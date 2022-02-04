@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {getAnimalBreeds, getAnimalCities} from "../store/actions/animalActions";
-import useLoading from "../hooks/useLoading";
+import {getAnimalBreeds, getAnimalCities} from "../../store/actions/animalActions";
+import useLoading from "../../hooks/useLoading";
 import {useDispatch, useSelector} from "react-redux";
-import ContentView from "./ContentView";
+import ContentView from "../ContentView";
 
 function CitySelect({onSelect},props) {
     const [cities, setCities] = useState([])

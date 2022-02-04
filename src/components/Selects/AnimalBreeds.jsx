@@ -1,9 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {getAnimalBreeds} from "../store/actions/animalActions";
-import useLoading from "../hooks/useLoading";
+import {getAnimalBreeds} from "../../store/actions/animalActions";
+import useLoading from "../../hooks/useLoading";
 import {useDispatch, useSelector} from "react-redux";
-import ContentView from "./ContentView";
+import ContentView from "../ContentView";
 
 function AnimalBreeds({onSelect},props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)

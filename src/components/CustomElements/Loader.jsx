@@ -1,7 +1,7 @@
 
 import React from "react";
 import {View, Animated, Easing } from "react-native";
-import loader from "../media/Icons/Loader.png";
+import loader from "../../media/Icons/Loader.png";
 export const Loader = ({style}) => {
     let spinValue = new Animated.Value(0);
 

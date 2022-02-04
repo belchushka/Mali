@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SwipeablePanel} from "rn-swipeable-panel";
-import CitySelect from "../CitySelect";
+import CitySelect from "../Selects/CitySelect";
 
 function CityPanel({opened=false,closePanelAction, onSelect},props) {
     const [panelProps, setPanelProps] = useState({

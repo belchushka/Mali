@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import SvgUri from "react-native-svg-uri";
-import Back from "../media/Icons/Back.svg"
+import Back from "../../media/Icons/Back.svg"
 
 function CustomHeader({title,hasBackButton, goBackAction, style},props) {
     return (

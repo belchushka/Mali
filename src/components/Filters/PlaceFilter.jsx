@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet} from "react-native";
-import {getAnimalPlaces} from "../store/actions/animalActions";
+import {getAnimalPlaces} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
-import useLoading from "../hooks/useLoading";
+import useLoading from "../../hooks/useLoading";
 
 function PlaceFilter({title,style, onChange,selectedValues},props) {
     const [places,setPlaces] = useState([])

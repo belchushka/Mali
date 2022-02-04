@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SwipeablePanel} from "rn-swipeable-panel";
-import PriceFilter from "./PriceFilter";
+import PriceFilter from "../Filters/PriceFilter";
 
 function PricePanel({opened=false,closePanelAction, onDone, priceRange},props) {
     const [panelProps, setPanelProps] = useState({

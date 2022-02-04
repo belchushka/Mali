@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SwipeablePanel} from "rn-swipeable-panel";
-import PriceFilter from "./PriceFilter";
-import AnimalBreeds from "./AnimalBreeds";
+import PriceFilter from "../Filters/PriceFilter";
+import AnimalBreeds from "../Selects/AnimalBreeds";
 
 function AnimalBreedPanel({opened=false,closePanelAction, onSelect},props) {
     const [panelProps, setPanelProps] = useState({

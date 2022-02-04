@@ -1,58 +1,106 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import {AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import IntroPageOne from "../media/Intro/IntroPageOne.png"
+import IntroPageTwo from "../media/Intro/IntroPageTwo.png"
+import App from "../../App";
 
 const slides = [
     {
         key: 'one',
-        title: 'Title 1',
-        text: 'Description.\nSay something cool',
-        image: require('./assets/1.jpg'),
+        text: 'Находите домашних животных\n' +
+            'по всей России!',
+        image: IntroPageOne,
         backgroundColor: '#59b2ab',
     },
     {
         key: 'two',
-        title: 'Title 2',
-        text: 'Other cool stuff',
-        image: require('./assets/2.jpg'),
+        text: 'Размещайте объявления \nдомашних животных по всей \nРоссии!',
+        image: IntroPageTwo,
         backgroundColor: '#febe29',
     },
-    {
-        key: 'three',
-        title: 'Rocket guy',
-        text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
-        image: require('./assets/3.jpg'),
-        backgroundColor: '#22bcb5',
-    }
 ];
 
-export default class App extends React.Component {
-    constructor(props){
+const styles = StyleSheet.create({
+    intoImage: {
+        width:"100%",
+        height:500,
+        resizeMode:"cover",
+
+    },
+
+    slideView:{
+        backgroundColor:"#F6A405"
+    },
+
+    introTextWrapper:{
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:"center"
+    },
+
+    introText:{
+        color:"white",
+        fontSize:20,
+        marginTop:30,
+        lineHeight:30
+    }
+})
+
+class Intro extends React.Component {
+    constructor(props) {
         super(props)
         this.state = {
-            showRealApp: false
+            showRealApp:   false
         }
+        this.navigation = props.navigation
     }
 
-    _renderItem = ({ item }) => {
+    _renderItem = ({item}) => {
         return (
-            <View style={styles.slide}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Image source={item.image} />
-                <Text style={styles.text}>{item.text}</Text>
+            <View>
+                <Image style={styles.intoImage} source={item.image}/>
+                <View style={styles.introTextWrapper}>
+                    <Text style={styles.introText} >{item.text}</Text>
+                </View>
+
             </View>
         );
     }
-    _onDone = () => {
-        // User finished the introduction. Show real app through
-        // navigation or simply by controlling state
-        this.setState({ showRealApp: true });
+    _onDone = async () => {
+       await AsyncStorage.setItem("firstTime","false")
+        this.navigation.navigate("home")
     }
+
+
+
     render() {
         if (this.state.showRealApp) {
-            return <App />;
+            return <App/>;
         } else {
-            return <AppIntroSlider renderItem={this._renderItem} data={slides} onDone={this._onDone}/>;
+            return <AppIntroSlider
+                style={styles.slideView}
+                nextLabel={"Пропустить"}
+                doneLabel={"Начать"}
+                renderItem={this._renderItem}
+                data={slides}
+                styl
+                onDone={this._onDone}
+                dotStyle={{
+                    width:4,
+                    height:4,
+                    backgroundColor:"rgba(255,255,255,0.67)",
+                    marginLeft:16
+                }}
+                activeDotStyle={{
+                    width:12,
+                    height:4,
+                    backgroundColor:"#ffffff",
+                    marginLeft:16
+                }}
+            />;
         }
     }
 }
+
+export default Intro

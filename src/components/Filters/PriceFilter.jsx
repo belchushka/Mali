@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, View} from "react-native";
-import ContentView from "./ContentView";
-import CustomButton from "./CustomButton";
+import ContentView from "../ContentView";
+import CustomButton from "../CustomElements/CustomButton";
 
 function PriceFilter({onSubmit,fromPrice,toPrice},props) {
     const [from,setFrom]=useState(fromPrice)

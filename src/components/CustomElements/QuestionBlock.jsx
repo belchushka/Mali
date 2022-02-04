@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, Button, TouchableOpacity} from "react-native";
-import CustomButton from "./CustomElements/CustomButton";
-import CircledIcon from "./CustomElements/CircledIcon";
+import CustomButton from "./CustomButton";
+import CircledIcon from "./CircledIcon";
 
 function QuestionBlock({title, icon, buttonText, text, style, iconWidth, iconHeight, onButtonClick},props) {
     return (

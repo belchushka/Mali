@@ -1,6 +1,6 @@
 import React from 'react';
 import {TextInput, View,StyleSheet, Image} from "react-native";
-import SearchIcon from "../media/Icons/Search.png"
+import SearchIcon from "../../media/Icons/Search.png"
 
 function SearchBar({style},props) {
     return (
