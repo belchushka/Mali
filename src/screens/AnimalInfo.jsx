@@ -1,30 +1,38 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity} from "react-native";
+import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity, Button} from "react-native";
 import Swiper from 'react-native-swiper'
 import BackWhite from "../media/Icons/BackWhite.svg"
-import Test from "../media/Animals/Test.png"
 import SvgUri from "react-native-svg-uri";
 import CircledIcon from "../components/CustomElements/CircledIcon";
 import PlaneImg from "../media/Icons/Plane.svg"
-import {LinearGradient} from "expo-linear-gradient";
 import ContentView from "../components/ContentView";
 import CustomButton from "../components/CustomElements/CustomButton";
-import AnimalCard from "../components/AnimalCard";
-import CatImg from "../media/Animals/Cat.png"
 import {useDispatch} from "react-redux";
 import {getAnimal} from "../store/actions/animalActions";
 import useLoading from "../hooks/useLoading";
 import LoadingView from "../components/CustomElements/LoadingView";
+import YoutubePlayer from "react-native-youtube-iframe";
+
+function youtube_parser(url){
+    let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    let match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
 
 function AnimalInfo({navigation, route}, props) {
     const animalId = route.params.id
     const dispatch = useDispatch()
     const [data, setAnimalData]=useState({})
     const {start, stop, loading} = useLoading()
+    const [playing, setPlaying] = useState(false);
+    const togglePlaying = useCallback(() => {
+        setPlaying((prev) => !prev);
+    }, []);
     const fetch = useCallback(async ()=>{
         try {
             start()
             const data = await dispatch(getAnimal({idAd:animalId}))
+            console.log(data);
             setAnimalData(data)
             stop()
         }catch (e){
@@ -75,7 +83,7 @@ function AnimalInfo({navigation, route}, props) {
                             loop={false} width={"100%"} height={400} style={styles.wrapper}
                         >
                             {data.imagesPath.map(el=>{
-                                return  <View style={{
+                                return  <View key={el.id} style={{
                                     flex: 1,
                                 }}>
                                     <Image
@@ -123,24 +131,30 @@ function AnimalInfo({navigation, route}, props) {
                             <Text style={styles.descriptionTitle}>Описание</Text>
                             <Text style={styles.descriptionText}>{`${data.descriptionPet}`}</Text>
                         </View>
-                        <View style={styles.video}>
+                        {data.youtubeVideo && <View style={styles.video}>
+                            <YoutubePlayer
+                                height={245}
+                                play={playing}
+                                videoId={youtube_parser(data.youtubeVideo)}
+                            />
+                        </View>}
 
-                        </View>
+
                         <CustomButton style={{marginTop:25}} title={"Нашли ошибку?"}/>
-                        <View style={styles.suggestions}>
-                            <Text style={styles.suggestionsTitle}>Похожие предложения</Text>
-                            <View style={styles.cardHolder}>
-                                <TouchableOpacity onPress={()=>{navigation.navigate("animalInfo")}} style={styles.searchCard}>
-                                    {/*<AnimalCard clickable={false}  image={CatImg}/>*/}
-                                    <Text style={styles.cardText}>{"Абиссинская кошка Молли"}</Text>
-                                    <Text style={styles.cardTextBold}>{"5000 руб."}</Text>
-                                    <Text style={styles.cardTextSmall}>{"Сочи, Мамайка"}</Text>
-                                    <View style={styles.placeCardWrap}>
-                                        <Text style={styles.placeCardText}>{"Частное объявление"}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                        {/*<View style={styles.suggestions}>*/}
+                        {/*    <Text style={styles.suggestionsTitle}>Похожие предложения</Text>*/}
+                        {/*    <View style={styles.cardHolder}>*/}
+                        {/*        <TouchableOpacity onPress={()=>{navigation.navigate("animalInfo")}} style={styles.searchCard}>*/}
+                        {/*            /!*<AnimalCard clickable={false}  image={CatImg}/>*!/*/}
+                        {/*            <Text style={styles.cardText}>{"Абиссинская кошка Молли"}</Text>*/}
+                        {/*            <Text style={styles.cardTextBold}>{"5000 руб."}</Text>*/}
+                        {/*            <Text style={styles.cardTextSmall}>{"Сочи, Мамайка"}</Text>*/}
+                        {/*            <View style={styles.placeCardWrap}>*/}
+                        {/*                <Text style={styles.placeCardText}>{"Частное объявление"}</Text>*/}
+                        {/*            </View>*/}
+                        {/*        </TouchableOpacity>*/}
+                        {/*    </View>*/}
+                        {/*</View>*/}
                     </ContentView>
 
                 </ScrollView>
@@ -198,8 +212,8 @@ const styles = StyleSheet.create({
     },
     video:{
       width:"100%",
-        height:245,
-        backgroundColor:"red",
+        height:210,
+        overflow:"hidden",
         marginTop:30,
         borderRadius:20
     },

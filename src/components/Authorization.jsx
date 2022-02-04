@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import ContentView from "./ContentView";
 import CustomButton from "./CustomElements/CustomButton";
 import SvgUri from "react-native-svg-uri";
 import Seperator from "../media/Icons/Seperator.svg"
+import Google from "../media/Icons/Google.svg"
+import Facebook from "../media/Icons/Facebook.svg"
+import Apple from "../media/Icons/Apple.svg"
+import {useDispatch} from "react-redux";
+import {login, register} from "../store/actions/userActions";
 
 const styles = StyleSheet.create({
     typeSwitch: {
@@ -61,6 +66,30 @@ const styles = StyleSheet.create({
 
 function Authorization({navigation},props) {
     const [authorizationType,setAuthorizationType] = useState("registration")
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("")
+    const [passwordRepeat, setPasswordRepeat] = useState("")
+    const dispatch = useDispatch()
+    const sendData = useCallback(async()=>{
+        try {
+            if (authorizationType==="registration"){
+                const data = await dispatch(register({
+                    email:email,
+                    password:password
+                }))
+            }else {
+                const loggedIn = await dispatch(login({
+                    email:email,
+                    password:password
+                }))
+                if(loggedIn){
+                    navigation.navigate("profile")
+                }
+            }
+        }catch (e) {
+
+        }
+    }, [email,password,passwordRepeat,authorizationType])
     return (
         <ScrollView>
             <ContentView>
@@ -82,28 +111,21 @@ function Authorization({navigation},props) {
                     marginTop: 40
                 }]}>{authorizationType === "registration" ? "Зарегистрироваться":"Войти"} через:</Text>
                 <View>
-                    <TouchableOpacity>
-                        <Text>Google</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text>Apple ID</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text>Facebook</Text>
-                    </TouchableOpacity>
+                   <TouchableOpacity>
+                   </TouchableOpacity>
                 </View>
                 <Text style={styles.sectionHeader}>Или {authorizationType === "registration" ? "зарегистрируйтесь":"войдите"} с помощью
                     электронной почты</Text>
                 <View style={styles.inputForm}>
-                    <TextInput style={styles.input} placeholder={"Введите e-mail"}
+                    <TextInput value={email} onChangeText={(val)=>setEmail(val)} style={styles.input} placeholder={"Введите e-mail"}
                                placeholderTextColor="#777777"/>
-                    <TextInput style={styles.input} placeholder={authorizationType === "registration" ? "Придумайте пароль": "Введите пароль"}
+                    <TextInput value={password} onChangeText={(val)=>setPassword(val)} style={styles.input} placeholder={authorizationType === "registration" ? "Придумайте пароль": "Введите пароль"}
                                placeholderTextColor="#777777"/>
-                    {authorizationType === "registration" && <TextInput style={styles.input} placeholder={"Повторите пароль"}
+                    {authorizationType === "registration" && <TextInput value={passwordRepeat} onChangeText={(val)=>setPasswordRepeat(val)} style={styles.input} placeholder={"Повторите пароль"}
                                                                         placeholderTextColor="#777777"/>}
 
                 </View>
-                <CustomButton style={{marginTop: 30}} title={authorizationType === "registration" ?"Зарегистрироваться": "Войти"}/>
+                <CustomButton onClick={()=>{sendData()}} style={{marginTop: 30}} title={authorizationType === "registration" ?"Зарегистрироваться": "Войти"}/>
                 <Text style={styles.policy}>Создавая личный кабинет вы соглашаетесь с нашими <Text onPress={()=>{navigation.navigate("policy")}} style={{textDecorationLine: 'underline'}}>условиями использования</Text> и <Text style={{textDecorationLine: 'underline'}}>политикой конфедициальности</Text>  </Text>
                 <View style={styles.help}>
                     <Text style={styles.helpText}>Забыли пароль?</Text>

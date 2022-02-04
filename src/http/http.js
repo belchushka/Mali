@@ -10,7 +10,8 @@ const $host = axios.create({
 })
 
 $authHost.interceptors.request.use(async (config)=>{
-    const token = await AsyncStorage.getItem("token") || ""
+    const data = await AsyncStorage.getItem("userData") || ""
+    const token = JSON.parse(data).accessToken
     config.headers.authorization = "Bearer " + token
     return config
 });

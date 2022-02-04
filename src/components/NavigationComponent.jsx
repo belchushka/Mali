@@ -1,7 +1,7 @@
 import {Text, TouchableOpacity, View} from "react-native";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setFirstTime} from "../store/actions/userActions";
+import {setFirstTime, setLoggedIn, setUserData} from "../store/actions/userActions";
 import {createNativeStackNavigator} from "react-native-screens/native-stack";
 import Intro from "./Intro";
 import Catalog from "../screens/Catalog";
@@ -21,6 +21,7 @@ import AnimalFilter from "../screens/AnimalFilter";
 import SearchResults from "../screens/SearchResults";
 import AdditionFilter from "../screens/AdditionFilter";
 import AnimalInfo from "../screens/AnimalInfo";
+import userAnimals from "../screens/UserAnimals";
 
 function HomeTabs() {
     const Tab = createBottomTabNavigator()
@@ -65,7 +66,11 @@ const NavigationComponent = ()=>{
     const Stack = createNativeStackNavigator()
     useEffect(async ()=>{
         const firstTime = await AsyncStorage.getItem("firstTime") !== "false"
+        const loggedIn = await AsyncStorage.getItem("loggedIn") !== "false"
+        const userData = await AsyncStorage.getItem("userData")
+        dispatch(setUserData(userData ? JSON.parse(userData) : {}))
         dispatch(setFirstTime(firstTime))
+        dispatch(setLoggedIn(loggedIn))
     })
     return <NavigationContainer >
         <Stack.Navigator screenOptions={{headerShown:false}}  initialRouteName={firstTime ? "introduction" : "home"} >
@@ -77,6 +82,7 @@ const NavigationComponent = ()=>{
             <Stack.Screen  name={"searchResults"} component={SearchResults} />
             <Stack.Screen  name={"additionalFilter"} component={AdditionFilter}  />
             <Stack.Screen  name={"animalInfo"} component={AnimalInfo}  />
+            <Stack.Screen  name={"userAnimals"} component={userAnimals}  />
         </Stack.Navigator>
     </NavigationContainer>
 }
