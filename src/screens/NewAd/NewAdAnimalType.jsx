@@ -12,7 +12,7 @@ function NewAdAnimalType({navigation}, props) {
     const dispatch = useDispatch()
     const loggedIn = useSelector(state => state.user.loggedIn)
     const goNext = useCallback(async (id, name) => {
-        await dispatch(setCurrentAnimalTypeIdAndName({id, name}))
+        dispatch(setCurrentAnimalTypeIdAndName({id,name}))
         navigation.navigate("newAdBreed")
     }, [dispatch])
 

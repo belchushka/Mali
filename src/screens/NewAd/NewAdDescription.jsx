@@ -11,8 +11,10 @@ function NewAdDescription({navigation},props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async ()=>{
         await dispatch({
-            type:"SET_NEW_DESCRIPTION",
-            payload:name
+            type:"SET_NEW_AD_DATA",
+            payload:{
+                descriptionPet:name
+            }
         })
         navigation.navigate("newAdPrice")
     },[dispatch, name])

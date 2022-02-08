@@ -10,8 +10,10 @@ function NewAdAnimalBreed({navigation},props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async (id,name)=>{
         await dispatch({
-            type:"SET_NEW_BREED",
-            payload:id
+            type:"SET_NEW_AD_DATA",
+            payload:{
+                idAnimalBreed:id
+            }
         })
         navigation.navigate("newAdAppiarance")
     },[dispatch])

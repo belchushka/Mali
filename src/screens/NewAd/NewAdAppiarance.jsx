@@ -19,6 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import Cat from "../../media/Animals/Cat.png"
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {setCurrentAnimalTypeIdAndName} from "../../store/actions/animalActions";
+import {ConvertImage} from "../../utils/ConvertImage";
 
 
 function NewAdAppiarance({navigation},props) {
@@ -59,17 +60,13 @@ function NewAdAppiarance({navigation},props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async ()=>{
         await dispatch({
-            type:"SET_NEW_PHOTOS",
-            payload:photos
-        })
-        await dispatch({
-            type:"SET_NEW_LINK",
-            payload:youtube
-        })
-
-        await dispatch({
-            type:"SET_NEW_PLACES",
-            payload:places
+            type:"SET_NEW_AD_DATA",
+            payload:{
+                imgs:photos.map(el=>ConvertImage(el)),
+                youtubeVideo:youtube,
+                idAnimalPlace:places[0],
+                preview:ConvertImages(photos[0])
+            }
         })
         navigation.navigate("newAdName")
     },[dispatch, photos,youtube,places])

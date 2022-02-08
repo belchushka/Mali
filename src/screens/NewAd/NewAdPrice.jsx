@@ -11,8 +11,10 @@ function NewAdPrice({navigation},props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async ()=>{
         await dispatch({
-            type:"SET_NEW_PRICE",
-            payload:name
+            type:"SET_NEW_AD_DATA",
+            payload:{
+                price:name
+            }
         })
         navigation.navigate("newAdContacts")
     },[dispatch, name])

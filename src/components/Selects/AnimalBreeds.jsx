@@ -7,7 +7,9 @@ import ContentView from "../ContentView";
 
 function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
+
     const [breeds, setBreeds] = useState([])
+    console.log(breeds);
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -29,10 +31,6 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
                     <FlatList
                         style={[styles.breedList,style]}
                         data={breeds}
-                        keyExtractor = {function (item){
-                            return item.id
-                        }
-                        }
                         renderItem={function ({item}){
                             return <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
                                 borderTopColor:"#F6F4F0"} : { borderBottomWidth:1,

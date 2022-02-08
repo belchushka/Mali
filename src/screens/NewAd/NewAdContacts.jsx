@@ -1,43 +1,39 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import CustomHeader from "../../components/CustomElements/CustomHeader";
 import ContentView from "../../components/ContentView";
 import AnimalTypes from "../../components/Selects/AnimalTypes";
-import {StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, View} from "react-native";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import {useDispatch, useSelector} from "react-redux";
 import {createNewAd} from "../../store/actions/userActions";
-import {ConvertImage} from "../../utils/ConvertImage";
 
 function NewAdContacts({navigation},props) {
     const [name,setName] = useState()
     const dispatch = useDispatch()
-    const images = useSelector(state=>state.user.newAdPhotos)
-    const youtube = useSelector(state=>state.user.newAdLink)
-    const place = useSelector(state=>state.user.newAdPlace)
-    const breed = useSelector(state=>state.user.newAdBreed)
-    const nameAnimal = useSelector(state=>state.user.newAdName)
-    const description = useSelector(state=>state.user.newAdDescription)
-    const price = useSelector(state=>state.user.newAdPrice)
     const type = useSelector(state=>state.animal.currentAnimalTypeId)
-    const goNext = useCallback(async ()=>{
-        const data = dispatch(createNewAd({
-            preview: ConvertImage(images[0]),
-            imgs:JSON.stringify(images.map(el=>ConvertImage(el))),
-            idAnimalCategories:type,
-            idAnimalBreed:breed,
-            idAnimalPlace:place[0],
-            idGender:1,
-            idCity:1,
-            namePet:nameAnimal,
-            price:price,
-            address:"sidji",
-            age:22,
-            youtubeVideo:youtube,
-            descriptionPet:description,
+    const dataT = useSelector(state=>state.user.newAdData)
+    const goNext =useCallback(async ()=>{
+        try {
+            const formData = new FormData()
+            Object.keys(dataT).filter(el=>el!="imgs").forEach(el=>{
+                    formData.append(el,dataT[el])
+            })
+            dataT.imgs.forEach(el=>{
+                formData.append("imgs[]",el)
+            })
+            formData.append("idAnimalCategories",type)
+            formData.append("idGender",1)
+            formData.append("idCity",1)
+            formData.append("address","test")
+            formData.append("age",1)
 
-    }))
-        navigation.navigate("home")
-    },[dispatch, nameAnimal, youtube,images,place,breed,description,price,type])
+            const data = await dispatch(createNewAd(formData))
+            navigation.navigate("home")
+        }catch (e) {
+            Alert.alert("Ошибочка",e.message)
+        }
+
+    },[dispatch, type])
     return (
         <View style={{flex:1, backgroundColor:"white"}}>
             <CustomHeader hasBackButton={true} goBackAction={navigation.goBack} title={"Как с вами связаться"} />

@@ -192,11 +192,27 @@ export const saveUserInfo = (params)=>async (dispatch)=>{
 
 export const createNewAd = (params)=>async (dispatch)=>{
     try{
-        const data =await $authHost.post("user/create_ad",{
-            ...params,
+        console.log(params);
+        const xhr = new XMLHttpRequest();
+        const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
+        const data = await new Promise((resolve, reject) => {
+            xhr.onreadystatechange = e => {
+                if (xhr.readyState !== 4) {
+                    return;
+                }
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject(xhr.responseText);
+                }
+            };
+            xhr.open("POST","https://MALI.DEPRA.RU/api/user/create_ad")
+            xhr.setRequestHeader("Content-Type", "multipart/form-data");
+            xhr.setRequestHeader("Authorization", "Bearer "+token);
+            xhr.send(params);
         })
-        return data.data
+        return data
     }catch (e){
-        throw false
+        throw e
     }
 }
