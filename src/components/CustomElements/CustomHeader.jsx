@@ -3,24 +3,24 @@ import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import SvgUri from "react-native-svg-uri";
 import Back from "../../media/Icons/Back.svg"
 
-function CustomHeader({title,hasBackButton, goBackAction, style},props) {
+function CustomHeader({title,hasBackButton, goBackAction, style, backButtonImg=Back, backIconWidth = 8, backIconHeight=15},props) {
     return (
-        <View style={[styles.headerView, style]}>
+        <View style={[styles.headerView, style, { justifyContent: hasBackButton ?  "space-between" : "center",}]}>
             {hasBackButton &&
                 <TouchableOpacity onPress={()=>{
                     goBackAction()
                 }
-                } style={{width:50}}>
+                } style={{width:20, height:20}}>
                     <SvgUri
-                        width={8}
-                        height={15}
-                        source={Back}
+                        width={backIconWidth}
+                        height={backIconHeight}
+                        source={backButtonImg}
                     />
                 </TouchableOpacity>
 
             }
             <Text style={styles.headerTitle}>{title}</Text>
-            <View style={{width:50}}></View>
+            {hasBackButton &&<View style={{width:50}}></View>}
         </View>
     );
 }
@@ -28,7 +28,6 @@ function CustomHeader({title,hasBackButton, goBackAction, style},props) {
 const styles = StyleSheet.create({
     headerView:{
         flexDirection:"row",
-        justifyContent:"space-between",
         alignItems:"center",
         backgroundColor:"white",
         paddingLeft:12,

@@ -1,9 +1,7 @@
 import React from 'react';
-import {ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View, Dimensions} from "react-native";
 import Shadow from "../media/Animals/Shadow.png"
-import SvgUri from "react-native-svg-uri";
 import useLoading from "../hooks/useLoading";
-import {Loader} from "./CustomElements/Loader";
 
 function AnimalCard({text, image,  onClick, clickable=true},props) {
     const {start, stop, loading} = useLoading()
@@ -52,9 +50,9 @@ function AnimalCard({text, image,  onClick, clickable=true},props) {
 
 const styles = StyleSheet.create({
     animalCardImage:{
-        width:178,
-        height:178,
-        borderRadius:20
+        width:Dimensions.get("window").width/2.2,
+        height:Dimensions.get("window").width/2.2,
+          borderRadius:20
     },
     animalCardText:{
         position:"absolute",
@@ -76,8 +74,8 @@ const styles = StyleSheet.create({
     },
     animalCardShadow:{
         position:"absolute",
-        width:178,
-        height:178,
+        width:Dimensions.get("window").width/2.2,
+        height:Dimensions.get("window").width/2.2,
     }
 })
 

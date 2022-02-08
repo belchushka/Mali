@@ -6,11 +6,22 @@ const initialState = {
     loggedIn:false,
     userData:{},
     email:"",
-    userAnimals:[]
+    password:"",
+    userInfo:{},
+    userAnimals:[],
+    newAdData:{}
 }
 
 export const userReducer = (state=initialState, action)=>{
     switch (action.type){
+        case "SET_NEW_AD_DATA":
+            return {
+                ...state,
+                newAdData: {
+                    ...state.newAdData,
+                    ...action.payload
+                }
+            }
         case "SET_FIRST_TIME":
             return {
                 ...state,
@@ -21,10 +32,11 @@ export const userReducer = (state=initialState, action)=>{
                 ...state,
                 userData:action.payload
             }
-        case "SET_USER_EMAIL":
+        case "SET_USER_EMAIL_AND_PASSWORD":
             return {
                 ...state,
-                email:action.payload
+                email:action.payload.email,
+                password: action.payload.password
             }
         case "SET_LOGGED_IN":
             return {
@@ -42,6 +54,12 @@ export const userReducer = (state=initialState, action)=>{
                 ...state,
                 userAnimals: action.payload
             }
+        case "SET_USER_INFO":{
+            return {
+                ...state,
+                userInfo: action.payload
+            }
+        }
         default:
             return state
     }

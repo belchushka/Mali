@@ -44,13 +44,54 @@ export const register = (params)=>async (dispatch)=>{
         const data =await $host.post("authentication/registration",{
             ...params
         })
-        console.log(data);
         dispatch({
             type:"SET_USER_EMAIL",
             payload:params.email
         })
+        return true
     }catch (e){
-        console.log(e);
+        throw e.response.data.message
+    }
+
+}
+
+export const verifyEmail = (params)=>async (dispatch)=>{
+    try{
+        const data =await $host.post("authentication/check_verification_code",{
+            ...params
+        })
+        await AsyncStorage.setItem("userData",JSON.stringify(data.data))
+        await AsyncStorage.setItem("loggedIn","true")
+        return data.data
+    }catch (e){
+        throw e.response.data.message
+    }
+
+}
+
+export const verifyCode = (params)=>async (dispatch)=>{
+    try{
+        const data =await $host.post("user/password_change_request",{
+            ...params
+        })
+        console.log(data);
+
+    }catch (e){
+        throw e.response.data.message
+    }
+
+}
+
+export const changePassword = (params)=>async (dispatch)=>{
+    try{
+        const data =await $host.post("user/change_password",{
+            ...params
+        })
+
+        return true
+
+    }catch (e){
+        throw e.response.data.message
     }
 
 }
@@ -75,7 +116,7 @@ export const login = (params)=>async (dispatch)=>{
         return true
 
     }catch (e){
-        return false
+        throw e
     }
 
 }
@@ -104,5 +145,58 @@ export const getUserAnimals = (params)=>async (dispatch)=>{
     }catch (e){
         console.log(e);
         return false
+    }
+}
+
+export const getUserInfo = (params)=>async (dispatch)=>{
+    try{
+        const data =await $authHost.get("user/profile")
+        dispatch({
+            type:"SET_USER_INFO",
+            payload:data.data
+        })
+        return data.data
+    }catch (e){
+        console.log(e);
+        return false
+    }
+}
+
+export const saveUserInfo = (params)=>async (dispatch)=>{
+    try{
+
+        const xhr = new XMLHttpRequest();
+        const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
+        const data = await new Promise((resolve, reject) => {
+            xhr.onreadystatechange = e => {
+                if (xhr.readyState !== 4) {
+                    return;
+                }
+
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject(xhr.responseText);
+                }
+            };
+            xhr.open("POST","https://MALI.DEPRA.RU/api/user/change_user_data")
+            xhr.setRequestHeader("Content-Type", "multipart/form-data");
+            xhr.setRequestHeader("Authorization", "Bearer "+token);
+            xhr.send(params);
+        })
+        return params
+    }catch (e){
+        throw e
+    }
+}
+
+export const createNewAd = (params)=>async (dispatch)=>{
+    try{
+        const data =await $authHost.post("user/create_ad",{
+            ...params,
+        })
+        return data.data
+    }catch (e){
+        throw false
     }
 }

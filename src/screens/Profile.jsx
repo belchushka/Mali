@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import ContentView from "../components/ContentView";
 import CustomHeader from "../components/CustomElements/CustomHeader";
@@ -10,18 +10,38 @@ import {useDispatch, useSelector} from "react-redux";
 import SvgUri from "react-native-svg-uri";
 import NextIcon from "../media/Icons/Next.svg"
 import {exitUser} from "../store/actions/userActions";
+import ContentLayout from "../components/ContentLayout";
+import ContentWrapper from "../components/ContentWrapper";
 
-function Profile({navigation},props) {
-    const loggedIn = useSelector(state=>state.user.loggedIn)
+function Profile({navigation, route}, props) {
+    const loggedIn = useSelector(state => state.user.loggedIn)
     const [panelProps, setPanelProps] = useState({
         fullWidth: true,
         openLarge: true,
+        onlyLarge:true,
         onClose: () => closePanel(),
         onPressCloseButton: () => closePanel(),
-        closeOnTouchOutside:true,
-        showCloseButton:true
+        closeOnTouchOutside: true,
+        showCloseButton: true
     });
     const dispatch = useDispatch()
+    const hideCloseButton = useCallback(()=>{
+
+        setPanelProps(state=>{
+            return {
+                ...state,
+                showCloseButton: false
+            }
+        })
+    },[panelProps])
+    const showCloseButtonAction = useCallback(()=>{
+        setPanelProps(state=>{
+            return {
+                ...state,
+                showCloseButton: true
+            }
+        })
+    },[panelProps])
     const [isPanelActive, setIsPanelActive] = useState(false);
     const openPanel = () => {
         setIsPanelActive(true);
@@ -31,57 +51,68 @@ function Profile({navigation},props) {
         setIsPanelActive(false);
     };
 
-    const exit = useCallback(async ()=>{
+    const exit = useCallback(async () => {
         const exit = await dispatch(exitUser())
-        if(exit){
+        setIsPanelActive(false)
+        if (exit) {
             navigation.navigate("home")
         }
-    },[])
+    }, [])
+    useEffect(()=>{
+        setIsPanelActive(route.params?.opened || false)
+    },[route.params])
     return (
-        <View style={{flex:1, backgroundColor:"white"}}>
+        <ContentLayout>
             <CustomHeader title={"Личный кабинет"} hasBackButton={true} goBackAction={navigation.goBack}/>
-            <ContentView style={{height:315}}>
+            <ContentWrapper stretch={true}>
                 {loggedIn ?
-                    <>
-                        <TouchableOpacity style={styles.profileElement} onPress={()=>{navigation.navigate("userAnimals")}}>
+                    <View>
+                        <TouchableOpacity style={styles.profileElement} onPress={() => {
+                            navigation.navigate("userAnimals")
+                        }}>
                             <Text style={styles.profileElementText}>Мои объявления</Text>
-                            <SvgUri  source={NextIcon} width={9} height={14}/>
+                            <SvgUri source={NextIcon} width={9} height={14}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.profileElement}>
+                        <TouchableOpacity style={styles.profileElement} onPress={() => {
+                            navigation.navigate("userInfo")
+                        }}>
                             <Text style={styles.profileElementText}>Профиль</Text>
-                            <SvgUri  source={NextIcon} width={9} height={14}/>
+                            <SvgUri source={NextIcon} width={9} height={14}/>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.profileElement} onPress={exit}>
                             <Text style={styles.profileElementText}>Выйти</Text>
                         </TouchableOpacity>
-                    </>
-
-
-
-                    : <QuestionBlock style={{marginTop:20}} title={"Необходимо зайти в аккаунт"} text={"Чтобы пользоваться профилем, нужно войти\n" +
-                    "в свой аккаунт или создать новый"} onButtonClick={openPanel} buttonText={"Зарегистрироваться"} icon={Alert}/>}
-
-
-            </ContentView>
-            {!loggedIn && <SwipeablePanel {...panelProps} isActive={isPanelActive}>
-                <Authorization navigation={navigation}/>
-            </SwipeablePanel>}
-        </View>
+                    </View>
+                    :
+                    <QuestionBlock style={{marginTop: 20}} title={"Необходимо зайти в аккаунт"}
+                                   text={"Чтобы пользоваться профилем, нужно войти\n" +
+                                       "в свой аккаунт или создать новый"} onButtonClick={openPanel}
+                                   buttonText={"Зарегистрироваться"} icon={Alert}/>
+                }
+            </ContentWrapper>
+            {
+                !loggedIn && <SwipeablePanel style={{position: "absolute"}} {...panelProps} isActive={isPanelActive}>
+                    <Authorization hideCloseButton={hideCloseButton} showCloseButton={showCloseButtonAction} closeAction={closePanel} navigation={navigation}/>
+                </SwipeablePanel>
+            }
+        </ContentLayout>
     );
 }
 
+
+
 const styles = StyleSheet.create({
-    profileElement:{
-        width:"100%",
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
-        height:58,
-        borderBottomWidth:1,
-        borderBottomColor:"#F6F4F0"
+    profileElement: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: 58,
+        borderBottomWidth: 1,
+        borderBottomColor: "#F6F4F0"
     },
-    profileElementText:{
-        fontSize:16
+    profileElementText: {
+        fontSize: 16
     }
 })
 export default Profile;

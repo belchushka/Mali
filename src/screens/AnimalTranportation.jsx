@@ -5,6 +5,8 @@ import ContentView from "../components/ContentView";
 import CustomButton from "../components/CustomElements/CustomButton";
 import CircledIcon from "../components/CustomElements/CircledIcon";
 import Inst from "../media/Icons/Inst.svg"
+import {Linking} from 'react-native'
+
 
 function AnimalTranportation({navigation},props) {
     return (
@@ -17,7 +19,7 @@ function AnimalTranportation({navigation},props) {
                    не специализированного транспорта для домашних животных, вы можете заказать на нашем сайте профессиональную коневозку для перевозки лошадей или специальный скотовоз для перевозки свиней или овец. Для этого вам нужно просто разместить запрос, а все остальное мы сделаем
                    за вас.</Text>
                <View style={styles.actionView}>
-                   <CustomButton title={"Позвонить"} style={{width:220}} />
+                   <CustomButton onClick={()=>{Linking.openURL(`tel:${88005553535}`)}} title={"Позвонить"} style={{width:220}} />
                    <CircledIcon style={{marginLeft:20}} image={Inst}/>
                </View>
            </ContentView>

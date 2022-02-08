@@ -1,12 +1,13 @@
 import React from 'react';
 import {TextInput, View,StyleSheet, Image} from "react-native";
-import SearchIcon from "../../media/Icons/Search.png"
+import SearchIcon from "../../media/Icons/Search.svg"
+import SvgUri from "react-native-svg-uri";
 
 function SearchBar({style},props) {
     return (
         <View style={[style,{marginTop:12, marginBottom:32, paddingLeft:12, paddingRight:12}]}>
             <View style={styles.searchIcon}>
-                <Image  source={SearchIcon}/>
+                <SvgUri width={16} height={16} source={SearchIcon}/>
             </View>
             <TextInput
                 style={styles.searchInput}

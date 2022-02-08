@@ -13,6 +13,8 @@ import PricePanel from "../components/Panels/PricePanel";
 import AnimalBreedPanel from "../components/Panels/AnimalBreedPanel";
 import CityPanel from "../components/Panels/CityPanel";
 import useLoading from "../hooks/useLoading";
+import ContentLayout from "../components/ContentLayout";
+import ContentWrapper from "../components/ContentWrapper";
 
 function AdditionFilter({navigation, route}, props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
@@ -44,9 +46,9 @@ function AdditionFilter({navigation, route}, props) {
     }, [dispatch, animalTypeId, animalBreed, priceRange, city, animalPlace])
     useEffect(refreshData,[refreshData])
     return (
-        <View style={{flex: 1, backgroundColor: "white"}}>
+        <ContentLayout >
             <CustomHeader goBackAction={navigation.goBack} hasBackButton={true} title={"Параметры"}/>
-            <ContentView>
+            <ContentWrapper stretch={true}>
                 <TouchableOpacity onPress={() => {
                     setCityPanelOpened(true)
                 }} style={styles.input}>
@@ -66,10 +68,10 @@ function AdditionFilter({navigation, route}, props) {
                 <PlaceFilter selectedValues={animalPlace} onChange={(places) => {
                     setAnimalPlace(places)
                 }} style={{marginTop: 20}} title={"Откуда животное:"}/>
-            </ContentView>
+            </ContentWrapper>
             <View style={{
                 position: "absolute",
-                bottom: 40,
+                bottom: 0,
                 flexDirection: "row",
                 justifyContent: "center",
                 width: "100%",
@@ -111,7 +113,7 @@ function AdditionFilter({navigation, route}, props) {
                 setAnimalTypeName(name)
                 setBreedPanelOpened(false)
             }}/>
-        </View>
+        </ContentLayout>
     );
 }
 

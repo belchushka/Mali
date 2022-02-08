@@ -15,6 +15,7 @@ function CitySelect({onSelect},props) {
             const data = await dispatch(getAnimalCities({
                 limit:500
             }))
+            console.log(data.find(el => el.name == "Озерск"));
             setCities(data)
             stop()
         } catch (e) {

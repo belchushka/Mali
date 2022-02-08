@@ -1,10 +1,10 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, Text, TouchableOpacity} from "react-native";
 
-function CustomButton({style, title, onClick, loading=false},props) {
+function CustomButton({style, title, onClick, loading=false, textColor="white"},props) {
     return (
         <TouchableOpacity  onPress={()=>{ !loading && onClick()}} style={[styles.button, style]}>
-            {loading ? <ActivityIndicator size={"small"} color={"white"} />:<Text style={styles.buttonText}>
+            {loading ? <ActivityIndicator size={"small"} color={"white"} />:<Text style={[styles.buttonText,{color:textColor}]}>
                 {title}
             </Text>}
 
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     },
 
     buttonText: {
-        color:"white",
         fontSize:16
     }
 })

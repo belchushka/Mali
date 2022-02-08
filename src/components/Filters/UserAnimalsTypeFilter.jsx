@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import {ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet, ScrollView} from "react-native";
 import {getAnimalPlaces} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
 import useLoading from "../../hooks/useLoading";
@@ -8,10 +8,8 @@ function UserAnimalTypeFilter({style, onChange,actives, checking,archive},props)
     const [selectedType, setSelectedType] = useState(null)
     const dispatch = useDispatch()
     return (
-        <View style={style}>
-
-            <>
-                <View style={styles.filterWrap}>
+        <View style={[{width:"100%"},style]}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterWrap}>
                         <TouchableOpacity  style={[styles.filterItem,selectedType === "Активный" ? styles.filterItemActive:{}]} onPress={ ()=>{
                             if(selectedType !== "Активный"){
                                 setSelectedType(state=>{
@@ -60,17 +58,31 @@ function UserAnimalTypeFilter({style, onChange,actives, checking,archive},props)
                     }>
                         <Text style={[styles.filterText,selectedType === "Архив" && styles.filterTextActive]}>Архив {archive}</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity  style={[styles.filterItem,selectedType === "Архив" ? styles.filterItemActive:{}]} onPress={ ()=>{
+                        if(selectedType !== "Архив"){
+                            setSelectedType(state=>{
+                                return "Архив"
+                            })
+                            onChange("Архив")
+                        }else{
+                            setSelectedType((state)=>{
+                                return null
+                            })
+                            onChange(null)
+                        }
+                    }
+                    }>
+                        <Text style={[styles.filterText,selectedType === "Архив" && styles.filterTextActive]}>Архив2 {archive}</Text>
+                    </TouchableOpacity>
 
-                </View>
-            </>
+                </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     filterWrap:{
-        flexDirection:"row",
-        justifyContent:"space-between",
+        width:"100%",
         marginLeft:-10,
         marginTop:10
     },
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
         borderRadius:4,
         paddingTop:8,
         paddingBottom:8,
-        width:"31%",
+        width:130,
         flexDirection:"row",
         justifyContent:"center",
         marginLeft:10,

@@ -8,6 +8,8 @@ import MailIcon from "../media/Icons/Mail.svg";
 import {useDispatch, useSelector} from "react-redux";
 import {getAnimalTypes, setCurrentAnimalTypeId, setCurrentAnimalTypeIdAndName} from "../store/actions/animalActions";
 import useLoading from "../hooks/useLoading";
+import ContentLayout from "../components/ContentLayout";
+import ContentWrapper from "../components/ContentWrapper";
 
 function Catalog({navigation}, props) {
     const dispatch = useDispatch()
@@ -23,12 +25,13 @@ function Catalog({navigation}, props) {
 
         }
     }, [dispatch])
+
     useEffect(fetch, [fetch])
     return (
-        <ScrollView style={styles.catalogView}>
+        <ContentLayout style={{backgroundColor: "#F6F4F0"}}>
             <SearchBar/>
-            <ContentView>
-                {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} />:
+            <ContentWrapper>
+            {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} />:
                     <View style={styles.cardHolder}>
                         {animalTypes.map(el=>{
                             if(el.id === 6){
@@ -49,13 +52,13 @@ function Catalog({navigation}, props) {
                     </View>
                 }
 
-                <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам\n" +
-                    "                в ближайшее время."} buttonText={"Написать"} icon={MailIcon} style={{
+                <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам \n в ближайшее время."} buttonText={"Написать"} icon={MailIcon} style={{
                     marginTop: 50,
                     marginBottom: 50,
                 }} iconHeight={12} iconWidth={16}/>
-            </ContentView>
-        </ScrollView>
+                </ContentWrapper>
+
+        </ContentLayout>
     );
 }
 

@@ -15,20 +15,33 @@ function UserAnimals({navigation},props) {
     const [status,setStatus] = useState(null)
     const {start, stop, loading} = useLoading()
     const actives = useMemo(()=>{
-        return userAnimals.filter(el=>el.adStatus == "Активный").length
+        if (userAnimals){
+            return userAnimals.filter(el=>el.adStatus == "Активный").length
+        }
+        return []
     },[userAnimals])
     const checking = useMemo(()=>{
-        return userAnimals.filter(el=>el.adStatus == "На проверке").length
+        if (userAnimals) {
+            return userAnimals.filter(el => el.adStatus == "На проверке").length
+        }
+        return []
     },[userAnimals])
     const archive = useMemo(()=>{
-        return userAnimals.filter(el=>el.adStatus == "Архив").length
+        if (userAnimals) {
+            return userAnimals.filter(el => el.adStatus == "Архив").length
+        }
+        return []
     },[userAnimals])
     const filteredValues = useMemo(()=>{
         switch (status){
             case null:
                 return userAnimals
             default:
-                return userAnimals.filter(el=>el.adStatus === status)
+                if (userAnimals){
+                    return userAnimals.filter(el=>el.adStatus === status)
+                }
+                return []
+
         }
     },[userAnimals, status])
     const fetch = useCallback(async ()=>{
@@ -44,7 +57,7 @@ function UserAnimals({navigation},props) {
                     <UserAnimalTypeFilter actives={actives} checking={checking} archive={archive} onChange={(status)=>{
                         setStatus(status)
                     }}/>
-                {userAnimals.length!=0 ? <View style={styles.cardHolder}>
+                {userAnimals ? <View style={styles.cardHolder}>
                     {filteredValues && filteredValues.map(el=>{
                         return <TouchableOpacity key={el.adId} style={styles.card}>
                             <Image style={styles.cardImage}  source={{uri:el.imagePreview}}/>
@@ -57,7 +70,7 @@ function UserAnimals({navigation},props) {
 
                 </View> : <View style={styles.createWrapper}>
                     <Text style={styles.createText}>У вас еще нет ни одного объявления.</Text>
-                    <CustomButton style={{marginTop:40}} title={"Разместить объявление"} />
+                    <CustomButton onClick={()=>{navigation.navigate("createAd")}} style={{marginTop:40}} title={"Разместить объявление"} />
                 </View>}
 
             </ContentView>}

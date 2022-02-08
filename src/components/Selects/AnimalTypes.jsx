@@ -1,39 +1,32 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {getAnimalBreeds} from "../../store/actions/animalActions";
+import {getAnimalTypes} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
-import {useDispatch, useSelector} from "react-redux";
-import ContentView from "../ContentView";
+import {useDispatch} from "react-redux";
 
-function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
-    const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
+function AnimalTypes({onSelect,style, underlineBottom=false},props) {
     const [breeds, setBreeds] = useState([])
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
             start()
-            const data = await dispatch(getAnimalBreeds({
-                id:animalTypeId
-            }))
+            const data = await dispatch(getAnimalTypes())
             setBreeds(data)
             stop()
         } catch (e) {
 
         }
-    }, [dispatch,animalTypeId])
-    useEffect(fetch, [fetch, animalTypeId])
+    }, [dispatch])
+    useEffect(fetch, [fetch])
     return (
-            <View style={{paddingLeft:12,paddingRight:12, flex:1}}>
-                {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
-                    <FlatList
-                        style={[styles.breedList,style]}
-                        data={breeds}
-                        keyExtractor = {function (item){
-                            return item.id
-                        }
-                        }
-                        renderItem={function ({item}){
+        <View style={{paddingLeft:12,paddingRight:12, flex:1}}>
+            {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
+                <FlatList
+                    style={[styles.breedList,style]}
+                    data={breeds}
+                    renderItem={({item})=>{
+                        if (item.name!=="Перевозка животных"){
                             return <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
                                 borderTopColor:"#F6F4F0"} : { borderBottomWidth:1,
                                 borderBottomColor:"#F6F4F0"}]} onPress={()=>{
@@ -43,11 +36,13 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
                                 <Text>{item.name}</Text>
                             </TouchableOpacity>
                         }
-                        }
-                    />
-                }
 
-            </View>
+                    }
+                    }
+                />
+            }
+
+        </View>
     );
 }
 
@@ -55,11 +50,10 @@ const styles = StyleSheet.create({
     typePicker:{
         paddingTop:18,
         paddingBottom:18,
-
     },
     breedList:{
         marginTop:20
     }
 })
 
-export default AnimalBreeds;
+export default AnimalTypes;
