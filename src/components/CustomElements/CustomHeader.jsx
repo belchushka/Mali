@@ -20,7 +20,7 @@ function CustomHeader({title,hasBackButton, goBackAction, style, backButtonImg=B
 
             }
             <Text style={styles.headerTitle}>{title}</Text>
-            {hasBackButton &&<View style={{width:50}}></View>}
+            {hasBackButton &&<View style={{width:20}}></View>}
         </View>
     );
 }
