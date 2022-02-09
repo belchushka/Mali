@@ -30,8 +30,6 @@ import NewAdAnimalType from "../screens/NewAd/NewAdAnimalType";
 import NewAdAnimalBreed from "../screens/NewAd/NewAdAnimalBreed";
 import NewAdAppiarance from "../screens/NewAd/NewAdAppiarance";
 import NewAdName from "../screens/NewAd/NewAdName";
-import NewAdDescription from "../screens/NewAd/NewAdDescription";
-import NewAdPrice from "../screens/NewAd/NewAdPrice";
 import NewAdContacts from "../screens/NewAd/NewAdContacts";
 
 function HomeTabs() {
@@ -113,8 +111,6 @@ const NavigationComponent = () => {
             <Stack.Screen name={"newAdBreed"} component={NewAdAnimalBreed}/>
             <Stack.Screen name={"newAdAppiarance"} component={NewAdAppiarance}/>
             <Stack.Screen name={"newAdName"} component={NewAdName}/>
-            <Stack.Screen name={"newAdDescription"} component={NewAdDescription}/>
-            <Stack.Screen name={"newAdPrice"} component={NewAdPrice}/>
             <Stack.Screen name={"newAdContacts"} component={NewAdContacts}/>
         </Stack.Navigator>
     </NavigationContainer>

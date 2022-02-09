@@ -2,23 +2,20 @@ import React, {useCallback, useEffect, useState} from 'react';
 import CustomHeader from "../../components/CustomElements/CustomHeader";
 import ContentView from "../../components/ContentView";
 import {
+    Alert,
     Dimensions,
-    FlatList,
     Image,
-    ScrollView,
     StyleSheet,
     Text,
     TextInput,
     TouchableOpacity,
     View
 } from "react-native";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import PlaceFilter from "../../components/Filters/PlaceFilter";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import * as ImagePicker from "expo-image-picker";
-import Cat from "../../media/Animals/Cat.png"
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {setCurrentAnimalTypeIdAndName} from "../../store/actions/animalActions";
 import {ConvertImage} from "../../utils/ConvertImage";
 
 
@@ -26,7 +23,7 @@ function NewAdAppiarance({navigation},props) {
     const [youtube,setYoutube] = useState("")
     const [isYoutubeLinkValid,SetIsYoutubeLinkValid] = useState(true)
     const [photos, setPhotos] = useState([])
-    const [places,setPlaces] = useState([])
+    const [place,setPlace] = useState([])
     console.log(photos);
     const CheckYoutubeLink = () => {
         if (youtube) {
@@ -59,25 +56,38 @@ function NewAdAppiarance({navigation},props) {
     },[])
     const dispatch = useDispatch()
     const goNext = useCallback(async ()=>{
-        await dispatch({
-            type:"SET_NEW_AD_DATA",
-            payload:{
-                imgs:photos.map(el=>ConvertImage(el)),
-                youtubeVideo:youtube,
-                idAnimalPlace:places[0],
-                preview:ConvertImages(photos[0])
+        try{
+            if (place==null){
+                throw "Выберете место"
+            }else if(!isYoutubeLinkValid){
+                throw "Неверная ссылка"
+            }else if(photos.length<2){
+                throw "Выберете хотя бы 2 фото"
             }
-        })
-        navigation.navigate("newAdName")
-    },[dispatch, photos,youtube,places])
+            await dispatch({
+                type:"SET_NEW_AD_DATA",
+                payload:{
+                    imgs:photos.map(el=>ConvertImage(el)),
+                    youtubeVideo:youtube,
+                    idAnimalPlace:place,
+                    preview:ConvertImage(photos[0])
+                }
+            })
+            navigation.navigate("newAdName")
+        }catch (e){
+            Alert.alert(e)
+        }
+
+    },[dispatch, photos,youtube,place])
     useEffect(CheckYoutubeLink,[youtube])
     return (
         <View style={{flex: 1, backgroundColor: "white"}}>
             <KeyboardAwareScrollView >
                 <CustomHeader hasBackButton={true} title={"Внешний вид"} goBackAction={navigation.goBack}/>
                 <ContentView style={{flex: 1, height:Dimensions.get("window").height*0.92}}>
-                    <PlaceFilter onChange={(places)=>{
-                        setPlaces(places)
+                    <PlaceFilter checkOne={true} onChange={(places)=>{
+                        setPlace(places)
+
                     }} style={{marginTop:20}} title={"Откуда животное"}/>
                     <Text style={styles.sectionTitle}>Фотографии:</Text>
                     <View style={styles.imagesWrap}>

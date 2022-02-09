@@ -164,9 +164,9 @@ export const getUserInfo = (params)=>async (dispatch)=>{
 
 export const saveUserInfo = (params)=>async (dispatch)=>{
     try{
-
         const xhr = new XMLHttpRequest();
         const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
+
         const data = await new Promise((resolve, reject) => {
             xhr.onreadystatechange = e => {
                 if (xhr.readyState !== 4) {
@@ -192,14 +192,15 @@ export const saveUserInfo = (params)=>async (dispatch)=>{
 
 export const createNewAd = (params)=>async (dispatch)=>{
     try{
-        console.log(params);
         const xhr = new XMLHttpRequest();
         const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
+
         const data = await new Promise((resolve, reject) => {
             xhr.onreadystatechange = e => {
                 if (xhr.readyState !== 4) {
                     return;
                 }
+                console.log(xhr);
                 if (xhr.status === 200) {
                     resolve(JSON.parse(xhr.responseText));
                 } else {
@@ -211,7 +212,6 @@ export const createNewAd = (params)=>async (dispatch)=>{
             xhr.setRequestHeader("Authorization", "Bearer "+token);
             xhr.send(params);
         })
-        return data
     }catch (e){
         throw e
     }

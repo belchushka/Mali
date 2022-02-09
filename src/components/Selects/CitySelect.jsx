@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CitySelect;
+export default React.memo(CitySelect);
