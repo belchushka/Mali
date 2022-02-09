@@ -92,6 +92,17 @@ export const getAnimalCities = (params) => async (dispatch) => {
     }
 }
 
+export const getAnimalGender = (params) => async (dispatch) => {
+    try{
+        const data = await $host.get("ads/genders", {
+            params:params
+        })
+        return data.data
+    }catch (e) {
+
+    }
+}
+
 export const getAnimal = (params) => async (dispatch) => {
     try{
         const data = await $host.get("ads/card", {

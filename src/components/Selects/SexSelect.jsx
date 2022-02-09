@@ -1,18 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {getAnimalBreeds, getAnimalCities} from "../../store/actions/animalActions";
+import {getAnimalBreeds, getAnimalCities, getAnimalGender} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
 import {useDispatch, useSelector} from "react-redux";
 import ContentView from "../ContentView";
 
-function CitySelect({onSelect},props) {
+function SexSelect({onSelect},props) {
     const [cities, setCities] = useState([])
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
             start()
-            const data = await dispatch(getAnimalCities({
+            const data = await dispatch(getAnimalGender({
                 limit:500
             }))
             setCities(data)
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default React.memo(CitySelect);
+export default React.memo(SexSelect);
