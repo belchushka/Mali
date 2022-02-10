@@ -10,9 +10,11 @@ import {getAnimalTypes, setCurrentAnimalTypeId, setCurrentAnimalTypeIdAndName} f
 import useLoading from "../hooks/useLoading";
 import ContentLayout from "../components/ContentLayout";
 import ContentWrapper from "../components/ContentWrapper";
+import ErrorModal from "../components/Modals/ErrorModal";
 
 function Catalog({navigation}, props) {
     const dispatch = useDispatch()
+    const [modalVisible,setModalVisible] = useState(false)
     const [animalTypes, setAnimalTypes] = useState([])
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -52,11 +54,16 @@ function Catalog({navigation}, props) {
                     </View>
                 }
 
-                <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам \n в ближайшее время."} buttonText={"Написать"} icon={MailIcon} style={{
+                <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам \n в ближайшее время."} buttonText={"Написать"} onButtonClick={()=>{
+                    setModalVisible(true)
+                }} icon={MailIcon} style={{
                     marginTop: 50,
                     marginBottom: 50,
                 }} iconHeight={12} iconWidth={16}/>
                 </ContentWrapper>
+            <ErrorModal close={()=>{
+                setModalVisible(false)
+            }} visible={modalVisible}/>
 
         </ContentLayout>
     );
