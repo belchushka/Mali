@@ -12,9 +12,11 @@ import NextIcon from "../media/Icons/Next.svg"
 import {exitUser} from "../store/actions/userActions";
 import ContentLayout from "../components/ContentLayout";
 import ContentWrapper from "../components/ContentWrapper";
+import {useAlert} from "../hooks/useAlert";
 
 function Profile({navigation, route}, props) {
     const loggedIn = useSelector(state => state.user.loggedIn)
+
     const [panelProps, setPanelProps] = useState({
         fullWidth: true,
         openLarge: true,
@@ -95,6 +97,7 @@ function Profile({navigation, route}, props) {
                     <Authorization hideCloseButton={hideCloseButton} showCloseButton={showCloseButtonAction} closeAction={closePanel} navigation={navigation}/>
                 </SwipeablePanel>
             }
+
         </ContentLayout>
     );
 }

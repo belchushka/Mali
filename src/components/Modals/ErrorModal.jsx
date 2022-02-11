@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput, ScrollView} from "react-native";
+import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput, ScrollView, TouchableOpacity} from "react-native";
 import CustomButton from "../CustomElements/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-
-//Todo переписать ContentLayout на схему View{flex:1} => ScrollView{flex:1} contentContainerStyle{flexGrow:1}
-
+import CloseIcon from "../../media/Icons/Close.svg"
+import SvgUri from "react-native-svg-uri";
 const ErrorModal = ({visible, close}) => {
     return (
-        <View style={styles.centeredView}>
-            <ScrollView >
+        <View style={{flex:1, justifyContent:"center"}}>
+
                 <Modal
                     animationType="fade"
                     transparent={true}
@@ -17,18 +16,32 @@ const ErrorModal = ({visible, close}) => {
                         close()
                     }}
                 >
+                    <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Нашли ошибку?</Text>
+                            <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between", marginBottom:16}}>
+                                <Text style={styles.modalText}>Нашли ошибку?</Text>
+                                <TouchableOpacity onPress={()=>{
+                                    close()
+                                }}>
+                                    <SvgUri width={14} height={14}  source={CloseIcon}/>
+
+                                </TouchableOpacity>
+                            </View>
+
                             <TextInput style={styles.inputs} placeholder={"Впишите ваше имя"}></TextInput>
                             <TextInput style={styles.inputs} placeholder={"+ 7 (000) 000-00-00"}></TextInput>
                             <TextInput multiline={true} numberOfLines={6} style={[styles.inputs,styles.textArea]} placeholder={"Опишите проблему"}></TextInput>
-                            <CustomButton title={"Отправить"} style={{marginTop:400}}/>
+                            <CustomButton title={"Отправить"} onClick={()=>{
+                                close()
+                                Alert.alert("Уведомление отправлено")
+                            }} style={{marginTop:20}}/>
                         </View>
                     </View>
+                    </KeyboardAwareScrollView>
+
                 </Modal>
 
-            </ScrollView>
 
         </View>
     );
@@ -39,7 +52,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
+        borderWidth:1
     },
     modalView: {
         margin: 20,
@@ -76,7 +89,6 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     modalText: {
-        marginBottom: 15,
         fontSize:18
     },
     inputs:{

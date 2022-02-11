@@ -17,10 +17,10 @@ import Facebook from "../media/Icons/Facebook.svg"
 import Apple from "../media/Icons/Apple.svg"
 import {useDispatch, useSelector} from "react-redux";
 import {changePassword, login, register, verifyCode, verifyEmail} from "../store/actions/userActions";
-import Stepper from "react-native-stepper-ui";
 import useLoading from "../hooks/useLoading";
 import LoadingView from "./CustomElements/LoadingView";
 import BackIconBlack from "../media/Icons/BackIconBlack.svg"
+import {useAlert} from "../hooks/useAlert";
 
 
 const styles = StyleSheet.create({
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
 })
 
-function Authorization({navigation, nextAction, hideCloseButton, goTo}, props) {
+function Auth({navigation, hideCloseButton, goTo}, props) {
     const [authorizationType, setAuthorizationType] = useState("registration")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -85,7 +85,7 @@ function Authorization({navigation, nextAction, hideCloseButton, goTo}, props) {
     const [passwordRepeat, setPasswordRepeat] = useState("")
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
-
+    const {open,close,render} = useAlert()
     const sendData = useCallback(async () => {
         start()
         try {
@@ -111,14 +111,13 @@ function Authorization({navigation, nextAction, hideCloseButton, goTo}, props) {
                                 }
                             })
                             stop()
-                            nextAction()
+                            goTo(1)
                             hideCloseButton()
-
                         }
                     }
                 } catch (e) {
                     stop()
-                    Alert.alert("Введите корректные данные:", e)
+                    open(e)
                 }
 
 
@@ -134,7 +133,8 @@ function Authorization({navigation, nextAction, hideCloseButton, goTo}, props) {
                     }
                 } catch (e) {
                     stop()
-                    Alert.alert("Неверный логин или пароль")
+                    open("Неверный логин или пароль. Попробуйте ввести" +
+                        "значения еще раз.")
                 }
 
             }
@@ -216,6 +216,7 @@ function Authorization({navigation, nextAction, hideCloseButton, goTo}, props) {
                     />
                     <Text style={styles.helpText}>Нужна помощь?</Text>
                 </View>
+                {render()}
             </ScrollView>}
 
         </ContentView>
@@ -227,6 +228,7 @@ const EmailVerification = ({navigation, showCloseButton,goTo}) => {
     const dispatch = useDispatch()
     const [code, setCode] = useState("")
     const {start, stop, loading} = useLoading()
+    const {open,close,render} = useAlert()
     const submit = useCallback(async () => {
         try {
             start()
@@ -239,7 +241,7 @@ const EmailVerification = ({navigation, showCloseButton,goTo}) => {
             navigation.navigate("profile")
         } catch (e) {
             stop()
-            Alert.alert("Ошибочка", e)
+            open(e)
         }
 
     }, [code])
@@ -256,6 +258,7 @@ const EmailVerification = ({navigation, showCloseButton,goTo}) => {
                                placeholder={"Введите код"}/>
                     <CustomButton onClick={submit} style={{marginTop: 50}} title={"Подтвердить адрес"}/>
                 </ScrollView>
+                {render()}
             </ContentView>}
         </>
 
@@ -266,6 +269,8 @@ const PasswordResetEmail = ({goTo,showCloseButton}) => {
     const dispatch = useDispatch()
     const [code, setCode] = useState("")
     const {start, stop, loading} = useLoading()
+    const {open,close,render} = useAlert()
+
     const submit = useCallback(async () => {
         try {
             start()
@@ -283,7 +288,7 @@ const PasswordResetEmail = ({goTo,showCloseButton}) => {
             goTo(3)
         } catch (e) {
             stop()
-            Alert.alert("Ошибочка", e)
+            open(e)
         }
     }, [code])
     return (
@@ -300,6 +305,7 @@ const PasswordResetEmail = ({goTo,showCloseButton}) => {
                                placeholder={"Введите email"}/>
                     <CustomButton onClick={submit} style={{marginTop: 50}} title={"Подтвердить адрес"}/>
                 </ScrollView>
+                {render()}
             </ContentView>}
         </>
 
@@ -314,6 +320,8 @@ const PasswordChange = ({goTo, showCloseButton}) => {
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
     const {start, stop, loading} = useLoading()
+    const {open,close,render} = useAlert()
+
     const submit = useCallback(async () => {
         try {
             start()
@@ -333,7 +341,7 @@ const PasswordChange = ({goTo, showCloseButton}) => {
 
         } catch (e) {
             stop()
-            Alert.alert("Ошибочка", e)
+            open(e)
         }
     }, [code,password,repeatPassword])
     return (
@@ -352,6 +360,7 @@ const PasswordChange = ({goTo, showCloseButton}) => {
                                placeholder={"Подтвердите новый пароль"}/>
                     <CustomButton onClick={submit} style={{marginTop: 50}} title={"Подтвердить адрес"}/>
                 </ScrollView>
+                {render()}
             </ContentView> }
         </>
 
@@ -359,7 +368,7 @@ const PasswordChange = ({goTo, showCloseButton}) => {
 }
 
 
-const stepper = ({closeAction, hideCloseButton, showCloseButton, navigation}) => {
+const Authorization = ({closeAction, hideCloseButton, showCloseButton, navigation}) => {
     const [active, setActive] = useState(0);
     const increase = useCallback(() => {
         setActive(active + 1)
@@ -395,18 +404,12 @@ const stepper = ({closeAction, hideCloseButton, showCloseButton, navigation}) =>
 
         return () => BackHandler.removeEventListener('hardwareBackPress', backAction)
     }, [active])
-    return <Stepper
-        active={active}
-        content={[<Authorization closeAction={closeAction} goTo={goTo} closed={close} navigation={navigation}
-                                 hideCloseButton={hideCloseButton} nextAction={increase}/>, <EmailVerification goTo={goTo} showCloseButton={showCloseButton} navigation={navigation}/>,
-            <PasswordResetEmail showCloseButton={showCloseButton} goTo={goTo}/>, <PasswordChange goTo={goTo}  showCloseButton={showCloseButton}/>]}
-        onNext={() => setActive((p) => p + 1)}
-        onBack={() => setActive((p) => p - 1)}
-        showButton={false}
-        stepStyle={{display: "none"}}
-        wrapperStyle={{overflow: "hidden"}}
-        onFinish={() => Alert.alert("Finish")}
-    />
+    return <>
+        {active==0 && <Auth goTo={goTo} hideCloseButton={hideCloseButton} navigation={navigation}/> }
+        {active==1 && <EmailVerification navigation={navigation} showCloseButton={showCloseButton} goTo={goTo}/>}
+        {active==2 &&  <PasswordResetEmail showCloseButton={showCloseButton} goTo={goTo} />}
+        {active==3 &&   <PasswordChange goTo={goTo} showCloseButton={showCloseButton} />}
+    </>
 }
 
-export default stepper;
+export default Authorization;

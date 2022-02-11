@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity, Button} from "react-native";
+import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity, Button, ActivityIndicator} from "react-native";
 import Swiper from 'react-native-swiper'
 import BackWhite from "../media/Icons/BackWhite.svg"
 import SvgUri from "react-native-svg-uri";
@@ -12,6 +12,8 @@ import {getAnimal} from "../store/actions/animalActions";
 import useLoading from "../hooks/useLoading";
 import LoadingView from "../components/CustomElements/LoadingView";
 import YoutubePlayer from "react-native-youtube-iframe";
+import {LinearGradient} from "expo-linear-gradient";
+import AppIntroSlider from "react-native-app-intro-slider";
 
 function youtube_parser(url){
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -20,6 +22,7 @@ function youtube_parser(url){
 }
 
 function AnimalInfo({navigation, route}, props) {
+    const [videoLoaded,setVideoLoaded] = useState(false)
     const animalId = route.params.id
     const dispatch = useDispatch()
     const [data, setAnimalData]=useState({})
@@ -64,38 +67,47 @@ function AnimalInfo({navigation, route}, props) {
                                 <CircledIcon image={PlaneImg} style={{marginLeft: 5}}/>
                             </TouchableOpacity>
                         </View>
-                        {data.imagesPath && <Swiper
-                            dotStyle={{
-                                width: 4,
-                                height: 4,
-                                backgroundColor: "rgba(255,255,255,0.67)",
-                                marginLeft: 16,
-                                marginBottom: 20
+                        {data.imagesPath &&<AppIntroSlider
+                            style={{ width: "100%", aspectRatio: 1 }}
+                            keyExtractor={(item) => item}
+                            renderItem={({ item }) => {
+                                return (
+                                    <View style={{ flex: 1 }}>
+                                        <Image
+                                            source={{ uri: item }}
+                                            style={{
+                                                width: "100%",
+                                                aspectRatio: 1,
+                                            }}
+                                        />
+                                        <LinearGradient
+                                            colors={["rgba(255,255,255,0.01)", "rgba(0,0,0,0.65)"]}
+                                            style={{
+                                                width: "100%",
+                                                aspectRatio: 2,
+                                                position: "absolute",
+                                                top: "50%",
+                                            }}
+                                        />
+                                    </View>
+                                );
                             }}
-                            activeDotStyle={{
-                                width: 12,
-                                height: 4,
-                                backgroundColor: "#ffffff",
-                                marginLeft: 16,
-                                marginBottom: 20
-                            }}
+                            activeDotStyle={{ display: "none" }}
+                            dotStyle={{ display: "none" }}
+                            showDoneButton={false}
+                            showNextButton={false}
+                            renderPagination={(index)=>{
+                                return <View style={{position:"absolute", alignSelf:"center", bottom:40, flexDirection:"row"}}>
+                                    {data.imagesPath.map((el,indexEl)=>{
+                                        return <View style={[{width:5, height:5, backgroundColor:"rgba(255,255,255,0.3)", borderRadius:1200, marginLeft:10},indexEl==index && {width:15, backgroundColor:"white"} ]}>
 
-                            loop={false} width={"100%"} height={400} style={styles.wrapper}
-                        >
-                            {data.imagesPath.map(el=>{
-                                return  <View key={el.id} style={{
-                                    flex: 1,
-                                }}>
-                                    <Image
-                                        source={{uri:el}}
-                                        style={{
-                                            aspectRatio: 1,
-                                        }}
-                                    />
+                                        </View>
+                                    })}
                                 </View>
-                            })}
-
-                        </Swiper>}
+                            }
+                            }
+                            data={data.imagesPath}
+                        />}
 
                     </View>
                     <ContentView style={styles.mainView}>
@@ -131,13 +143,17 @@ function AnimalInfo({navigation, route}, props) {
                             <Text style={styles.descriptionTitle}>Описание</Text>
                             <Text style={styles.descriptionText}>{`${data.descriptionPet}`}</Text>
                         </View>
-                        {data.youtubeVideo && <View style={styles.video}>
+                        {data.youtubeVideo && <View style={[styles.video, !videoLoaded && {display:"none"}]}>
                             <YoutubePlayer
                                 height={245}
                                 play={playing}
+                                onReady={()=>{setVideoLoaded(true)}}
                                 videoId={youtube_parser(data.youtubeVideo)}
                             />
                         </View>}
+
+                        {!videoLoaded && <View style={[styles.video, {justifyContent:"center"}]}><ActivityIndicator size="large" color="#F6A405" /></View>}
+
 
 
                         <CustomButton style={{marginTop:25}} title={"Нашли ошибку?"}/>

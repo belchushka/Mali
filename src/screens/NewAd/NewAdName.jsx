@@ -7,17 +7,20 @@ import ContentLayout from "../../components/ContentLayout";
 import ContentWrapper from "../../components/ContentWrapper";
 import CityPanel from "../../components/Panels/CityPanel";
 import SexPanel from "../../components/Panels/SexPanel";
+import {useAlert} from "../../hooks/useAlert";
 
 function NewAdName({navigation},props) {
-    const [name,setName] = useState()
-    const [description,setDescription] = useState()
-    const [age,setAge] = useState()
+    const [name,setName] = useState("")
+    const [description,setDescription] = useState("")
+    const [age,setAge] = useState("")
     const [sex,setSex] = useState("")
     const [sexId,setSexId] = useState()
-    const [address,setAddress] = useState()
-    const [price,setPrice] = useState()
+    const [address,setAddress] = useState("")
+    const [price,setPrice] = useState("")
     const [cityName,setCityName] = useState("")
     const [city,setCity] = useState()
+    const {open,close,render} = useAlert()
+
     const [cityPanelOpened,setCityPanelOpened] = useState(false)
     const [sexPanelOpened,setSexPanelOpened] = useState(false)
     const dispatch = useDispatch()
@@ -40,7 +43,7 @@ function NewAdName({navigation},props) {
             })
             navigation.navigate("newAdContacts")
         }catch (e){
-            Alert.alert(e)
+            open(e)
         }
     },[dispatch, name, description, price, city,sexId,address,age])
     return (
@@ -83,7 +86,7 @@ function NewAdName({navigation},props) {
                 setSexPanelOpened(false)
 
             }}/>
-
+            {render()}
         </ContentLayout>
 
     );

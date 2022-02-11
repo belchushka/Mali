@@ -12,6 +12,7 @@ import SvgUri from "react-native-svg-uri";
 import EmptyImage from "../../media/Icons/EmtyImageProfile.svg";
 import Whataspp from "../../media/Icons/Whatsapp.svg"
 import {ConvertImage} from "../../utils/ConvertImage";
+import {useAlert} from "../../hooks/useAlert";
 
 function NewAdContacts({navigation},props) {
     const dispatch = useDispatch()
@@ -22,6 +23,8 @@ function NewAdContacts({navigation},props) {
     const [name,setName]=useState("")
     const [iconPath, setIconPath] = useState({})
     const [phone,setPhone]=useState("")
+    const {open,close,render} = useAlert()
+
     const [phoneWhatsapp,setPhoneWhatsapp]=useState("")
     const fetch = useCallback(async () => {
         try {
@@ -50,7 +53,7 @@ function NewAdContacts({navigation},props) {
                 await dispatch(saveUserInfo(formData))
             }else{
                 stop()
-                Alert.alert("Уведомление","Заполните все контактные данные")
+                open("Заполните все контактные данные")
             }
 
             const fformData = new FormData()
@@ -66,7 +69,7 @@ function NewAdContacts({navigation},props) {
             stop()
             navigation.navigate("home")
         }catch (e) {
-            Alert.alert("Ошибочка",e)
+            open(e)
         }
 
     },[dispatch, type, name,userData, phone, phoneWhatsapp])
@@ -97,6 +100,7 @@ function NewAdContacts({navigation},props) {
             <View style={{paddingLeft:12,paddingRight:12}}>
                 <CustomButton style={{ position:"absolute",bottom:20,alignSelf:"center"}} onClick={goNext} title={"Разместить оюъявление"}/>
             </View>
+            {render()}
         </ContentLayout>
     );
 }

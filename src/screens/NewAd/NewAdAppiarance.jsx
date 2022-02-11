@@ -17,6 +17,7 @@ import CustomButton from "../../components/CustomElements/CustomButton";
 import * as ImagePicker from "expo-image-picker";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {ConvertImage} from "../../utils/ConvertImage";
+import {useAlert} from "../../hooks/useAlert";
 
 
 function NewAdAppiarance({navigation},props) {
@@ -24,6 +25,8 @@ function NewAdAppiarance({navigation},props) {
     const [isYoutubeLinkValid,SetIsYoutubeLinkValid] = useState(true)
     const [photos, setPhotos] = useState([])
     const [place,setPlace] = useState([])
+    const {open,close,render} = useAlert()
+
     console.log(photos);
     const CheckYoutubeLink = () => {
         if (youtube) {
@@ -75,14 +78,14 @@ function NewAdAppiarance({navigation},props) {
             })
             navigation.navigate("newAdName")
         }catch (e){
-            Alert.alert(e)
+            open(e)
         }
 
     },[dispatch, photos,youtube,place])
     useEffect(CheckYoutubeLink,[youtube])
     return (
         <View style={{flex: 1, backgroundColor: "white"}}>
-            <KeyboardAwareScrollView >
+            <KeyboardAwareScrollView>
                 <CustomHeader hasBackButton={true} title={"Внешний вид"} goBackAction={navigation.goBack}/>
                 <ContentView style={{flex: 1, height:Dimensions.get("window").height*0.92}}>
                     <PlaceFilter checkOne={true} onChange={(places)=>{
@@ -106,7 +109,7 @@ function NewAdAppiarance({navigation},props) {
                     <CustomButton style={{position:"absolute", bottom:20,alignSelf:"center"}} onClick={goNext} title={"Продолжить"}/>
                 </ContentView>
             </KeyboardAwareScrollView>
-
+            {render()}
         </View>
     );
 }
