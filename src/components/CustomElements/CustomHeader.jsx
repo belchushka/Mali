@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import SvgUri from "react-native-svg-uri";
 import Back from "../../media/Icons/Back.svg"
 
 function CustomHeader({title,hasBackButton, goBackAction, style, backButtonImg=Back, backIconWidth = 8, backIconHeight=15},props) {
+
     return (
         <View style={[styles.headerView, style, { justifyContent: hasBackButton ?  "space-between" : "center",}]}>
             {hasBackButton &&

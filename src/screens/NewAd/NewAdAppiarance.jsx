@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import CustomHeader from "../../components/CustomElements/CustomHeader";
 import ContentView from "../../components/ContentView";
 import {
-    Alert,
+    Alert, Button,
     Dimensions,
     Image,
     StyleSheet,
@@ -84,10 +84,37 @@ function NewAdAppiarance({navigation},props) {
     },[dispatch, photos,youtube,place])
     useEffect(CheckYoutubeLink,[youtube])
     return (
-        <View style={{flex: 1, backgroundColor: "white"}}>
-            <KeyboardAwareScrollView>
+        <View style={{flex:1, backgroundColor:"white"}}>
+            <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
+                {/*<ContentView style={{borderWidth:1, flex:1}}>*/}
+                {/*    <Text>siodfjoisdjfiojs</Text>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
+                {/*    <CustomButton style={{position:"absolute",bottom:0}} title={"Test"}></CustomButton>*/}
+                {/*</ContentView>*/}
                 <CustomHeader hasBackButton={true} title={"Внешний вид"} goBackAction={navigation.goBack}/>
-                <ContentView style={{flex: 1, height:Dimensions.get("window").height*0.92}}>
+                <ContentView style={{flex:1}}>
                     <PlaceFilter checkOne={true} onChange={(places)=>{
                         setPlace(places)
 
@@ -105,14 +132,18 @@ function NewAdAppiarance({navigation},props) {
                     <Text style={styles.sectionTitle}>Видео с Ютуб:</Text>
                     <TextInput value={youtube}  onChangeText={(val)=>{setYoutube(val)}} style={[styles.textInput, !isYoutubeLinkValid &&{borderBottomColor:"red"}]} placeholder={"Ссылка на видео"}/>
                     {!isYoutubeLinkValid && <Text style={{color:"red", fontSize:12, marginTop:10}}>Неверная ссылка, попробуйте еще раз.</Text>}
-
-                    <CustomButton style={{position:"absolute", bottom:20,alignSelf:"center"}} onClick={goNext} title={"Продолжить"}/>
+                    <View style={{flex:1, justifyContent:"flex-end", marginBottom:10}}>
+                        <CustomButton onClick={goNext} title={"Продолжить"}/>
+                    </View>
                 </ContentView>
+                {render()}
             </KeyboardAwareScrollView>
-            {render()}
         </View>
     );
 }
+
+
+
 
 const styles = StyleSheet.create({
     sectionTitle:{

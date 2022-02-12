@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import CustomHeader from "../../components/CustomElements/CustomHeader";
-import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import {useDispatch} from "react-redux";
 import ContentLayout from "../../components/ContentLayout";
@@ -8,6 +8,8 @@ import ContentWrapper from "../../components/ContentWrapper";
 import CityPanel from "../../components/Panels/CityPanel";
 import SexPanel from "../../components/Panels/SexPanel";
 import {useAlert} from "../../hooks/useAlert";
+import ContentView from "../../components/ContentView";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 function NewAdName({navigation},props) {
     const [name,setName] = useState("")
@@ -47,30 +49,35 @@ function NewAdName({navigation},props) {
         }
     },[dispatch, name, description, price, city,sexId,address,age])
     return (
-        <ContentLayout>
+        <View style={{flex:1, backgroundColor:"white"}}>
+            <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
             <CustomHeader hasBackButton={true} goBackAction={navigation.goBack} title={"Укажите данные"} />
-            <ContentWrapper stretchType={"bottom"} stretch={true}>
+            <ContentView style={{flexGrow:1}}>
                 <TextInput value={name}  onChangeText={(val)=>{setName(val)}} style={[styles.textInput]} placeholder={"Кличка животного"}/>
-                <TextInput value={age}  onChangeText={(val)=>{setAge(val)}} style={[styles.textInput]} placeholder={"Возраст животного"}/>
+                <TextInput value={age} keyboardType={Platform.OS == "android" ? "numeric" : "number-pad"}  onChangeText={(val)=>{setAge(val.replace(/[^0-9]/g, ""))}} style={[styles.textInput]} placeholder={"Возраст животного(лет)"}/>
+
                 <TouchableOpacity onPress={() => {
                     setSexPanelOpened(true)
                 }} style={styles.input}>
-                    <Text>{sex.length === 0 ? "Выберете пол" : sex}</Text>
+                    <Text>{sex.length === 0 ? "Выберете пол >" : sex}</Text>
                 </TouchableOpacity>
-                <TextInput value={description}  onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput]} placeholder={"Опишите питомца"}/>
+                {/*<View style={{  backgroundColor:"#F6F4F0", borderRadius:10, marginTop:10,*/}
+                {/*    marginBottom:10,}}>*/}
+                {/*    <TextInput value={description} numberOfLines={6} multiline={true} onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput,styles.textArea]} placeholder={"Опишите питомца"}/>*/}
+
+                {/*</View>*/}
                 <TextInput value={price}  onChangeText={(val)=>{setPrice(val)}} style={[styles.textInput]} placeholder={"Назначьте цену"}/>
                 <TouchableOpacity onPress={() => {
                     setCityPanelOpened(true)
                 }} style={styles.input}>
-                    <Text>{cityName.length === 0 ? "Укажите город проживания" : cityName}</Text>
+                    <Text>{cityName.length === 0 ? "Укажите город проживания >" : cityName}</Text>
                 </TouchableOpacity>
                 <TextInput value={address}  onChangeText={(val)=>{setAddress(val)}} style={[styles.textInput]} placeholder={"Введите адресс"}/>
-
-            </ContentWrapper>
-            <View style={{paddingLeft:12,paddingRight:12}}>
-                <CustomButton style={{ position:"absolute",bottom:20,alignSelf:"center"}} onClick={goNext} title={"Продолжить"}/>
-            </View>
-            <CityPanel closePanelAction={() => {
+                <View style={{flex:1, justifyContent:"flex-end", marginBottom:10}}>
+                    <CustomButton  onClick={goNext} title={"Продолжить"}/>
+                </View>
+            </ContentView>
+            <CityPanel  closePanelAction={() => {
                 setCityPanelOpened(false)
             }} opened={cityPanelOpened} onSelect={ (id, name) => {
                 setCity(id)
@@ -86,8 +93,11 @@ function NewAdName({navigation},props) {
                 setSexPanelOpened(false)
 
             }}/>
-            {render()}
-        </ContentLayout>
+                {render()}
+
+            </KeyboardAwareScrollView>
+        </View>
+
 
     );
 }
@@ -109,6 +119,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         justifyContent: "center"
     },
+
+    textArea:{
+        textAlignVertical:"top",
+        paddingRight:10,
+        paddingLeft:10,
+        borderTopWidth:0
+    }
 })
 
 export default NewAdName;

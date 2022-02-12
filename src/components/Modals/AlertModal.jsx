@@ -6,7 +6,7 @@ import CloseIcon from "../../media/Icons/Close.svg"
 import SvgUri from "react-native-svg-uri";
 const AlertModal = ({visible, close, text}) => {
     return (
-        <View style={{flex:1, justifyContent:"center"}}>
+        <View style={{flex:1, justifyContent:"center", position:"absolute"}}>
 
             <Modal
                 animationType="fade"
