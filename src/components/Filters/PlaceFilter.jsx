@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import {getAnimalPlaces} from "../../store/actions/animalActions";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import useLoading from "../../hooks/useLoading";
 
 function PlaceFilter({title,style, onChange,selectedValues, checkOne=false},props) {
-    const [places,setPlaces] = useState([])
+    const places = useSelector(state=>state.animal.places)
     const [selectedPlaces, setSelectedPlaces] = useState(selectedValues?selectedValues : [])
     const [selectedPlace, setSelectedPlace] = useState(null)
     const dispatch = useDispatch()
@@ -14,7 +14,6 @@ function PlaceFilter({title,style, onChange,selectedValues, checkOne=false},prop
         try {
             start()
             const data = await dispatch(getAnimalPlaces())
-            setPlaces(data)
             stop()
         } catch (e) {
 

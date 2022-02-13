@@ -1,18 +1,18 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import ContentView from "../components/ContentView";
-import CustomHeader from "../components/CustomElements/CustomHeader";
-import QuestionBlock from "../components/CustomElements/QuestionBlock";
-import Alert from "../media/Icons/Alert.svg";
+import ContentView from "../../components/ContentView";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
+import QuestionBlock from "../../components/CustomElements/QuestionBlock";
+import Alert from "../../media/Icons/Alert.svg";
 import {SwipeablePanel} from "rn-swipeable-panel";
-import Authorization from "../components/Authorization";
+import Authorization from "../../components/Authorization";
 import {useDispatch, useSelector} from "react-redux";
 import SvgUri from "react-native-svg-uri";
-import NextIcon from "../media/Icons/Next.svg"
-import {exitUser} from "../store/actions/userActions";
-import ContentLayout from "../components/ContentLayout";
-import ContentWrapper from "../components/ContentWrapper";
-import {useAlert} from "../hooks/useAlert";
+import NextIcon from "../../media/Icons/Next.svg"
+import {exitUser} from "../../store/actions/userActions";
+import ContentLayout from "../../components/ContentLayout";
+import ContentWrapper from "../../components/ContentWrapper";
+import {useAlert} from "../../hooks/useAlert";
 
 function Profile({navigation, route}, props) {
     const loggedIn = useSelector(state => state.user.loggedIn)

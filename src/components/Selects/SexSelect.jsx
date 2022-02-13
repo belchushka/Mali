@@ -6,8 +6,9 @@ import {useDispatch, useSelector} from "react-redux";
 import ContentView from "../ContentView";
 
 function SexSelect({onSelect},props) {
-    const [cities, setCities] = useState([])
     const dispatch = useDispatch()
+    const genders = useSelector(state=>state.animal.genders)
+    console.log(genders);
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
@@ -15,7 +16,6 @@ function SexSelect({onSelect},props) {
             const data = await dispatch(getAnimalGender({
                 limit:500
             }))
-            setCities(data)
             stop()
         } catch (e) {
 
@@ -27,7 +27,7 @@ function SexSelect({onSelect},props) {
             {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
                 <FlatList
                     style={styles.breedList}
-                    data={cities}
+                    data={genders}
                     renderItem={({item})=>{
                         return <TouchableOpacity style={styles.typePicker} onPress={()=>{
                             onSelect(item.id,item.name)

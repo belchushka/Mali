@@ -1,20 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import CustomHeader from "../components/CustomElements/CustomHeader";
-import ContentView from "../components/ContentView";
-import {SwipeablePanel} from "rn-swipeable-panel";
-import PlaceFilter from "../components/Filters/PlaceFilter";
-import CustomButton from "../components/CustomElements/CustomButton";
-import PriceFilter from "../components/Filters/PriceFilter";
-import AnimalBreeds from "../components/Selects/AnimalBreeds";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
+import ContentView from "../../components/ContentView";
+import PlaceFilter from "../../components/Filters/PlaceFilter";
+import CustomButton from "../../components/CustomElements/CustomButton";
 import {useDispatch, useSelector} from "react-redux";
-import {searchAnimals} from "../store/actions/animalActions";
-import PricePanel from "../components/Panels/PricePanel";
-import AnimalBreedPanel from "../components/Panels/AnimalBreedPanel";
-import CityPanel from "../components/Panels/CityPanel";
-import useLoading from "../hooks/useLoading";
-import ContentLayout from "../components/ContentLayout";
-import ContentWrapper from "../components/ContentWrapper";
+import {searchAnimals} from "../../store/actions/animalActions";
+import PricePanel from "../../components/Panels/PricePanel";
+import AnimalBreedPanel from "../../components/Panels/AnimalBreedPanel";
+import CityPanel from "../../components/Panels/CityPanel";
+import useLoading from "../../hooks/useLoading";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 function AdditionFilter({navigation, route}, props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
@@ -46,9 +42,10 @@ function AdditionFilter({navigation, route}, props) {
     }, [dispatch, animalTypeId, animalBreed, priceRange, city, animalPlace])
     useEffect(refreshData,[refreshData])
     return (
-        <ContentLayout >
+        <View style={{flex:1, backgroundColor:"white"}}>
+            <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
             <CustomHeader goBackAction={navigation.goBack} hasBackButton={true} title={"Параметры"}/>
-            <ContentWrapper stretch={true}>
+            <ContentView style={{flex:1}}>
                 <TouchableOpacity onPress={() => {
                     setCityPanelOpened(true)
                 }} style={styles.input}>
@@ -68,29 +65,27 @@ function AdditionFilter({navigation, route}, props) {
                 <PlaceFilter selectedValues={animalPlace} onChange={(places) => {
                     setAnimalPlace(places)
                 }} style={{marginTop: 20}} title={"Откуда животное:"}/>
-            </ContentWrapper>
-            <View style={{
-                position: "absolute",
-                bottom: 0,
-                flexDirection: "row",
-                justifyContent: "center",
-                width: "100%",
-                paddingLeft: 12,
-                paddingRight: 12
-            }}>
-                <CustomButton loading={loading} title={`Показать ${total} предложений`} onClick={() => {
-                    navigation.navigate("searchResults",{
-                        ...(animalPlace.length !== 0 && {idAnimalPlace: animalPlace}),
-                        ...(animalBreed && {idAnimalBreed: animalBreed}),
-                        ...(animalTypeId && {idAnimalCategories: animalTypeId}),
-                        ...(priceRange[0] && {priceMin: priceRange[0]}),
-                        ...(priceRange[1] && {priceMax: priceRange[1]}),
-                        searchName:"Результаты поиска:",
-                        breedName:animalTypeName,
-                        numberAds:46
-                    })
-                }}/>
-            </View>
+                <View style={{
+                  flex:1,
+                    justifyContent: "flex-end",
+                    marginBottom: 20
+                }}>
+                    <CustomButton loading={loading} title={`Показать ${total} предложений`} onClick={() => {
+                        navigation.navigate("searchResults",{
+                            ...(animalPlace.length !== 0 && {idAnimalPlace: animalPlace}),
+                            ...(animalBreed && {idAnimalBreed: animalBreed}),
+                            ...(animalTypeId && {idAnimalCategories: animalTypeId}),
+                            ...(priceRange[0] && {priceMin: priceRange[0]}),
+                            ...(priceRange[1] && {priceMax: priceRange[1]}),
+                            searchName:"Результаты поиска:",
+                            breedName:animalTypeName,
+                            numberAds:46
+                        })
+                    }}/>
+                </View>
+            </ContentView>
+            </KeyboardAwareScrollView>
+
             <CityPanel closePanelAction={() => {
                 setCityPanelOpened(false)
             }} opened={cityPanelOpened} onSelect={ (id, name) => {
@@ -113,7 +108,7 @@ function AdditionFilter({navigation, route}, props) {
                 setAnimalTypeName(name)
                 setBreedPanelOpened(false)
             }}/>
-        </ContentLayout>
+        </View>
     );
 }
 

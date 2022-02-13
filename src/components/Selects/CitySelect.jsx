@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import ContentView from "../ContentView";
 
 function CitySelect({onSelect},props) {
-    const [cities, setCities] = useState([])
+    const cities = useSelector(state=>state.animal.cities)
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -15,7 +15,6 @@ function CitySelect({onSelect},props) {
             const data = await dispatch(getAnimalCities({
                 limit:500
             }))
-            setCities(data)
             stop()
         } catch (e) {
 

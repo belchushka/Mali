@@ -1,18 +1,18 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import SearchBar from "../components/CustomElements/SearchBar";
-import ContentView from "../components/ContentView";
-import {searchAnimals, setCurrentAnimalTypeId} from "../store/actions/animalActions";
-import {useDispatch} from "react-redux";
-import AnimalCard from "../components/AnimalCard";
-import useLoading from "../hooks/useLoading";
-import CustomButton from "../components/CustomElements/CustomButton";
-import LoadingView from "../components/CustomElements/LoadingView";
+import SearchBar from "../../components/CustomElements/SearchBar";
+import ContentView from "../../components/ContentView";
+import {searchAnimals} from "../../store/actions/animalActions";
+import {useDispatch, useSelector} from "react-redux";
+import AnimalCard from "../../components/AnimalCard";
+import useLoading from "../../hooks/useLoading";
+import CustomButton from "../../components/CustomElements/CustomButton";
+import LoadingView from "../../components/CustomElements/LoadingView";
 
 function SearchResults({route, navigation},props) {
     const params = route.params
     const dispatch = useDispatch()
-    const [results, setResults] = useState([])
+    const results = useSelector(state=>state.animal.searchedAnimals)
     const [resultsCount, setResultsCount] = useState(0)
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -25,10 +25,7 @@ function SearchResults({route, navigation},props) {
             const data = await dispatch(searchAnimals({
                 ...filteredParams
             }))
-            setResults(data.cards)
-            console.log(results);
             setResultsCount(data.total)
-
             stop()
         } catch (e) {
 
@@ -47,7 +44,7 @@ function SearchResults({route, navigation},props) {
                         </View>
 
                         <View style={styles.cardHolder}>
-                            {results.map(el=>{
+                            {results && results.map(el=>{
                                 return <TouchableOpacity onPress={()=>{navigation.navigate("animalInfo",{id:el.idAd})}} key={el.idAd} style={styles.searchCard}>
                                     <AnimalCard clickable={false} key={el.idAd} image={el.imagePreview}/>
                                     <Text style={styles.cardText}>{el.namePet}</Text>

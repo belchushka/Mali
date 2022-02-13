@@ -4,17 +4,18 @@ import AlertModal from "../components/Modals/AlertModal";
 export const useAlert = ()=>{
     const [visible, setVisible] = useState(false)
     const [text, setText] = useState("")
+    const [title, setTitle] = useState("")
     const close = useCallback(()=>{
         setVisible(false)
     }, [])
-    const open = useCallback((text)=>{
+    const open = useCallback((title,text)=>{
         setText(text)
+        setTitle(title)
         setVisible(true)
-
     }, [])
 
     const render = useCallback(()=>{
-        return <AlertModal visible={visible} close={close} text={text}/>
+        return <AlertModal title={title} visible={visible} close={close} text={text}/>
     },[visible,close, text])
 
     return useMemo(()=>{

@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, Text, TouchableOpacity, View, StyleSheet, ScrollView} from "react-native";
-import ContentView from "../components/ContentView";
-import CustomHeader from "../components/CustomElements/CustomHeader";
+import ContentView from "../../components/ContentView";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
 import {useDispatch, useSelector} from "react-redux";
-import useLoading from "../hooks/useLoading";
-import {getUserAnimals} from "../store/actions/userActions";
-import LoadingView from "../components/CustomElements/LoadingView";
-import UserAnimalTypeFilter from "../components/Filters/UserAnimalsTypeFilter";
-import CustomButton from "../components/CustomElements/CustomButton";
+import useLoading from "../../hooks/useLoading";
+import {getUserAnimals} from "../../store/actions/userActions";
+import LoadingView from "../../components/CustomElements/LoadingView";
+import UserAnimalTypeFilter from "../../components/Filters/UserAnimalsTypeFilter";
+import CustomButton from "../../components/CustomElements/CustomButton";
 
 function UserAnimals({navigation},props) {
     const dispatch = useDispatch()
@@ -51,31 +51,39 @@ function UserAnimals({navigation},props) {
     }, [dispatch])
     useEffect(fetch, [fetch])
     return (
-        <ScrollView style={{flex:1, backgroundColor:"white"}}>
-            <CustomHeader hasBackButton={true} title={"Мои объявления"} goBackAction={navigation.goBack}/>
-            {loading ? <LoadingView/> : <ContentView>
+        <View style={{flex:1}}>
+            <ScrollView style={{flex:1, backgroundColor:"white"}}>
+                <CustomHeader hasBackButton={true} title={"Мои объявления"} goBackAction={navigation.goBack}/>
+                {loading ? <LoadingView/> : <ContentView>
                     <UserAnimalTypeFilter actives={actives} checking={checking} archive={archive} onChange={(status)=>{
                         setStatus(status)
                     }}/>
-                {userAnimals ? <View style={styles.cardHolder}>
-                    {filteredValues && filteredValues.map(el=>{
-                        return <TouchableOpacity key={el.adId} style={styles.card}>
-                            <Image style={styles.cardImage}  source={{uri:el.imagePreview}}/>
-                            <View style={styles.cardTextWrapper}>
-                                <Text style={styles.cardTitle}>{el.namePet}</Text>
-                                <Text style={styles.cardPrice}>{el.price} руб</Text>
-                            </View>
-                        </TouchableOpacity>
-                    })}
+                    {userAnimals ? <View style={styles.cardHolder}>
+                        {filteredValues && filteredValues.map(el=>{
+                            return <TouchableOpacity key={el.idAd} onPress={()=>{
+                             navigation.navigate("animalInfo", {
+                                 id:el.idAd
+                             })
+                            }
+                            } style={styles.card}>
+                                <Image style={styles.cardImage}  source={{uri:el.imagePreview}}/>
+                                <View style={styles.cardTextWrapper}>
+                                    <Text style={styles.cardTitle}>{el.namePet}</Text>
+                                    <Text style={styles.cardPrice}>{el.price} руб</Text>
+                                </View>
+                            </TouchableOpacity>
+                        })}
 
-                </View> : <View style={styles.createWrapper}>
-                    <Text style={styles.createText}>У вас еще нет ни одного объявления.</Text>
-                    <CustomButton onClick={()=>{navigation.navigate("createAd")}} style={{marginTop:40}} title={"Разместить объявление"} />
-                </View>}
+                    </View> : <View style={styles.createWrapper}>
+                        <Text style={styles.createText}>У вас еще нет ни одного объявления.</Text>
+                        <CustomButton onClick={()=>{navigation.navigate("createAd")}} style={{marginTop:40}} title={"Разместить объявление"} />
+                    </View>}
 
-            </ContentView>}
+                </ContentView>}
 
-        </ScrollView>
+            </ScrollView>
+
+        </View>
     );
 }
 

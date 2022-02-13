@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet, View, Dimensions, ScrollView} from "react-native";
-import CustomHeader from "../components/CustomElements/CustomHeader";
-import ContentView from "../components/ContentView";
-import CustomButton from "../components/CustomElements/CustomButton";
-import CircledIcon from "../components/CustomElements/CircledIcon";
-import Inst from "../media/Icons/Inst.svg"
+import CustomHeader from "../../components/CustomElements/CustomHeader";
+import ContentView from "../../components/ContentView";
+import CustomButton from "../../components/CustomElements/CustomButton";
+import CircledIcon from "../../components/CustomElements/CircledIcon";
+import Inst from "../../media/Icons/Inst.svg"
 
 function Policy({navigation},props) {
     return (

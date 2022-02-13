@@ -4,7 +4,7 @@ import CustomButton from "../CustomElements/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CloseIcon from "../../media/Icons/Close.svg"
 import SvgUri from "react-native-svg-uri";
-const AlertModal = ({visible, close, text}) => {
+const AlertModal = ({visible, close, text, title}) => {
     return (
         <View style={{flex:1, justifyContent:"center", position:"absolute"}}>
 
@@ -19,7 +19,7 @@ const AlertModal = ({visible, close, text}) => {
                 <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                                <Text style={styles.modalText}>Ошибка</Text>
+                                <Text style={styles.modalText}>{title}</Text>
                                 <Text style={{fontSize:14, color:"#808080", marginTop:10}}>{text}</Text>
                             <TouchableOpacity onPress={close} style={{marginTop:10, alignSelf:"flex-end"}}>
                                 <Text style={{color:"#F6A405", fontSize:16}}>Ok</Text>

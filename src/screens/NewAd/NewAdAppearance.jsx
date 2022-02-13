@@ -18,9 +18,10 @@ import * as ImagePicker from "expo-image-picker";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {ConvertImage} from "../../utils/ConvertImage";
 import {useAlert} from "../../hooks/useAlert";
+import {setNewAdData} from "../../store/actions/animalActions";
 
 
-function NewAdAppiarance({navigation},props) {
+function NewAdAppearance({navigation}, props) {
     const [youtube,setYoutube] = useState("")
     const [isYoutubeLinkValid,SetIsYoutubeLinkValid] = useState(true)
     const [photos, setPhotos] = useState([])
@@ -67,18 +68,15 @@ function NewAdAppiarance({navigation},props) {
             }else if(photos.length<2){
                 throw "Выберете хотя бы 2 фото"
             }
-            await dispatch({
-                type:"SET_NEW_AD_DATA",
-                payload:{
-                    imgs:photos.map(el=>ConvertImage(el)),
-                    youtubeVideo:youtube,
-                    idAnimalPlace:place,
-                    preview:ConvertImage(photos[0])
-                }
-            })
+            await dispatch(setNewAdData({
+                imgs:photos.map(el=>ConvertImage(el)),
+                youtubeVideo:youtube,
+                idAnimalPlace:place,
+                preview:ConvertImage(photos[0])
+            }))
             navigation.navigate("newAdName")
         }catch (e){
-            open(e)
+            open("Ошибка",e)
         }
 
     },[dispatch, photos,youtube,place])
@@ -86,33 +84,6 @@ function NewAdAppiarance({navigation},props) {
     return (
         <View style={{flex:1, backgroundColor:"white"}}>
             <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
-                {/*<ContentView style={{borderWidth:1, flex:1}}>*/}
-                {/*    <Text>siodfjoisdjfiojs</Text>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <TextInput placeholder={"Test"}></TextInput>*/}
-                {/*    <CustomButton style={{position:"absolute",bottom:0}} title={"Test"}></CustomButton>*/}
-                {/*</ContentView>*/}
                 <CustomHeader hasBackButton={true} title={"Внешний вид"} goBackAction={navigation.goBack}/>
                 <ContentView style={{flex:1}}>
                     <PlaceFilter checkOne={true} onChange={(places)=>{
@@ -180,4 +151,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NewAdAppiarance;
+export default NewAdAppearance;

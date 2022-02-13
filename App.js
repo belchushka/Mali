@@ -4,6 +4,7 @@ import {Provider} from "react-redux";
 import store from "./src/store";
 import NavigationComponent from "./src/components/NavigationComponent";
 import {StatusBar} from "expo-status-bar";
+import {useAlert} from "./src/hooks/useAlert";
 TextInput.defaultProps.selectionColor = '#777777'
 LogBox.ignoreAllLogs();
 
@@ -18,7 +19,7 @@ export default function App() {
     return (
         <Provider store={store}>
             <SafeAreaView style={{flex: 1}}>
-                <MyStatusBar backgroundColor="#f2f2f2" barStyle="light-content" />
+                <MyStatusBar backgroundColor="rgba(242,242,242,0.56)" barStyle="light-content" />
                 <NavigationComponent />
             </SafeAreaView>
         </Provider>

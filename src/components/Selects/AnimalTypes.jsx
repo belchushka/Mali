@@ -2,17 +2,16 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {getAnimalTypes} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 function AnimalTypes({onSelect,style, underlineBottom=false},props) {
-    const [breeds, setBreeds] = useState([])
+    const types = useSelector(state=>state.animal.types)
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
             start()
             const data = await dispatch(getAnimalTypes())
-            setBreeds(data)
             stop()
         } catch (e) {
 
@@ -24,7 +23,7 @@ function AnimalTypes({onSelect,style, underlineBottom=false},props) {
             {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
                 <FlatList
                     style={[styles.breedList,style]}
-                    data={breeds}
+                    data={types}
                     renderItem={({item})=>{
                         if (item.name!=="Перевозка животных"){
                             return <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,

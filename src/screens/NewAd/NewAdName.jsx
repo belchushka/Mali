@@ -10,6 +10,7 @@ import SexPanel from "../../components/Panels/SexPanel";
 import {useAlert} from "../../hooks/useAlert";
 import ContentView from "../../components/ContentView";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {setNewAdData} from "../../store/actions/animalActions";
 
 function NewAdName({navigation},props) {
     const [name,setName] = useState("")
@@ -29,23 +30,20 @@ function NewAdName({navigation},props) {
     const goNext = useCallback(async ()=>{
         try {
             if ([name,description,price,address,age].some(el=>el.length==0) || !sexId || !city){
-                throw "Заполнимте все поля"
+                throw "Заполните все поля"
             }
-            await dispatch({
-                type:"SET_NEW_AD_DATA",
-                payload:{
-                    namePet:name,
-                    descriptionPet:description,
-                    price:price,
-                    idGender:sexId,
-                    idCity:city,
-                    address:address,
-                    age:age
-                }
-            })
+            await dispatch(setNewAdData({
+                namePet:name,
+                descriptionPet:description,
+                price:price,
+                idGender:sexId,
+                idCity:city,
+                address:address,
+                age:age
+            }))
             navigation.navigate("newAdContacts")
         }catch (e){
-            open(e)
+            open("Ошибка",e)
         }
     },[dispatch, name, description, price, city,sexId,address,age])
     return (
@@ -61,12 +59,12 @@ function NewAdName({navigation},props) {
                 }} style={styles.input}>
                     <Text>{sex.length === 0 ? "Выберете пол >" : sex}</Text>
                 </TouchableOpacity>
-                {/*<View style={{  backgroundColor:"#F6F4F0", borderRadius:10, marginTop:10,*/}
-                {/*    marginBottom:10,}}>*/}
-                {/*    <TextInput value={description} numberOfLines={6} multiline={true} onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput,styles.textArea]} placeholder={"Опишите питомца"}/>*/}
+                <View style={{  backgroundColor:"#F6F4F0", borderRadius:10, marginTop:10,
+                    marginBottom:10,}}>
+                    <TextInput value={description} numberOfLines={6} multiline={true} onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput,styles.textArea]} placeholder={"Опишите питомца"}/>
 
-                {/*</View>*/}
-                <TextInput value={price}  onChangeText={(val)=>{setPrice(val)}} style={[styles.textInput]} placeholder={"Назначьте цену"}/>
+                </View>
+                <TextInput value={price}  keyboardType={Platform.OS == "android" ? "numeric" : "number-pad"}  onChangeText={(val)=>{setPrice(val.replace(/[^0-9]/g, ""))}} style={[styles.textInput]} placeholder={"Назначьте цену"}/>
                 <TouchableOpacity onPress={() => {
                     setCityPanelOpened(true)
                 }} style={styles.input}>

@@ -7,9 +7,7 @@ import ContentView from "../ContentView";
 
 function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
-
-    const [breeds, setBreeds] = useState([])
-    console.log(breeds);
+    const breeds = useSelector(state=>state.animal.breeds)
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -18,7 +16,6 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
             const data = await dispatch(getAnimalBreeds({
                 id:animalTypeId
             }))
-            setBreeds(data)
             stop()
         } catch (e) {
 

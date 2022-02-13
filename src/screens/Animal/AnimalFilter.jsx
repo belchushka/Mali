@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import ContentView from "../components/ContentView";
-import CustomHeader from "../components/CustomElements/CustomHeader";
-import PlaceFilter from "../components/Filters/PlaceFilter";
+import ContentView from "../../components/ContentView";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
+import PlaceFilter from "../../components/Filters/PlaceFilter";
 import {useDispatch, useSelector} from "react-redux";
-import useLoading from "../hooks/useLoading";
-import {getAnimalBreeds, getAnimalPlaces, searchAnimals} from "../store/actions/animalActions";
-import AnimalBreeds from "../components/Selects/AnimalBreeds";
+import useLoading from "../../hooks/useLoading";
+import {getAnimalBreeds, getAnimalPlaces, searchAnimals} from "../../store/actions/animalActions";
+import AnimalBreeds from "../../components/Selects/AnimalBreeds";
 
 function AnimalFilter({navigation}, props) {
     const dispatch = useDispatch()

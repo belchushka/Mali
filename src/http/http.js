@@ -12,7 +12,6 @@ const $host = axios.create({
 $authHost.interceptors.request.use(async (config)=>{
     const data = await AsyncStorage.getItem("userData") || ""
     const token = JSON.parse(data).accessToken
-    console.log("token: ",token);
     config.headers.authorization = "Bearer " + token
     return config
 });

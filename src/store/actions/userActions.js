@@ -1,11 +1,20 @@
 import {AsyncStorage} from "react-native";
 import {$authHost, $host} from "../../http/http";
+import {
+    EXIT_USER,
+    SET_FIRST_TIME,
+    SET_LOGGED_IN,
+    SET_USER_ANIMALS,
+    SET_USER_DATA,
+    SET_USER_EMAIL,
+    SET_USER_INFO
+} from "../consts";
 
 
 export const setFirstTime = (value)=>async (dispatch)=>{
     try{
         dispatch({
-            type:"SET_FIRST_TIME",
+            type:SET_FIRST_TIME,
             payload:value
         })
     }catch (e){
@@ -17,7 +26,7 @@ export const setFirstTime = (value)=>async (dispatch)=>{
 export const setLoggedIn = (value)=>async (dispatch)=>{
     try{
         dispatch({
-            type:"SET_LOGGED_IN",
+            type:SET_LOGGED_IN,
             payload:value
         })
     }catch (e){
@@ -29,7 +38,7 @@ export const setLoggedIn = (value)=>async (dispatch)=>{
 export const setUserData = (value)=>async (dispatch)=>{
     try{
         dispatch({
-            type:"SET_USER_DATA",
+            type:SET_USER_DATA,
             payload:value
         })
     }catch (e){
@@ -45,7 +54,7 @@ export const register = (params)=>async (dispatch)=>{
             ...params
         })
         dispatch({
-            type:"SET_USER_EMAIL",
+            type:SET_USER_EMAIL,
             payload:params.email
         })
         return true
@@ -74,8 +83,6 @@ export const verifyCode = (params)=>async (dispatch)=>{
         const data =await $host.post("user/password_change_request",{
             ...params
         })
-        console.log(data);
-
     }catch (e){
         throw e.response.data.message
     }
@@ -87,9 +94,7 @@ export const changePassword = (params)=>async (dispatch)=>{
         const data =await $host.post("user/change_password",{
             ...params
         })
-
         return true
-
     }catch (e){
         throw e.response.data.message
     }
@@ -105,18 +110,16 @@ export const login = (params)=>async (dispatch)=>{
         await AsyncStorage.setItem("userData",JSON.stringify(userData))
         await AsyncStorage.setItem("loggedIn","true")
         dispatch({
-            type:"SET_USER_DATA",
+            type:SET_USER_DATA,
             payload:userData
         })
         dispatch({
-            type:"SET_LOGGED_IN",
+            type:SET_LOGGED_IN,
             payload:true
         })
-
         return true
-
     }catch (e){
-        throw e
+        throw e.response.data.message
     }
 
 }
@@ -125,11 +128,10 @@ export const exitUser = ()=>async (dispatch)=>{
     try{
         await AsyncStorage.multiRemove(["loggedIn","userData"])
         dispatch({
-            type:"EXIT_USER",
+            type:EXIT_USER,
         })
         return true
     }catch (e){
-        console.log(e);
         return false
     }
 }
@@ -138,12 +140,11 @@ export const getUserAnimals = (params)=>async (dispatch)=>{
     try{
         const data =await $authHost.get("user/user_ads")
         dispatch({
-            type:"SET_USER_ANIMALS",
+            type:SET_USER_ANIMALS,
             payload:data.data.ads
         })
         return data.data.ads
     }catch (e){
-        console.log(e);
         return false
     }
 }
@@ -152,12 +153,11 @@ export const getUserInfo = (params)=>async (dispatch)=>{
     try{
         const data =await $authHost.get("user/profile")
         dispatch({
-            type:"SET_USER_INFO",
+            type:SET_USER_INFO,
             payload:data.data
         })
         return data.data
     }catch (e){
-        console.log(e);
         return false
     }
 }

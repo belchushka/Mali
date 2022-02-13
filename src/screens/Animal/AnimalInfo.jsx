@@ -1,19 +1,20 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity, Button, ActivityIndicator} from "react-native";
 import Swiper from 'react-native-swiper'
-import BackWhite from "../media/Icons/BackWhite.svg"
+import BackWhite from "../../media/Icons/BackWhite.svg"
 import SvgUri from "react-native-svg-uri";
-import CircledIcon from "../components/CustomElements/CircledIcon";
-import PlaneImg from "../media/Icons/Plane.svg"
-import ContentView from "../components/ContentView";
-import CustomButton from "../components/CustomElements/CustomButton";
-import {useDispatch} from "react-redux";
-import {getAnimal} from "../store/actions/animalActions";
-import useLoading from "../hooks/useLoading";
-import LoadingView from "../components/CustomElements/LoadingView";
+import CircledIcon from "../../components/CustomElements/CircledIcon";
+import PlaneImg from "../../media/Icons/Plane.svg"
+import ContentView from "../../components/ContentView";
+import CustomButton from "../../components/CustomElements/CustomButton";
+import {useDispatch, useSelector} from "react-redux";
+import {getAnimal} from "../../store/actions/animalActions";
+import useLoading from "../../hooks/useLoading";
+import LoadingView from "../../components/CustomElements/LoadingView";
 import YoutubePlayer from "react-native-youtube-iframe";
 import {LinearGradient} from "expo-linear-gradient";
 import AppIntroSlider from "react-native-app-intro-slider";
+import {useAlert} from "../../hooks/useAlert";
 
 function youtube_parser(url){
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
@@ -28,6 +29,7 @@ function AnimalInfo({navigation, route}, props) {
     const [data, setAnimalData]=useState({})
     const {start, stop, loading} = useLoading()
     const [playing, setPlaying] = useState(false);
+    const {open,close,render} = useAlert()
     const togglePlaying = useCallback(() => {
         setPlaying((prev) => !prev);
     }, []);
@@ -35,14 +37,13 @@ function AnimalInfo({navigation, route}, props) {
         try {
             start()
             const data = await dispatch(getAnimal({idAd:animalId}))
-            console.log(data);
             setAnimalData(data)
             stop()
         }catch (e){
-
+            open(e)
         }
     },[dispatch, animalId])
-    useEffect(fetch,[fetch,animalId])
+    useEffect(fetch,[fetch, animalId])
     return (
         <>
             {loading ? <LoadingView/> :<View style={{flex: 1, backgroundColor:"white"}}>
@@ -172,10 +173,9 @@ function AnimalInfo({navigation, route}, props) {
                         {/*    </View>*/}
                         {/*</View>*/}
                     </ContentView>
-
                 </ScrollView>
             </View>}
-
+            {render()}
         </>
 
     );

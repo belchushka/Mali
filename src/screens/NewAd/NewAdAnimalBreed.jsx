@@ -3,19 +3,16 @@ import {View} from "react-native";
 import CustomHeader from "../../components/CustomElements/CustomHeader";
 import ContentView from "../../components/ContentView";
 import AnimalBreeds from "../../components/Selects/AnimalBreeds";
-import {setCurrentAnimalTypeIdAndName} from "../../store/actions/animalActions";
+import {setNewAdData} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
 
 function NewAdAnimalBreed({navigation},props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async (id,name)=>{
-        await dispatch({
-            type:"SET_NEW_AD_DATA",
-            payload:{
-                idAnimalBreed:id
-            }
-        })
-        navigation.navigate("newAdAppiarance")
+        await dispatch(setNewAdData({
+            idAnimalBreed:id
+        }))
+        navigation.navigate("newAdAppearance")
     },[dispatch])
     return (
        <View style={{flex:1, backgroundColor:"white"}}>

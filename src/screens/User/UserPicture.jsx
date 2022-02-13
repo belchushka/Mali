@@ -1,12 +1,12 @@
 import React from 'react';
-import CustomHeader from "../components/CustomElements/CustomHeader";
-import CloseImg from "../media/Icons/Close.svg";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
+import CloseImg from "../../media/Icons/Close.svg";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import ContentView from "../components/ContentView";
+import ContentView from "../../components/ContentView";
 import SvgUri from "react-native-svg-uri";
-import EditImage from "../media/Icons/EditImage.svg";
-import Edit from "../media/Icons/Edit.svg";
-import CustomButton from "../components/CustomElements/CustomButton";
+import EditImage from "../../media/Icons/EditImage.svg";
+import Edit from "../../media/Icons/Edit.svg";
+import CustomButton from "../../components/CustomElements/CustomButton";
 
 function UserPicture({navigation},props) {
     return (

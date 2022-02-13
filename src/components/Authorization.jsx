@@ -183,7 +183,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                         <TextInput value={phoneNumber} onChangeText={(val) => setPhoneNumber(val)} style={styles.input}
                                    placeholder={"Введите номер телефона"}
                                    placeholderTextColor="#777777"/>}
-                    <TextInput value={password} secureTextEntry={true} onChangeText={(val) => setPassword(val)} style={styles.input}
+                    <TextInput value={password} secureTextEntry={true} textContentType="password" onChangeText={(val) => setPassword(val)} style={styles.input}
                                placeholder={authorizationType === "registration" ? "Придумайте пароль" : "Введите пароль"}
                                placeholderTextColor="#777777"/>
                     {authorizationType === "registration" &&
