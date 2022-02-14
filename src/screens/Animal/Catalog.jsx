@@ -32,7 +32,7 @@ function Catalog({navigation}, props) {
     return (
         <View style={{flex:1}}>
             <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
-                <SearchBar/>
+                <SearchBar navigation={navigation}/>
                 <ContentView style={{flex:1}}>
                     {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} />:
                         <View style={styles.cardHolder}>

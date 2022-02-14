@@ -19,7 +19,7 @@ function AnimalFilter({navigation}, props) {
             idAnimalBreed:breedId,
             idAnimalCategories:animalTypeId,
             searchName:breedName,
-            breedName:breedName
+            breedName:breedName,
         })
     },[dispatch,filterPlaces])
     return (

@@ -1,10 +1,28 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {TextInput, View, StyleSheet, Image, TouchableOpacity} from "react-native";
 import SearchIcon from "../../media/Icons/Search.svg"
 import SvgUri from "react-native-svg-uri";
 import BackIcon from "../../media/Icons/Back.svg";
+import {useDispatch} from "react-redux";
+import {searchAnimalsString} from "../../store/actions/animalActions";
 
 function SearchBar({style, showBackButton=false, navigation},props) {
+    const [searchString, setSearchString] = useState("")
+    const dispatch = useDispatch()
+    const search = useCallback(async ()=>{
+        const params = await dispatch(searchAnimalsString({
+            searchString:searchString
+        }))
+        const properties = params.recognizedProperties
+        navigation.navigate("searchResults",{
+            ...(properties.idAnimalPlace.length !== 0 && {idAnimalPlace: properties.idAnimalPlace}),
+            ...(properties.idAnimalBreed && {idAnimalBreed: properties.idAnimalBreed}),
+            ...(properties.idAnimalCategories && {idAnimalCategories: properties.idAnimalCategories}),
+            ...(properties.priceMin && {priceMin: properties.priceMin}),
+            ...(properties.priceMax && {priceMax: properties.priceMax}),
+            searchName:"Результаты поиска:",
+        })
+    },[searchString])
     return (
         <View style={[style,{marginTop:12, marginBottom:32, paddingLeft:12, paddingRight:12}]}>
             <View style={{flexDirection:"row", alignItems:"center"}}>
@@ -18,6 +36,11 @@ function SearchBar({style, showBackButton=false, navigation},props) {
                 <TextInput
                     style={[styles.searchInput, showBackButton && {marginLeft:15}]}
                     placeholder={"Поиск"}
+                    value={searchString}
+                    onChangeText={(val)=>setSearchString(val)}
+                    onSubmitEditing={()=>{
+                        search()
+                    }}
                     placeholderTextColor="#777777"
                 />
             </View>

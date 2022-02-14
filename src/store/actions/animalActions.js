@@ -83,6 +83,26 @@ export const searchAnimals = (params) => async (dispatch) => {
     }
 }
 
+export const searchAnimalsString = (params) => async (dispatch) => {
+    try{
+        const data = await $host.get("ads/search_ads", {
+            params:params,
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+        dispatch({
+            type:SET_SEARCH_ANIMALS_RESULT,
+            payload:data.data.cards
+        })
+        return data.data
+
+    }catch (e) {
+        console.log(e.response);
+        throw e.response.data.message
+    }
+}
+
 export const getAnimalCities = (params) => async (dispatch) => {
     try{
         const data = await $host.get("ads/towns", {

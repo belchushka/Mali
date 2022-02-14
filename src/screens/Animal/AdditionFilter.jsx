@@ -79,7 +79,7 @@ function AdditionFilter({navigation, route}, props) {
                             ...(priceRange[1] && {priceMax: priceRange[1]}),
                             searchName:"Результаты поиска:",
                             breedName:animalTypeName,
-                            numberAds:46
+                            numberAds:46,
                         })
                     }}/>
                 </View>
