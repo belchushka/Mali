@@ -4,7 +4,7 @@ import {getAnimalPlaces} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
 import useLoading from "../../hooks/useLoading";
 
-function UserAnimalTypeFilter({style, onChange,actives, checking,archive},props) {
+function UserAnimalTypeFilter({style, onChange,actives, checking,archive,refused},props) {
     const [selectedType, setSelectedType] = useState(null)
     const dispatch = useDispatch()
     return (
@@ -58,12 +58,12 @@ function UserAnimalTypeFilter({style, onChange,actives, checking,archive},props)
                     }>
                         <Text style={[styles.filterText,selectedType === "Архив" && styles.filterTextActive]}>Архив {archive}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity  style={[styles.filterItem,selectedType === "Архив" ? styles.filterItemActive:{}]} onPress={ ()=>{
-                        if(selectedType !== "Архив"){
+                    <TouchableOpacity  style={[styles.filterItem,selectedType === "Отклонено" ? styles.filterItemActive:{}]} onPress={ ()=>{
+                        if(selectedType !== "Отклонено"){
                             setSelectedType(state=>{
-                                return "Архив"
+                                return "Отклонено"
                             })
-                            onChange("Архив")
+                            onChange("Отклонено")
                         }else{
                             setSelectedType((state)=>{
                                 return null
@@ -72,7 +72,7 @@ function UserAnimalTypeFilter({style, onChange,actives, checking,archive},props)
                         }
                     }
                     }>
-                        <Text style={[styles.filterText,selectedType === "Архив" && styles.filterTextActive]}>Архив2 {archive}</Text>
+                        <Text style={[styles.filterText,selectedType === "Отклонено" && styles.filterTextActive]}>Отклоненные {refused}</Text>
                     </TouchableOpacity>
 
                 </ScrollView>

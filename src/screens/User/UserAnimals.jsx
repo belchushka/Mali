@@ -32,6 +32,13 @@ function UserAnimals({navigation, route}, props) {
         }
         return []
     }, [userAnimals])
+
+    const refused = useMemo(() => {
+        if (userAnimals) {
+            return userAnimals.filter(el => el.adStatus == "Отклонено").length
+        }
+        return []
+    }, [userAnimals])
     const filteredValues = useMemo(() => {
         switch (status) {
             case null:
@@ -47,6 +54,7 @@ function UserAnimals({navigation, route}, props) {
     const fetch = useCallback(async () => {
         start()
         const data = await dispatch(getUserAnimals())
+        console.log(data);
         stop()
     }, [dispatch])
     useEffect(fetch, [fetch])
@@ -57,7 +65,7 @@ function UserAnimals({navigation, route}, props) {
                               title={"Мои объявления"}
                               goBackAction={navigation.goBack}/>
                 {loading ? <LoadingView/> : <ContentView>
-                    <UserAnimalTypeFilter actives={actives} checking={checking} archive={archive}
+                    <UserAnimalTypeFilter refused={refused} actives={actives} checking={checking} archive={archive}
                                           onChange={(status) => {
                                               setStatus(status)
                                           }}/>
@@ -74,6 +82,7 @@ function UserAnimals({navigation, route}, props) {
                                 <View style={styles.cardTextWrapper}>
                                     <Text style={styles.cardTitle}>{el.namePet}</Text>
                                     <Text style={styles.cardPrice}>{el.price} руб</Text>
+                                    {el.reasonRefusal && <Text style={{color:"red"}}>{el.reasonRefusal}</Text>}
                                 </View>
                             </TouchableOpacity>
                         })}

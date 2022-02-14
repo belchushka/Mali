@@ -4,21 +4,28 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import AnimalInfoLayout from "../../components/AnimalInfoLayout";
 import useLoading from "../../hooks/useLoading";
 import {useAlert} from "../../hooks/useAlert";
-import {approveAnimal, getAdminAnimal, getAnimal} from "../../store/actions/animalActions";
+import {approveAnimal, getAdminAnimal, getAnimal, refuseAnimal} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
 import RefuseModal from "../../components/Modals/RefuseModal";
+import QuestionBlock from "../../components/CustomElements/QuestionBlock";
+import Alert from "../../media/Icons/Alert.svg";
 
 function AdminAnimal({navigation},props) {
     const {open, close, render} = useAlert()
     const {start, stop, loading} = useLoading()
     const [refuseModalVisible, setRefuseModalVisible] = useState(false)
+    const [completed, setCompleted] = useState(false)
     const dispatch = useDispatch()
     const [animalData,setAnimalData] = useState({})
     const fetch = useCallback(async () => {
         try {
             start()
             const data = await dispatch(getAdminAnimal())
-            setAnimalData(data)
+            if (data==="No content"){
+                setCompleted(true)
+            }else{
+                setAnimalData(data)
+            }
             stop()
         } catch (e) {
             open(e, "", () => () => {
@@ -42,7 +49,7 @@ function AdminAnimal({navigation},props) {
 
     const refuse = useCallback(async (id,reason)=>{
         try{
-            const data = await dispatch(approveAnimal({
+            const data = await dispatch(refuseAnimal({
                 idAd:id,
                 reasonReject:reason
             }))
@@ -57,27 +64,31 @@ function AdminAnimal({navigation},props) {
     useEffect(fetch, [fetch])
     return (
         <>
-            {loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
-                <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
-                    <TouchableOpacity style={styles.adminButton} onPress={()=>{
-                        setRefuseModalVisible(true)}
-                    }>
-                        <Text style={styles.adminButtonText}>Отклонить</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.adminButton} onPress={()=>{
-                        approve(animalData.idAd)
-                    }
-                    }>
-                        <Text style={styles.adminButtonText}>Принять</Text>
-                    </TouchableOpacity>
-                </View>
-                <AnimalInfoLayout showErrorAlert={false} navigation={navigation} data={animalData}/>
-                <RefuseModal close={(reason)=>{
-                    refuse(animalData.idAd, reason)
-                    setRefuseModalVisible(false)
-                }} visible={refuseModalVisible}/>
-            </View>}
-            {render()}
+            {completed ?  <QuestionBlock style={{marginTop: 20}} title={"Хорошая работа!"}
+                                          text={"Объявления на проверку закончились"} showButton={false} icon={Alert}/> :
+                loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
+                    <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
+                        <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                            setRefuseModalVisible(true)}
+                        }>
+                            <Text style={styles.adminButtonText}>Отклонить</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                            approve(animalData.idAd)
+                        }
+                        }>
+                            <Text style={styles.adminButtonText}>Принять</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <AnimalInfoLayout showErrorAlert={false} navigation={navigation} data={animalData}/>
+                    <RefuseModal close={(reason)=>{
+                        refuse(animalData.idAd, reason)
+                        setRefuseModalVisible(false)
+                    }} visible={refuseModalVisible}/>
+                </View>}
+            {render()
+            }
+
         </>
     );
 }

@@ -3,13 +3,14 @@ import {View, StyleSheet, Image, Text, Button, TouchableOpacity} from "react-nat
 import CustomButton from "./CustomButton";
 import CircledIcon from "./CircledIcon";
 
-function QuestionBlock({title, icon, buttonText, text, style, iconWidth, iconHeight, onButtonClick},props) {
+function QuestionBlock({title, icon, buttonText, text, style, iconWidth, iconHeight, onButtonClick, showButton=true},props) {
     return (
         <View style={[styles.questionBlock,style]}>
             <CircledIcon width={iconWidth} height={iconHeight} image={icon}/>
             <Text style={styles.headerText}>{title}</Text>
             <Text style={styles.subText}>{text}</Text>
-            <CustomButton onClick={onButtonClick} title={buttonText} style={{ marginTop:28}} />
+            {showButton && <CustomButton onClick={onButtonClick} title={buttonText} style={{ marginTop:28}} />}
+
         </View>
     );
 }

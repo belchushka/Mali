@@ -133,6 +133,9 @@ export const getAdminAnimal = (params) => async (dispatch) => {
         const data = await $authHost.get("admin/ad_need_approved", {
             params:params
         })
+        if (data.status === 204){
+            return "No content"
+        }
         dispatch({
             type:SET_ANIMAL_INFO,
             payload:data.data
