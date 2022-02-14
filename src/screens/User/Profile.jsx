@@ -13,10 +13,13 @@ import {exitUser} from "../../store/actions/userActions";
 import ContentLayout from "../../components/ContentLayout";
 import ContentWrapper from "../../components/ContentWrapper";
 import {useAlert} from "../../hooks/useAlert";
+import useLoading from "../../hooks/useLoading";
+import LoadingView from "../../components/CustomElements/LoadingView";
 
 function Profile({navigation, route}, props) {
     const loggedIn = useSelector(state => state.user.loggedIn)
-
+    const {start, stop, loading} = useLoading()
+    const userData = useSelector(state=>state.user.userData)
     const [panelProps, setPanelProps] = useState({
         fullWidth: true,
         openLarge: true,
@@ -54,52 +57,65 @@ function Profile({navigation, route}, props) {
     };
 
     const exit = useCallback(async () => {
+        start()
         const exit = await dispatch(exitUser())
         setIsPanelActive(false)
+        stop()
         if (exit) {
-            navigation.navigate("home")
+            navigation.navigate("profile")
         }
     }, [])
     useEffect(()=>{
         setIsPanelActive(route.params?.opened || false)
     },[route.params])
-    return (
-        <ContentLayout>
-            <CustomHeader title={"Личный кабинет"} hasBackButton={true} goBackAction={navigation.goBack}/>
-            <ContentWrapper stretch={true}>
-                {loggedIn ?
-                    <View>
-                        <TouchableOpacity style={styles.profileElement} onPress={() => {
-                            navigation.navigate("userAnimals")
-                        }}>
-                            <Text style={styles.profileElementText}>Мои объявления</Text>
-                            <SvgUri source={NextIcon} width={9} height={14}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.profileElement} onPress={() => {
-                            navigation.navigate("userInfo")
-                        }}>
-                            <Text style={styles.profileElementText}>Профиль</Text>
-                            <SvgUri source={NextIcon} width={9} height={14}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.profileElement} onPress={exit}>
-                            <Text style={styles.profileElementText}>Выйти</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-                    <QuestionBlock style={{marginTop: 20}} title={"Необходимо зайти в аккаунт"}
-                                   text={"Чтобы пользоваться профилем, нужно войти\n" +
-                                       "в свой аккаунт или создать новый"} onButtonClick={openPanel}
-                                   buttonText={"Зарегистрироваться"} icon={Alert}/>
-                }
-            </ContentWrapper>
-            {
-                !loggedIn && <SwipeablePanel style={{position: "absolute"}} {...panelProps} isActive={isPanelActive}>
-                    <Authorization hideCloseButton={hideCloseButton} showCloseButton={showCloseButtonAction} closeAction={closePanel} navigation={navigation}/>
-                </SwipeablePanel>
-            }
+    return <>
+        {loading ? <LoadingView /> :
+            <ContentLayout>
+                <CustomHeader title={"Личный кабинет"} hasBackButton={true} goBackAction={navigation.goBack}/>
+                <ContentWrapper stretch={true}>
+                    {loggedIn ?
+                        <View>
+                            {userData.role === 2 && <Text style={{marginTop:10, marginBottom:5, color:"rgba(0,0,0,0.37)",fontSize: 16}}>//admin</Text>}
+                            <TouchableOpacity style={styles.profileElement} onPress={() => {
+                                navigation.navigate("userAnimals")
+                            }}>
+                                <Text style={styles.profileElementText}>Мои объявления</Text>
+                                <SvgUri source={NextIcon} width={9} height={14}/>
+                            </TouchableOpacity>
+                            {userData.role === 2 && <TouchableOpacity style={styles.profileElement} onPress={() => {
+                                navigation.navigate("adminAnimal")
+                            }}>
+                                <Text style={styles.profileElementText}>Объявления на проверку</Text>
+                                <SvgUri source={NextIcon} width={9} height={14}/>
+                            </TouchableOpacity>}
 
-        </ContentLayout>
-    );
+                            <TouchableOpacity style={styles.profileElement} onPress={() => {
+                                navigation.navigate("userInfo")
+                            }}>
+                                <Text style={styles.profileElementText}>Профиль</Text>
+                                <SvgUri source={NextIcon} width={9} height={14}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.profileElement} onPress={exit}>
+                                <Text style={styles.profileElementText}>Выйти</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <QuestionBlock style={{marginTop: 20}} title={"Необходимо зайти в аккаунт"}
+                                       text={"Чтобы пользоваться профилем, нужно войти\n" +
+                                           "в свой аккаунт или создать новый"} onButtonClick={openPanel}
+                                       buttonText={"Зарегистрироваться"} icon={Alert}/>
+                    }
+                </ContentWrapper>
+                {
+                    !loggedIn && <SwipeablePanel style={{position: "absolute"}} {...panelProps} isActive={isPanelActive}>
+                        <Authorization hideCloseButton={hideCloseButton} showCloseButton={showCloseButtonAction} closeAction={closePanel} navigation={navigation}/>
+                    </SwipeablePanel>
+                }
+
+            </ContentLayout>
+        }
+    </>
+
 }
 
 

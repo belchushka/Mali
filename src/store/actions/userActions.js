@@ -149,6 +149,20 @@ export const getUserAnimals = (params)=>async (dispatch)=>{
     }
 }
 
+export const getAdminCheckAnimals = (params)=>async (dispatch)=>{
+    try{
+        const data =await $authHost.get("admin/ads_need_approved")
+        console.log(data);
+        dispatch({
+            type:SET_USER_ANIMALS,
+            payload:data.data
+        })
+        return data.data
+    }catch (e){
+        return false
+    }
+}
+
 export const getUserInfo = (params)=>async (dispatch)=>{
     try{
         const data =await $authHost.get("user/profile")

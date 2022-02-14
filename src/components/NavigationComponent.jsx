@@ -31,6 +31,7 @@ import NewAdName from "../screens/NewAd/NewAdName";
 import NewAdContacts from "../screens/NewAd/NewAdContacts";
 import useLoading from "../hooks/useLoading";
 import LoadingView from "./CustomElements/LoadingView";
+import AdminAnimal from "../screens/Animal/AdminAnimal";
 
 function HomeTabs() {
     const Tab = createBottomTabNavigator()
@@ -117,6 +118,7 @@ const NavigationComponent = () => {
                     <Stack.Screen name={"newAdAppearance"} component={NewAdAppearance}/>
                     <Stack.Screen name={"newAdName"} component={NewAdName}/>
                     <Stack.Screen name={"newAdContacts"} component={NewAdContacts}/>
+                    <Stack.Screen name={"adminAnimal"} component={AdminAnimal}/>
                 </Stack.Navigator>
             </NavigationContainer>
         }

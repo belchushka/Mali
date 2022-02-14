@@ -1,4 +1,4 @@
-import {$host} from "../../http/http";
+import {$authHost, $host} from "../../http/http";
 import qs from "qs";
 import {
     SET_ANIMAL_BREEDS, SET_ANIMAL_CITIES, SET_ANIMAL_GENDERS, SET_ANIMAL_INFO,
@@ -124,6 +124,33 @@ export const getAnimal = (params) => async (dispatch) => {
         })
         return data.data
     }catch (e) {
+        throw e.response.data.message
+    }
+}
+
+export const getAdminAnimal = (params) => async (dispatch) => {
+    try{
+        const data = await $authHost.get("admin/ad_need_approved", {
+            params:params
+        })
+        dispatch({
+            type:SET_ANIMAL_INFO,
+            payload:data.data
+        })
+        return data.data
+    }catch (e) {
+        throw e.response.data.message
+    }
+}
+
+export const approveAnimal = (params) => async (dispatch) => {
+    try{
+        const data = await $authHost.post("admin/approve_ad", {
+            ...params
+        })
+        return data.data
+    }catch (e) {
+        console.log(e.response);
         throw e.response.data.message
     }
 }

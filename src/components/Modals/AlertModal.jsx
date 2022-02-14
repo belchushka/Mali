@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput, ScrollView, TouchableOpacity} from "react-native";
-import CustomButton from "../CustomElements/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import CloseIcon from "../../media/Icons/Close.svg"
-import SvgUri from "react-native-svg-uri";
-const AlertModal = ({visible, close, text, title}) => {
+const AlertModal = ({visible, close, text, title, callback}) => {
     return (
         <View style={{flex:1, justifyContent:"center", position:"absolute"}}>
 
@@ -16,12 +13,15 @@ const AlertModal = ({visible, close, text, title}) => {
                     close()
                 }}
             >
-                <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}>
+                <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1,backgroundColor:"rgba(0,0,0,0.38)"}}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                                 <Text style={styles.modalText}>{title}</Text>
                                 <Text style={{fontSize:14, color:"#808080", marginTop:10}}>{text}</Text>
-                            <TouchableOpacity onPress={close} style={{marginTop:10, alignSelf:"flex-end"}}>
+                            <TouchableOpacity onPress={()=>{
+                                callback && callback()
+                                close()
+                            }} style={{marginTop:10, alignSelf:"flex-end", width:30, height:30}}>
                                 <Text style={{color:"#F6A405", fontSize:16}}>Ok</Text>
                             </TouchableOpacity>
                         </View>

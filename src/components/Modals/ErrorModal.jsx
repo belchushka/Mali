@@ -16,7 +16,7 @@ const ErrorModal = ({visible, close}) => {
                         close()
                     }}
                 >
-                    <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1}}>
+                    <KeyboardAwareScrollView contentContainerStyle={{flexGrow:1,backgroundColor:"rgba(0,0,0,0.38)"}}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between", marginBottom:16}}>
@@ -25,7 +25,6 @@ const ErrorModal = ({visible, close}) => {
                                     close()
                                 }}>
                                     <SvgUri width={14} height={14}  source={CloseIcon}/>
-
                                 </TouchableOpacity>
                             </View>
 

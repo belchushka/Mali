@@ -8,6 +8,8 @@ import AnimalCard from "../../components/AnimalCard";
 import useLoading from "../../hooks/useLoading";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import LoadingView from "../../components/CustomElements/LoadingView";
+import SvgUri from "react-native-svg-uri";
+import BackIcon from "../../media/Icons/Back.svg"
 
 function SearchResults({route, navigation},props) {
     const params = route.params
@@ -36,7 +38,7 @@ function SearchResults({route, navigation},props) {
         <>
             {loading ? <LoadingView/> :        <View style={{flex:1, backgroundColor:"#F6F4F0"}}>
                 <ScrollView>
-                    <SearchBar/>
+                    <SearchBar showBackButton={true} navigation={navigation}/>
                     <ContentView>
                         <View style={styles.headers}>
                             <Text style={styles.textBold}>{params.searchName}</Text>

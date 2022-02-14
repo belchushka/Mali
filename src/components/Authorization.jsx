@@ -175,19 +175,19 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                     помощью
                     электронной почты</Text>
                 <View style={styles.inputForm}>
-                    <TextInput value={email} onChangeText={(val) => setEmail(val)} style={styles.input}
+                    <TextInput autoCapitalize = 'none' value={email} onChangeText={(val) => setEmail(val)} style={styles.input}
                                placeholder={"Введите e-mail"}
                                placeholderTextColor="#777777"/>
 
                     {authorizationType === "registration" &&
-                        <TextInput value={phoneNumber} onChangeText={(val) => setPhoneNumber(val)} style={styles.input}
+                        <TextInput autoCapitalize = 'none' value={phoneNumber} onChangeText={(val) => setPhoneNumber(val)} style={styles.input}
                                    placeholder={"Введите номер телефона"}
                                    placeholderTextColor="#777777"/>}
                     <TextInput value={password} secureTextEntry={true} textContentType="password" onChangeText={(val) => setPassword(val)} style={styles.input}
                                placeholder={authorizationType === "registration" ? "Придумайте пароль" : "Введите пароль"}
                                placeholderTextColor="#777777"/>
                     {authorizationType === "registration" &&
-                        <TextInput value={passwordRepeat} secureTextEntry={true} onChangeText={(val) => setPasswordRepeat(val)}
+                        <TextInput autoCapitalize = 'none' value={passwordRepeat} secureTextEntry={true} onChangeText={(val) => setPasswordRepeat(val)}
                                    style={styles.input} placeholder={"Повторите пароль"}
                                    placeholderTextColor="#777777"/>}
 
