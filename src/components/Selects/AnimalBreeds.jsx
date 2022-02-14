@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {getAnimalBreeds} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
 import {useDispatch, useSelector} from "react-redux";
@@ -21,15 +21,13 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
 
         }
     }, [dispatch,animalTypeId])
-    useEffect(fetch, [fetch, animalTypeId])
+    useEffect(fetch, [fetch, animalTypeId, onSelect])
     return (
             <View style={{paddingLeft:12,paddingRight:12, flex:1}}>
                 {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
-                    <FlatList
-                        style={[styles.breedList,style]}
-                        data={breeds}
-                        renderItem={function ({item}){
-                            return <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
+                    <ScrollView style={[styles.breedList,style]}>
+                        {breeds && breeds.map((item)=>{
+                            return  <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
                                 borderTopColor:"#F6F4F0"} : { borderBottomWidth:1,
                                 borderBottomColor:"#F6F4F0"}]} onPress={()=>{
                                 onSelect(item.id,item.name)
@@ -37,9 +35,8 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
                             }>
                                 <Text>{item.name}</Text>
                             </TouchableOpacity>
-                        }
-                        }
-                    />
+                        })}
+                    </ScrollView>
                 }
 
             </View>

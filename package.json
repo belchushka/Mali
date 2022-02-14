@@ -29,6 +29,7 @@
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-elements": "^3.4.2",
     "react-native-image-slider-banner": "^1.0.2",
+    "react-native-infinite-flatlist-patch": "^1.1.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.10.1",

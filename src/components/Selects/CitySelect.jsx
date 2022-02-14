@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {getAnimalBreeds, getAnimalCities} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,23 +20,20 @@ function CitySelect({onSelect},props) {
 
         }
     }, [dispatch])
-    useEffect(fetch, [fetch])
+    useEffect(fetch, [fetch, onSelect])
     return (
         <View style={{paddingLeft:12,paddingRight:12}}>
             {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
-                <FlatList
-                    style={styles.breedList}
-                    data={cities}
-                    renderItem={({item})=>{
+                <ScrollView style={styles.breedList}>
+                    {cities && cities.map(item=>{
                         return <TouchableOpacity style={styles.typePicker} onPress={()=>{
                             onSelect(item.id,item.name)
                         }
                         }>
                             <Text>{item.name}</Text>
                         </TouchableOpacity>
-                    }
-                    }
-                />
+                    })}
+                </ScrollView>
             }
 
         </View>

@@ -7,9 +7,13 @@ import {useDispatch, useSelector} from "react-redux";
 import AnimalCard from "../../components/AnimalCard";
 import useLoading from "../../hooks/useLoading";
 import CustomButton from "../../components/CustomElements/CustomButton";
-import LoadingView from "../../components/CustomElements/LoadingView";
-import SvgUri from "react-native-svg-uri";
-import BackIcon from "../../media/Icons/Back.svg"
+
+
+const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom;
+};
 
 function SearchResults({route, navigation},props) {
     const params = route.params
@@ -42,37 +46,33 @@ function SearchResults({route, navigation},props) {
     return (
         <>
             <View style={{flex:1, backgroundColor:"#F6F4F0"}}>
-                <ScrollView>
+                <ScrollView  onScroll={({nativeEvent}) => {
+                    if (isCloseToBottom(nativeEvent)) {
+                        setFetchIndex(state=>state+step)
+
+                    }
+                }}
+                             scrollEventThrottle={400}>
                     <SearchBar showBackButton={true} navigation={navigation}/>
                     <ContentView>
                         <View style={styles.headers}>
                             <Text style={styles.textBold}>{params.searchName}</Text>
                             <Text style={styles.textOpacity}>{resultsCount + " предложений"}</Text>
                         </View>
+                        <View style={styles.cardHolder}>
+                            {results && results.map((item)=>{
+                                return <TouchableOpacity onPress={()=>{navigation.navigate("animalInfo",{id:item.idAd})}} key={item.idAd} style={styles.searchCard}>
+                                    <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
+                                    <Text style={styles.cardText}>{item.namePet}</Text>
+                                    <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
+                                    <Text style={styles.cardTextSmall}>{item.city}</Text>
+                                    <View style={styles.placeWrap}>
+                                        <Text style={styles.placeText}>{item.place}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            })}
+                        </View>
 
-                            <FlatList
-                                data={results}
-                                style={{width:"100%"}}
-                                contentContainerStyle={styles.cardHolder}
-                                numColumns={2}
-                                onEndReached={()=>{
-                                    setFetchIndex(state=>state+step)
-                                    fetch()
-                                }
-                                }
-                                renderItem={({item})=>{
-                                    return <TouchableOpacity onPress={()=>{navigation.navigate("animalInfo",{id:item.idAd})}} key={item.idAd} style={styles.searchCard}>
-                                        <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
-                                        <Text style={styles.cardText}>{item.namePet}</Text>
-                                        <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
-                                        <Text style={styles.cardTextSmall}>{item.city}</Text>
-                                        <View style={styles.placeWrap}>
-                                            <Text style={styles.placeText}>{item.place}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                }
-                                }
-                            />
                         {loading && <ActivityIndicator size={"large"} color={"#F6A405"}/>}
 
                     </ContentView>
@@ -111,7 +111,9 @@ const styles = StyleSheet.create({
         marginTop:5
     },
     cardHolder: {
-        alignItems:"center",
+        flexDirection:"row",
+        flexWrap:"wrap",
+        justifyContent:"space-between",
         marginTop: 5,
         width:"100%",
         marginBottom:20
@@ -150,7 +152,6 @@ const styles = StyleSheet.create({
 
     searchCard:{
         marginTop:15,
-        margin:5
     }
 
 })
