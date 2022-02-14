@@ -155,6 +155,18 @@ export const approveAnimal = (params) => async (dispatch) => {
     }
 }
 
+export const refuseAnimal = (params) => async (dispatch) => {
+    try{
+        const data = await $authHost.post("admin/reject_ad", {
+            ...params
+        })
+        return data.data
+    }catch (e) {
+        console.log(e.response);
+        throw e.response.data.message
+    }
+}
+
 export const setNewAdData = (params) => async (dispatch) => {
     try{
       dispatch({

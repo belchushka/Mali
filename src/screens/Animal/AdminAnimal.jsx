@@ -6,10 +6,12 @@ import useLoading from "../../hooks/useLoading";
 import {useAlert} from "../../hooks/useAlert";
 import {approveAnimal, getAdminAnimal, getAnimal} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
+import RefuseModal from "../../components/Modals/RefuseModal";
 
 function AdminAnimal({navigation},props) {
     const {open, close, render} = useAlert()
     const {start, stop, loading} = useLoading()
+    const [refuseModalVisible, setRefuseModalVisible] = useState(false)
     const dispatch = useDispatch()
     const [animalData,setAnimalData] = useState({})
     const fetch = useCallback(async () => {
@@ -26,11 +28,25 @@ function AdminAnimal({navigation},props) {
     }, [dispatch])
     const approve = useCallback(async (id)=>{
         try{
-            console.log(id);
             const data = await dispatch(approveAnimal({
                 idAd:id
             }))
             open("Объявление успешно подтверждено" ,"", ()=>()=>{
+                fetch()
+            })
+        }catch (e) {
+            open("Ошибка",e)
+        }
+
+    },[dispatch,fetch])
+
+    const refuse = useCallback(async (id,reason)=>{
+        try{
+            const data = await dispatch(approveAnimal({
+                idAd:id,
+                reasonReject:reason
+            }))
+            open("Объявление успешно отклонено" ,"", ()=>()=>{
                 fetch()
             })
         }catch (e) {
@@ -43,7 +59,9 @@ function AdminAnimal({navigation},props) {
         <>
             {loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
                 <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
-                    <TouchableOpacity style={styles.adminButton}>
+                    <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                        setRefuseModalVisible(true)}
+                    }>
                         <Text style={styles.adminButtonText}>Отклонить</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.adminButton} onPress={()=>{
@@ -54,6 +72,10 @@ function AdminAnimal({navigation},props) {
                     </TouchableOpacity>
                 </View>
                 <AnimalInfoLayout showErrorAlert={false} navigation={navigation} data={animalData}/>
+                <RefuseModal close={(reason)=>{
+                    refuse(animalData.idAd, reason)
+                    setRefuseModalVisible(false)
+                }} visible={refuseModalVisible}/>
             </View>}
             {render()}
         </>
