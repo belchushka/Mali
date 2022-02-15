@@ -60,8 +60,9 @@ function NewAdName({navigation},props) {
                     <Text>{sex.length === 0 ? "Выберете пол >" : sex}</Text>
                 </TouchableOpacity>
                 <View style={{  backgroundColor:"#F6F4F0", borderRadius:10, marginTop:10,
-                    marginBottom:10,}}>
-                    <TextInput value={description} numberOfLines={6} multiline={true} onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput,styles.textArea]} placeholder={"Опишите питомца"}/>
+                    marginBottom:0}}>
+                    <TextInput value={description}   numberOfLines={Platform.OS === 'ios' ? null : 6}
+                               minHeight={(Platform.OS === 'ios' && 6) ? (20 * 6) : null} multiline={true} onChangeText={(val)=>{setDescription(val)}} style={[styles.textInput,styles.textArea, {borderBottomWidth: 0}]} placeholder={"Опишите питомца"}/>
 
                 </View>
                 <TextInput value={price}  keyboardType={Platform.OS == "android" ? "numeric" : "number-pad"}  onChangeText={(val)=>{setPrice(val.replace(/[^0-9]/g, ""))}} style={[styles.textInput]} placeholder={"Назначьте цену"}/>
@@ -111,9 +112,8 @@ const styles = StyleSheet.create({
     input: {
         borderBottomWidth: 1,
         borderBottomColor: "#F6F4F0",
-        height: 45,
         marginTop: 10,
-        paddingBottom: 10,
+        paddingBottom: 14,
         fontSize: 14,
         justifyContent: "center"
     },

@@ -8,7 +8,6 @@ import ContentView from "../ContentView";
 function SexSelect({onSelect},props) {
     const dispatch = useDispatch()
     const genders = useSelector(state=>state.animal.genders)
-    console.log(genders);
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
@@ -28,6 +27,7 @@ function SexSelect({onSelect},props) {
                 <FlatList
                     style={styles.breedList}
                     data={genders}
+                    nestedScrollEnabled={true}
                     renderItem={({item})=>{
                         return <TouchableOpacity style={styles.typePicker} onPress={()=>{
                             onSelect(item.id,item.name)

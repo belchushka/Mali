@@ -27,8 +27,6 @@ function NewAdAppearance({navigation}, props) {
     const [photos, setPhotos] = useState([])
     const [place,setPlace] = useState([])
     const {open,close,render} = useAlert()
-
-    console.log(photos);
     const CheckYoutubeLink = () => {
         if (youtube) {
             let regExp =
@@ -39,7 +37,7 @@ function NewAdAppearance({navigation}, props) {
                 SetIsYoutubeLinkValid(false);
             }
         } else SetIsYoutubeLinkValid(youtube == "");
-    };
+    }
     const selectImages =useCallback(async ()=>{
         const { status } =
             await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -61,7 +59,7 @@ function NewAdAppearance({navigation}, props) {
     const dispatch = useDispatch()
     const goNext = useCallback(async ()=>{
         try{
-            if (place==null){
+            if (place.length===0 || place[0]===null){
                 throw "Выберете место"
             }else if(!isYoutubeLinkValid){
                 throw "Неверная ссылка"
@@ -70,7 +68,7 @@ function NewAdAppearance({navigation}, props) {
             }
             await dispatch(setNewAdData({
                 imgs:photos.map(el=>ConvertImage(el)),
-                youtubeVideo:youtube,
+                ...(youtube.length!==0 && {youtubeVideo:youtube}),
                 idAnimalPlace:place,
                 preview:ConvertImage(photos[0])
             }))
@@ -79,7 +77,7 @@ function NewAdAppearance({navigation}, props) {
             open("Ошибка",e)
         }
 
-    },[dispatch, photos,youtube,place])
+    },[dispatch, photos,youtube,place,isYoutubeLinkValid])
     useEffect(CheckYoutubeLink,[youtube])
     return (
         <View style={{flex:1, backgroundColor:"white"}}>
@@ -93,7 +91,7 @@ function NewAdAppearance({navigation}, props) {
                     <Text style={styles.sectionTitle}>Фотографии:</Text>
                     <View style={styles.imagesWrap}>
                         {photos.map(el=>{
-                            return  <TouchableOpacity onPress={()=>{setPhotos(state=>state.filter(el1=>el1!=el))}} style={styles.imageWrap}>
+                            return  <TouchableOpacity key={el} onPress={()=>{setPhotos(state=>state.filter(el1=>el1!=el))}} style={styles.imageWrap}>
                                 <Image style={styles.image} source={{uri:el}}/>
 
                             </TouchableOpacity>
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
     },
 
     textInput:{
-        paddingBottom:20,
+        paddingBottom:10,
         borderBottomWidth:1,
         borderBottomColor:"#F6F4F0",
         fontSize:14

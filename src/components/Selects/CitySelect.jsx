@@ -20,7 +20,7 @@ function CitySelect({onSelect},props) {
 
         }
     }, [dispatch])
-    useEffect(fetch, [fetch, onSelect])
+    useEffect(fetch, [fetch])
     return (
         <View style={{paddingLeft:12,paddingRight:12}}>
             {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :

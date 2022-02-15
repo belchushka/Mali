@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {TextInput, View, StyleSheet, Image, TouchableOpacity} from "react-native";
+import {TextInput, View, StyleSheet, Image, TouchableOpacity, Alert} from "react-native";
 import SearchIcon from "../../media/Icons/Search.svg"
 import SvgUri from "react-native-svg-uri";
 import BackIcon from "../../media/Icons/Back.svg";
@@ -10,18 +10,23 @@ function SearchBar({style, showBackButton=false, navigation},props) {
     const [searchString, setSearchString] = useState("")
     const dispatch = useDispatch()
     const search = useCallback(async ()=>{
-        const params = await dispatch(searchAnimalsString({
-            searchString:searchString
-        }))
-        const properties = params.recognizedProperties
-        navigation.navigate("searchResults",{
-            ...(properties.idAnimalPlace.length !== 0 && {idAnimalPlace: properties.idAnimalPlace}),
-            ...(properties.idAnimalBreed && {idAnimalBreed: properties.idAnimalBreed}),
-            ...(properties.idAnimalCategories && {idAnimalCategories: properties.idAnimalCategories}),
-            ...(properties.priceMin && {priceMin: properties.priceMin}),
-            ...(properties.priceMax && {priceMax: properties.priceMax}),
-            searchName:"Результаты поиска:",
-        })
+        try{
+            const params = await dispatch(searchAnimalsString({
+                searchString:searchString
+            }))
+            const properties = params.recognizedProperties
+            navigation.navigate("searchResults",{
+                ...((properties.idAnimalPlace && properties.idAnimalPlace.length !== 0) && {idAnimalPlace: properties.idAnimalPlace}),
+                ...(properties.idAnimalBreed && {idAnimalBreed: properties.idAnimalBreed}),
+                ...(properties.idAnimalCategories && {idAnimalCategories: properties.idAnimalCategories}),
+                ...(properties.priceMin && {priceMin: properties.priceMin}),
+                ...(properties.priceMax && {priceMax: properties.priceMax}),
+                searchName:"Результаты поиска:",
+            })
+        }catch (e) {
+            console.log(e);
+        }
+
     },[searchString])
     return (
         <View style={[style,{marginTop:12, marginBottom:32, paddingLeft:12, paddingRight:12}]}>
@@ -65,10 +70,10 @@ const styles = StyleSheet.create({
         backgroundColor:"#ffffff",
         fontSize:15,
         borderRadius:10,
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
-        shadowColor: 'black',
-        shadowOffset: { height: 0, width: 0 },
+        // shadowOpacity: 0.75,
+        // shadowRadius: 5,
+        // shadowColor: 'black',
+        // shadowOffset: { height: 0, width: 0 },
         flexGrow:1
     },
 

@@ -32,6 +32,7 @@ import NewAdContacts from "../screens/NewAd/NewAdContacts";
 import useLoading from "../hooks/useLoading";
 import LoadingView from "./CustomElements/LoadingView";
 import AdminAnimal from "../screens/Animal/AdminAnimal";
+import * as Linking from 'expo-linking';
 
 function HomeTabs() {
     const Tab = createBottomTabNavigator()
@@ -99,9 +100,20 @@ const NavigationComponent = () => {
         dispatch(setLoggedIn(loggedIn))
         stop()
     },[])
+    const linking = {
+        prefixes: [
+            Linking.createURL('/'),"http://mali.com/"
+        ],
+        config: {
+            screens:{
+                animalInfo: "ad/:id",
+            }
+        },
+    };
+
     return <>
         {loading ? <LoadingView/> :
-            <NavigationContainer>
+            <NavigationContainer linking={linking}>
                 <Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName={firstTime ? "introduction" : "home"}>
                     {firstTime && <Stack.Screen name={"introduction"} component={Intro}/>}
                     <Stack.Screen name={"home"} component={HomeTabs}/>

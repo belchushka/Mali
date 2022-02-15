@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput, ScrollView, TouchableOpacity} from "react-native";
+import {
+    Alert,
+    Modal,
+    StyleSheet,
+    Text,
+    Pressable,
+    View,
+    TextInput,
+    ScrollView,
+    TouchableOpacity,
+    Platform
+} from "react-native";
 import CustomButton from "../CustomElements/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CloseIcon from "../../media/Icons/Close.svg"
@@ -29,7 +40,8 @@ const RefuseModal = ({visible, close}) => {
                                 </TouchableOpacity>
                             </View>
 
-                            <TextInput onChangeText={(value)=>setReason(value)} multiline={true} numberOfLines={6} style={[styles.inputs,styles.textArea]} placeholder={"Впишите ваш ответ"}></TextInput>
+                            <TextInput onChangeText={(value)=>setReason(value)} multiline={true} numberOfLines={Platform.OS === 'ios' ? null : 6}
+                                       minHeight={(Platform.OS === 'ios' && 6) ? (20 * 6) : null} style={[styles.inputs,styles.textArea]} placeholder={"Впишите ваш ответ"}></TextInput>
                             <CustomButton title={"Отправить"} onClick={()=>{
                                 close(reason)
                             }} style={{marginTop:20}}/>

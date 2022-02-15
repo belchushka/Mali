@@ -1,5 +1,16 @@
 import React, { useState } from "react";
-import {Alert, Modal, StyleSheet, Text, Pressable, View, TextInput, ScrollView, TouchableOpacity} from "react-native";
+import {
+    Alert,
+    Modal,
+    StyleSheet,
+    Text,
+    Pressable,
+    View,
+    TextInput,
+    ScrollView,
+    TouchableOpacity,
+    Platform
+} from "react-native";
 import CustomButton from "../CustomElements/CustomButton";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import CloseIcon from "../../media/Icons/Close.svg"
@@ -30,7 +41,8 @@ const ErrorModal = ({visible, close}) => {
 
                             <TextInput style={styles.inputs} placeholder={"Впишите ваше имя"}></TextInput>
                             <TextInput style={styles.inputs} placeholder={"+ 7 (000) 000-00-00"}></TextInput>
-                            <TextInput multiline={true} numberOfLines={6} style={[styles.inputs,styles.textArea]} placeholder={"Опишите проблему"}></TextInput>
+                            <TextInput multiline={true} numberOfLines={Platform.OS === 'ios' ? null : 6}
+                                       minHeight={(Platform.OS === 'ios' && 6) ? (20 * 6) : null} style={[styles.inputs,styles.textArea]} placeholder={"Опишите проблему"}></TextInput>
                             <CustomButton title={"Отправить"} onClick={()=>{
                                 close()
                                 Alert.alert("Уведомление отправлено")

@@ -53,6 +53,7 @@ function AdminAnimal({navigation},props) {
                 idAd:id,
                 reasonReject:reason
             }))
+
             open("Объявление успешно отклонено" ,"", ()=>()=>{
                 fetch()
             })
@@ -64,9 +65,9 @@ function AdminAnimal({navigation},props) {
     useEffect(fetch, [fetch])
     return (
         <>
-            {completed ?  <QuestionBlock style={{marginTop: 20}} title={"Хорошая работа!"}
-                                          text={"Объявления на проверку закончились"} showButton={false} icon={Alert}/> :
-                loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
+            {completed &&  <QuestionBlock style={{marginTop: 20}} title={"Хорошая работа!"}
+                                          text={"Объявления на проверку закончились"} showButton={false} icon={Alert}/> }
+            { loading ? <LoadingView/> : !completed && <View style={{flex: 1, backgroundColor: "white"}}>
                     <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
                         <TouchableOpacity style={styles.adminButton} onPress={()=>{
                             setRefuseModalVisible(true)}
@@ -86,9 +87,7 @@ function AdminAnimal({navigation},props) {
                         setRefuseModalVisible(false)
                     }} visible={refuseModalVisible}/>
                 </View>}
-            {render()
-            }
-
+            {render()}
         </>
     );
 }

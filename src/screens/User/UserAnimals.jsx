@@ -4,7 +4,7 @@ import ContentView from "../../components/ContentView";
 import CustomHeader from "../../components/CustomElements/CustomHeader";
 import {useDispatch, useSelector} from "react-redux";
 import useLoading from "../../hooks/useLoading";
-import {getAdminCheckAnimals, getUserAnimals} from "../../store/actions/userActions";
+import {getUserAnimals} from "../../store/actions/userActions";
 import LoadingView from "../../components/CustomElements/LoadingView";
 import UserAnimalTypeFilter from "../../components/Filters/UserAnimalsTypeFilter";
 import CustomButton from "../../components/CustomElements/CustomButton";
@@ -54,7 +54,6 @@ function UserAnimals({navigation, route}, props) {
     const fetch = useCallback(async () => {
         start()
         const data = await dispatch(getUserAnimals())
-        console.log(data);
         stop()
     }, [dispatch])
     useEffect(fetch, [fetch])

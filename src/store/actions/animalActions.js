@@ -7,6 +7,7 @@ import {
     SET_CURRENT_ANIMAL_TYPE_ID_AND_NAME, SET_NEW_AD_DATA,
     SET_SEARCH_ANIMALS_RESULT
 } from "../consts";
+import {AsyncStorage} from "react-native";
 
 export const getAnimalTypes = (params) => async (dispatch) => {
     try{
@@ -98,7 +99,6 @@ export const searchAnimalsString = (params) => async (dispatch) => {
         return data.data
 
     }catch (e) {
-        console.log(e.response);
         throw e.response.data.message
     }
 }
@@ -135,16 +135,29 @@ export const getAnimalGender = (params) => async (dispatch) => {
 
 export const getAnimal = (params) => async (dispatch) => {
     try{
-        const data = await $host.get("ads/card", {
-            params:params
-        })
-        dispatch({
-            type:SET_ANIMAL_INFO,
-            payload:data.data
-        })
-        return data.data
+        const loggedIn = await AsyncStorage.getItem("loggedIn")
+        if (loggedIn){
+            const data = await $authHost.get("ads/card", {
+                params:params
+            })
+            dispatch({
+                type:SET_ANIMAL_INFO,
+                payload:data.data
+            })
+            return data.data
+        }else{
+            const data = await $host.get("ads/card", {
+                params:params
+            })
+            dispatch({
+                type:SET_ANIMAL_INFO,
+                payload:data.data
+            })
+            return data.data
+        }
+
     }catch (e) {
-        throw e.response.data.message
+        console.log(e);
     }
 }
 

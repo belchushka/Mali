@@ -3,6 +3,7 @@
     "name": "mali",
     "slug": "mali",
     "version": "1.0.0",
+    "scheme": "mali",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

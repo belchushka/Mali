@@ -1,14 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ScrollView, Text, View, StyleSheet, Image, TouchableOpacity, Button, ActivityIndicator} from "react-native";
-import Swiper from 'react-native-swiper'
-import BackWhite from "../../media/Icons/BackWhite.svg"
-import SvgUri from "react-native-svg-uri";
-import CircledIcon from "../../components/CustomElements/CircledIcon";
-import PlaneImg from "../../media/Icons/Plane.svg"
-import ContentView from "../../components/ContentView";
-import CustomButton from "../../components/CustomElements/CustomButton";
-import {useDispatch, useSelector} from "react-redux";
-import {getAdminAnimal, getAnimal} from "../../store/actions/animalActions";
+import {View} from "react-native";
+import {useDispatch} from "react-redux";
+import {getAnimal} from "../../store/actions/animalActions";
 import useLoading from "../../hooks/useLoading";
 import LoadingView from "../../components/CustomElements/LoadingView";
 import {useAlert} from "../../hooks/useAlert";

@@ -71,6 +71,14 @@ export const verifyEmail = (params)=>async (dispatch)=>{
         })
         await AsyncStorage.setItem("userData",JSON.stringify(data.data))
         await AsyncStorage.setItem("loggedIn","true")
+        dispatch({
+            type:SET_USER_DATA,
+            payload:data.data
+        })
+        dispatch({
+            type:SET_LOGGED_IN,
+            payload:true
+        })
         return data.data
     }catch (e){
         throw e.response.data.message

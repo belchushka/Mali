@@ -21,13 +21,13 @@ function AnimalBreeds({onSelect, style,underlineBottom=false},props) {
 
         }
     }, [dispatch,animalTypeId])
-    useEffect(fetch, [fetch, animalTypeId, onSelect])
+    useEffect(fetch, [fetch, animalTypeId])
     return (
             <View style={{paddingLeft:12,paddingRight:12, flex:1}}>
                 {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} /> :
                     <ScrollView style={[styles.breedList,style]}>
                         {breeds && breeds.map((item)=>{
-                            return  <TouchableOpacity style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
+                            return  <TouchableOpacity key={item.id} style={[styles.typePicker,!underlineBottom ? {  borderTopWidth:1,
                                 borderTopColor:"#F6F4F0"} : { borderBottomWidth:1,
                                 borderBottomColor:"#F6F4F0"}]} onPress={()=>{
                                 onSelect(item.id,item.name)

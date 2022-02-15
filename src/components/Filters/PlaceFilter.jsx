@@ -22,12 +22,11 @@ function PlaceFilter({title,style, onChange,selectedValues, checkOne=false},prop
     useEffect(fetch, [fetch])
     return (
         <View style={style}>
-
                 <>
                     <Text style={styles.title}>{title}</Text>
                     <View style={styles.filterWrap}>
                         {places.map(el=>{
-                           return <>
+                           return <View key={el.id}>
                                {checkOne ?
                                    <TouchableOpacity key={el.id} style={[styles.filterItem,selectedPlace==el.id?styles.filterItemActive:{}]} onPress={ ()=>{
                                        if(selectedPlace != el.id){
@@ -69,7 +68,7 @@ function PlaceFilter({title,style, onChange,selectedValues, checkOne=false},prop
                                        <Text style={styles.filterText}>{el.name}</Text>
                                    </TouchableOpacity>
                                }
-                           </>
+                           </View>
 
                         })}
                     </View>
