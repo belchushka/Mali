@@ -12,6 +12,7 @@ import ContentLayout from "../../components/ContentLayout";
 import ContentWrapper from "../../components/ContentWrapper";
 import ErrorModal from "../../components/Modals/ErrorModal";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import LoadingView from "../../components/CustomElements/LoadingView";
 
 function Catalog({navigation}, props) {
     const dispatch = useDispatch()
@@ -34,31 +35,35 @@ function Catalog({navigation}, props) {
             <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
                 <SearchBar navigation={navigation}/>
                 <ContentView style={{flex:1}}>
-                    {loading ? <ActivityIndicator size={"large"} color={"#F6A405"} />:
-                        <View style={styles.cardHolder}>
-                            {animalTypes.map(el=>{
-                                if(el.id === 6){
-                                    return <AnimalCard key={el.id} text={el.name} onClick={() => {
-                                        navigation.navigate("animalTransportation")
-                                    }} image={el.src}/>
-                                }
-                                return <AnimalCard key={el.id} text={el.name} image={el.src} onClick={()=>{
-                                    dispatch(setCurrentAnimalTypeIdAndName({id:el.id, name:el.name}))
-                                    navigation.navigate("animalFilter")
-                                }
-                                }/>
+                    {loading ? <LoadingView />:
+                        <>
+                            <View style={styles.cardHolder}>
+                                {animalTypes.map(el=>{
+                                    if(el.id === 6){
+                                        return <AnimalCard key={el.id} text={el.name} onClick={() => {
+                                            navigation.navigate("animalTransportation")
+                                        }} image={el.src}/>
+                                    }
+                                    return <AnimalCard key={el.id} text={el.name} image={el.src} onClick={()=>{
+                                        dispatch(setCurrentAnimalTypeIdAndName({id:el.id, name:el.name}))
+                                        navigation.navigate("animalFilter")
+                                    }
+                                    }/>
 
-                            })}
+                                })}
 
 
-                        </View>
+                            </View>
+                            <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам \n в ближайшее время."} buttonText={"Написать"} onButtonClick={()=>{
+                                setModalVisible(true)
+                            }} icon={MailIcon} style={{
+                                marginTop: 50,
+                                marginBottom: 50,
+                            }} iconHeight={12} iconWidth={16}/>
+                        </>
+
                     }
-                    <QuestionBlock title={"Возник вопрос?"} text={"Напишите нам и мы ответим вам \n в ближайшее время."} buttonText={"Написать"} onButtonClick={()=>{
-                        setModalVisible(true)
-                    }} icon={MailIcon} style={{
-                        marginTop: 50,
-                        marginBottom: 50,
-                    }} iconHeight={12} iconWidth={16}/>
+
                 </ContentView>
                 <ErrorModal close={()=>{
                     setModalVisible(false)

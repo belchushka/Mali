@@ -19,6 +19,8 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {ConvertImage} from "../../utils/ConvertImage";
 import {useAlert} from "../../hooks/useAlert";
 import {setNewAdData} from "../../store/actions/animalActions";
+import DeleteImage from "../../media/Icons/DeleteImage.svg"
+import SvgUri from "react-native-svg-uri";
 
 
 function NewAdAppearance({navigation}, props) {
@@ -91,10 +93,13 @@ function NewAdAppearance({navigation}, props) {
                     <Text style={styles.sectionTitle}>Фотографии:</Text>
                     <View style={styles.imagesWrap}>
                         {photos.map(el=>{
-                            return  <TouchableOpacity key={el} onPress={()=>{setPhotos(state=>state.filter(el1=>el1!=el))}} style={styles.imageWrap}>
+                            return  <View style={styles.imageWrap}>
                                 <Image style={styles.image} source={{uri:el}}/>
+                                <TouchableOpacity key={el} onPress={()=>{setPhotos(state=>state.filter(el1=>el1!=el))}} style={{position:"absolute", top:5, right:5}} >
+                                    <SvgUri width={18} height={18}  source={DeleteImage}/>
+                                </TouchableOpacity>
+                            </View>
 
-                            </TouchableOpacity>
                         })}
                     </View>
                     <CustomButton onClick={selectImages} style={{backgroundColor:"white", borderWidth:1, borderColor:"#F6A405"}} textColor={"black"} title={"Добавить фотографии"}/>

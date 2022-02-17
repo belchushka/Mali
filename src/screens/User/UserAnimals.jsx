@@ -71,19 +71,28 @@ function UserAnimals({navigation, route}, props) {
 
                     {userAnimals ? <View style={styles.cardHolder}>
                         {filteredValues && filteredValues.map(el => {
-                            return <TouchableOpacity key={el.idAd} onPress={() => {
-                                navigation.navigate("animalInfo", {
-                                    id: el.idAd
-                                })
-                            }
-                            } style={styles.card}>
-                                <Image style={styles.cardImage} source={{uri: el.imagePreview}}/>
-                                <View style={styles.cardTextWrapper}>
-                                    <Text style={styles.cardTitle}>{el.namePet}</Text>
-                                    <Text style={styles.cardPrice}>{el.price} руб</Text>
-                                    {el.reasonRefusal && <Text style={{color:"red"}}>{el.reasonRefusal}</Text>}
-                                </View>
-                            </TouchableOpacity>
+                            return(
+                            <View key={el.idAd}>
+                                <TouchableOpacity  onPress={() => {
+                                    navigation.navigate("animalInfo", {
+                                        id: el.idAd
+                                    })
+                                }
+                                } style={styles.card}>
+                                    <Image style={styles.cardImage} source={{uri: el.imagePreview}}/>
+                                    <View style={styles.cardTextWrapper}>
+                                        <Text style={styles.cardTitle}>{el.namePet}</Text>
+                                        <Text style={styles.cardPrice}>{el.price} руб.</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                {el.reasonRefusal &&
+                                    <View style={{marginLeft:110}}>
+                                        <Text>Причина отклонения:</Text>
+                                        <Text style={{color:"red", marginTop:2}}>{el.reasonRefusal}</Text>
+                                    </View>
+                                }
+                            </View>)
+
                         })}
 
                     </View> : <View style={styles.createWrapper}>

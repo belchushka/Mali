@@ -21,6 +21,7 @@ import useLoading from "../hooks/useLoading";
 import LoadingView from "./CustomElements/LoadingView";
 import BackIconBlack from "../media/Icons/BackIconBlack.svg"
 import {useAlert} from "../hooks/useAlert";
+import MaskInput from "react-native-mask-input/src/MaskInput";
 
 
 const styles = StyleSheet.create({
@@ -178,11 +179,23 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                     <TextInput autoCapitalize = 'none' value={email} onChangeText={(val) => setEmail(val)} style={styles.input}
                                placeholder={"Введите e-mail"}
                                placeholderTextColor="#777777"/>
+                    {authorizationType === "registration" && <TextInput  style={styles.input}
+                                                                        placeholder={"Введите ваше имя"}
+                                                                        placeholderTextColor="#777777"/> }
 
                     {authorizationType === "registration" &&
-                        <TextInput autoCapitalize = 'none' value={phoneNumber} onChangeText={(val) => setPhoneNumber(val)} style={styles.input}
-                                   placeholder={"Введите номер телефона"}
-                                   placeholderTextColor="#777777"/>}
+                        <MaskInput
+                            value={phoneNumber}
+                            onChangeText={(masked, unmasked) => {
+                                setPhoneNumber(masked); // you can use the unmasked value as well
+                            }}
+                            placeholder={"Введите номер телефона"}
+                            placeholderTextColor="#777777"
+                            style={styles.input}
+                            autoCapitalize = 'none'
+                            mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                        />
+                    }
                     <TextInput value={password} secureTextEntry={true} textContentType="password" onChangeText={(val) => setPassword(val)} style={styles.input}
                                placeholder={authorizationType === "registration" ? "Придумайте пароль" : "Введите пароль"}
                                placeholderTextColor="#777777"/>

@@ -15,6 +15,7 @@ import {ConvertImage} from "../../utils/ConvertImage";;
 import {useAlert} from "../../hooks/useAlert";
 import ContentView from "../../components/ContentView";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import MaskInput from "react-native-mask-input/src/MaskInput";
 
 function UserInfo({navigation}, props) {
     const dispatch = useDispatch()
@@ -23,6 +24,7 @@ function UserInfo({navigation}, props) {
     const [name,setName]=useState("")
     const [surname,setSurname]=useState("")
     const [phone,setPhone]=useState("")
+    const [phoneWhatsapp,setPhoneWhatsapp]=useState("")
     const [email,setEmail]=useState("")
     const {start, stop, loading} = useLoading()
     const {open, close, render} = useAlert()
@@ -33,6 +35,7 @@ function UserInfo({navigation}, props) {
             setName(data.nameUser || "")
             setSurname(data.surname || "")
             setPhone(data.numberPhone || "")
+            setPhoneWhatsapp(data.numberWhatsApp || "")
             setEmail(data.email || "")
             setIconPath(data.iconPath || "")
             stop()
@@ -64,7 +67,7 @@ function UserInfo({navigation}, props) {
             formData.append("name", name)
             formData.append("surname", surname)
             formData.append("numberPhone", phone)
-            formData.append("numberWhatsApp", phone)
+            formData.append("numberWhatsApp", phoneWhatsapp)
             newUserIcon && formData.append("icon", ConvertImage(newUserIcon))
 
             if (name.length !== 0) {
@@ -81,7 +84,7 @@ function UserInfo({navigation}, props) {
             open("Ошибка", e)
 
         }
-    }, [newUserIcon, dispatch, name, surname, phone])
+    }, [newUserIcon, dispatch, name, surname, phone,phoneWhatsapp])
     useEffect(fetch, [fetch])
     return (
         <View style={{flex: 1, backgroundColor: "white"}}>
@@ -132,8 +135,31 @@ function UserInfo({navigation}, props) {
                             </View>
                             <View style={styles.input}>
                                 <Text style={styles.inputText}>Телефон</Text>
-                                <TextInput onChangeText={(val) => setPhone(val)} style={styles.inputField}
-                                           value={phone && phone} placeholder={"Не указано"}/>
+                                <MaskInput
+                                    value={phone && phone}
+                                    onChangeText={(masked, unmasked) => {
+                                        setPhone(masked); // you can use the unmasked value as well
+                                    }}
+                                    placeholder={"Не указано"}
+                                    placeholderTextColor="#777777"
+                                    style={styles.inputField}
+                                    autoCapitalize = 'none'
+                                    mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                />
+                            </View>
+                            <View style={styles.input}>
+                                <Text style={styles.inputText}>Телефон Whatsapp</Text>
+                                <MaskInput
+                                    value={phoneWhatsapp && phoneWhatsapp}
+                                    onChangeText={(masked, unmasked) => {
+                                        setPhoneWhatsapp(masked); // you can use the unmasked value as well
+                                    }}
+                                    placeholder={"Не указано"}
+                                    placeholderTextColor="#777777"
+                                    style={styles.inputField}
+                                    autoCapitalize = 'none'
+                                    mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                />
                             </View>
                             <View style={styles.input}>
                                 <Text style={styles.inputText}>Изменить пароль</Text>

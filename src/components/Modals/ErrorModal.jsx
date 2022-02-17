@@ -39,9 +39,9 @@ const ErrorModal = ({visible, close}) => {
                                 </TouchableOpacity>
                             </View>
 
-                            <TextInput style={styles.inputs} placeholder={"Впишите ваше имя"}></TextInput>
-                            <TextInput style={styles.inputs} placeholder={"+ 7 (000) 000-00-00"}></TextInput>
-                            <TextInput multiline={true} numberOfLines={Platform.OS === 'ios' ? null : 6}
+                            <TextInput style={styles.inputs} placeholder={"Впишите ваше имя"} placeholderTextColor="grey"></TextInput>
+                            <TextInput style={styles.inputs} placeholder={"+ 7 (000) 000-00-00"} placeholderTextColor="grey"></TextInput>
+                            <TextInput placeholderTextColor="grey" multiline={true} numberOfLines={Platform.OS === 'ios' ? null : 6}
                                        minHeight={(Platform.OS === 'ios' && 6) ? (20 * 6) : null} style={[styles.inputs,styles.textArea]} placeholder={"Опишите проблему"}></TextInput>
                             <CustomButton title={"Отправить"} onClick={()=>{
                                 close()
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         margin: 20,
         width:"85%",
         backgroundColor: "white",
-        borderRadius: 20,
+        borderRadius: 5,
         paddingTop: 25,
         paddingBottom: 25,
         paddingLeft: 20,

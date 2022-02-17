@@ -43,7 +43,8 @@ function HomeTabs() {
                 tabBarLabelStyle: {
                     fontSize: 12
                 },
-                headerShown: false
+                headerShown: false,
+                tabBarHideOnKeyboard:true
             }}>
             <Tab.Screen options={{
                 tabBarLabel: "Каталог",

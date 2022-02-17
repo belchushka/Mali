@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import RefuseModal from "../../components/Modals/RefuseModal";
 import QuestionBlock from "../../components/CustomElements/QuestionBlock";
 import Alert from "../../media/Icons/Alert.svg";
+import CustomHeader from "../../components/CustomElements/CustomHeader";
 
 function AdminAnimal({navigation},props) {
     const {open, close, render} = useAlert()
@@ -65,8 +66,17 @@ function AdminAnimal({navigation},props) {
     useEffect(fetch, [fetch])
     return (
         <>
-            {completed &&  <QuestionBlock style={{marginTop: 20}} title={"Хорошая работа!"}
-                                          text={"Объявления на проверку закончились"} showButton={false} icon={Alert}/> }
+            {completed &&
+                <View style={{flex:1}}>
+                    <CustomHeader hasBackButton={true} goBackAction={navigation.goBack}/>
+                    <View style={{backgroundColor:"white", flex:1}}>
+                        <QuestionBlock style={{marginTop: 20}} title={"Хорошая работа!"}
+                                       text={"Объявления на проверку закончились"} showButton={false} icon={Alert}/>
+                    </View>
+
+                </View>
+
+            }
             { loading ? <LoadingView/> : !completed && <View style={{flex: 1, backgroundColor: "white"}}>
                     <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
                         <TouchableOpacity style={styles.adminButton} onPress={()=>{
