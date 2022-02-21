@@ -1,5 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+    ActivityIndicator,
+    BackHandler,
+    FlatList,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import SearchBar from "../../components/CustomElements/SearchBar";
 import ContentView from "../../components/ContentView";
 import {searchAnimals, searchAnimalsString} from "../../store/actions/animalActions";
@@ -21,6 +30,8 @@ function SearchResults({route, navigation}, props) {
     const [fetchIndex, setFetchIndex] = useState(0)
     const step = 16
     const [results, setResults] = useState([])
+    const [goingToClose,setGoingToClose] = useState(false)
+    const [remains, setRemains] = useState(0)
     const [resultsCount, setResultsCount] = useState(0)
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
@@ -32,22 +43,27 @@ function SearchResults({route, navigation}, props) {
             filteredParams.idAnimalPlace = JSON.stringify(filteredParams.idAnimalPlace)
             const data = await dispatch(searchAnimals({
                 ...filteredParams,
-                idLastAd: 0,
+                idLastAd: fetchIndex,
+                numberAds:step
             }))
             setResultsCount(data.total)
-            setResults(data.cards)
+            setRemains(data.remained)
+            setResults(state => [...state,...data.cards])
             stop()
         } catch (e) {
 
         }
     }, [dispatch, params, fetchIndex])
     useEffect(fetch, [fetch])
+
     return (
         <>
             <View style={{flex: 1, backgroundColor: "#F6F4F0"}}>
                 <ScrollView onScroll={({nativeEvent}) => {
                     if (isCloseToBottom(nativeEvent)) {
-                            setFetchIndex(state => state + step+1)
+                        if (remains>0){
+                            setFetchIndex(state => results[results.length - 1].idAd)
+                        }
                     }
                 }}
                             scrollEventThrottle={400}>
@@ -57,24 +73,31 @@ function SearchResults({route, navigation}, props) {
                             <Text style={styles.textBold}>{params.searchName}</Text>
                             <Text style={styles.textOpacity}>{resultsCount + " предложений"}</Text>
                         </View>
-                        <View style={styles.cardHolder}>
-                            {results && results.map((item) => {
-                                return <TouchableOpacity onPress={() => {
-                                    navigation.navigate("animalInfo", {id: item.idAd})
-                                }} key={item.idAd} style={styles.searchCard}>
-                                    <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
-                                    <Text style={styles.cardText}>{item.namePet}</Text>
-                                    <Text style={styles.cardText}>{item.idAd}</Text>
-                                    <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
-                                    <Text style={styles.cardTextSmall}>{item.city}</Text>
-                                    <View style={styles.placeWrap}>
-                                        <Text style={styles.placeText}>{item.place}</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            })}
-                        </View>
+                        {!goingToClose && (
+                            <View style={styles.cardHolder}>
+                                {results && results.map((item) => {
+                                    return <TouchableOpacity onPress={() => {
+                                        navigation.navigate("animalInfo", {id: item.idAd})
+                                    }} key={item.idAd} style={styles.searchCard}>
+                                        <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
+                                        <Text style={styles.cardText}>{item.namePet}</Text>
+                                        <Text style={styles.cardText}>{item.idAd}</Text>
+                                        <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
+                                        <Text style={styles.cardTextSmall}>{item.city}</Text>
+                                        <View style={styles.placeWrap}>
+                                            <Text style={styles.placeText}>{item.place}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                })}
 
-                        {loading && <ActivityIndicator size={"large"} color={"#F6A405"}/>}
+                                {loading && <View style={{alignItems:"center", width:"100%", marginTop:20}}>
+                                    <ActivityIndicator size={"large"}  color={"#F6A405"}/>
+                                </View>}
+                            </View>
+                        )}
+
+
+
 
                     </ContentView>
                 </ScrollView>

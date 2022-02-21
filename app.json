@@ -18,7 +18,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.belchushka.mali",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.1033752769210-oe6ksm0uqai87ns8if9oujle8145jih3"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {

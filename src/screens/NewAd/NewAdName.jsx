@@ -68,7 +68,6 @@ function NewAdName({navigation},props) {
             <ContentView style={{flexGrow:1}}>
                 <TextInput value={name}  onChangeText={(val)=>{setName(val)}} style={[styles.textInput]} placeholder={"Кличка животного"}/>
                 <TextInput value={age} keyboardType={Platform.OS == "android" ? "numeric" : "number-pad"}  onChangeText={(val)=>{setAge(val.replace(/[^0-9]/g, ""))}} style={[styles.textInput]} placeholder={"Возраст животного(лет)"}/>
-
                 <TouchableOpacity onPress={() => {
                     Keyboard.dismiss()
                     setSexPanelOpened(true)

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
-    Alert, BackHandler,
+    Alert, BackHandler, Button, Platform,
     ScrollView,
     StyleSheet,
     Text,
@@ -12,9 +12,6 @@ import ContentView from "./ContentView";
 import CustomButton from "./CustomElements/CustomButton";
 import SvgUri from "react-native-svg-uri";
 import Seperator from "../media/Icons/Seperator.svg"
-import Google from "../media/Icons/Google.svg"
-import Facebook from "../media/Icons/Facebook.svg"
-import Apple from "../media/Icons/Apple.svg"
 import {useDispatch, useSelector} from "react-redux";
 import {changePassword, login, register, verifyCode, verifyEmail} from "../store/actions/userActions";
 import useLoading from "../hooks/useLoading";
@@ -22,6 +19,9 @@ import LoadingView from "./CustomElements/LoadingView";
 import BackIconBlack from "../media/Icons/BackIconBlack.svg"
 import {useAlert} from "../hooks/useAlert";
 import MaskInput from "react-native-mask-input/src/MaskInput";
+import * as GoogleSignIn from "expo-google-sign-in"
+import * as Google from 'expo-google-app-auth';
+
 
 
 const styles = StyleSheet.create({
@@ -87,6 +87,41 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
     const {open,close,render} = useAlert()
+    const androidClientId = "1033752769210-t2gjm84ns6v68ofvb4el8a7hc0a359m6.apps.googleusercontent.com"
+    const iosClientId = "1033752769210-oe6ksm0uqai87ns8if9oujle8145jih3.apps.googleusercontent.com"
+    const initAsync = async ()=>{
+        try{
+           await GoogleSignIn.initAsync({
+               clientId:Platform.OS === "ios" ? iosClientId : androidClientId
+           })
+            getUser()
+        }catch (e) {
+
+        }
+    }
+    const getUser = async ()=>{
+        try {
+          const user=await GoogleSignIn.signInSilentlyAsync()
+        }catch (e) {
+
+        }
+    }
+
+    const handleGoogleSignIn = async ()=>{
+        // await GoogleSignIn.askForPlayServicesAsync()
+        const { type, accessToken, user } = await Google.logInAsync({
+            iosClientId:iosClientId,
+            androidClientId:androidClientId
+        });
+        console.log(user, accessToken);
+        // if (type==="success"){
+        //     getUser()
+        // }else{
+        //     alert("canceled")
+        // }
+    }
+    useEffect(initAsync)
+
     const sendData = useCallback(async () => {
         start()
         try {
@@ -168,8 +203,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                     marginTop: 40
                 }]}>{authorizationType === "registration" ? "Зарегистрироваться" : "Войти"} через:</Text>
                 <View>
-                    <TouchableOpacity>
-                    </TouchableOpacity>
+                    <Button title={"Google"} onPress={handleGoogleSignIn}/>
                 </View>
                 <Text
                     style={styles.sectionHeader}>Или {authorizationType === "registration" ? "зарегистрируйтесь" : "войдите"} с
