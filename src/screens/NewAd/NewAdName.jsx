@@ -59,6 +59,7 @@ function NewAdName({navigation},props) {
             })
         }catch (e){
             open("Ошибка",e)
+            stop()
         }
     },[dispatch, name, description, price, city,sexId,address,age, dataT,type])
     return (

@@ -160,7 +160,6 @@ export const getUserAnimals = (params)=>async (dispatch)=>{
 export const getAdminCheckAnimals = (params)=>async (dispatch)=>{
     try{
         const data =await $authHost.get("admin/ads_need_approved")
-        console.log(data);
         dispatch({
             type:SET_USER_ANIMALS,
             payload:data.data
@@ -234,6 +233,16 @@ export const createNewAd = (params)=>async (dispatch)=>{
             xhr.setRequestHeader("Authorization", "Bearer "+token);
             xhr.send(params);
         })
+    }catch (e){
+        throw e
+    }
+}
+
+export const sendToArchive = (params)=>async (dispatch)=>{
+    try{
+        const data = await $authHost.post("user/send_ad_to_archive", params)
+        console.log(data);
+        return true
     }catch (e){
         throw e
     }

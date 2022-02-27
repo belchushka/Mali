@@ -11,11 +11,13 @@ import SvgUri from "react-native-svg-uri";
 import CloseSvg from "../../media/Icons/Close.svg"
 import Edit from "../../media/Icons/EditNoWrap.svg"
 import Ok from "../../media/Icons/OkSvg.svg"
+import {sendToArchive} from "../../store/actions/userActions";
 
 
 function AnimalInfo({navigation, route}, props) {
     const animalId = route.params.id
     const dispatch = useDispatch()
+    const refreshParent = route?.params?.refresh
     const [data, setAnimalData] = useState({})
     const {start, stop, loading} = useLoading()
     const {open, close, render} = useAlert()
@@ -34,6 +36,21 @@ function AnimalInfo({navigation, route}, props) {
             })
         }
     }, [dispatch, animalId])
+
+    const sendAdToArchive = useCallback(async ()=>{
+        try{
+            const data = await dispatch(sendToArchive({idAd:animalId}))
+            open("Уведомление", "Объявление отправлено в архив", () => () => {
+                navigation.navigate("userAnimals",{
+                    status:"На проверке"
+                })
+            })
+        }catch(e){
+            open(e, "", () => () => {
+                navigation.goBack()
+            })
+        }
+    },[dispatch, animalId])
     useEffect(fetch, [fetch, animalId])
     return (
         <>
@@ -50,6 +67,7 @@ function AnimalInfo({navigation, route}, props) {
                         </View>
                         <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                             <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                                sendAdToArchive()
                             }}>
                                 <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>
                                     <SvgUri

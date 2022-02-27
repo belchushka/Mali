@@ -4,8 +4,8 @@ import {getAnimalPlaces} from "../../store/actions/animalActions";
 import {useDispatch} from "react-redux";
 import useLoading from "../../hooks/useLoading";
 
-function UserAnimalTypeFilter({style, onChange,actives, checking,archive,refused},props) {
-    const [selectedType, setSelectedType] = useState(null)
+function UserAnimalTypeFilter({style, onChange,actives, checking,archive,refused, selectedStatus},props) {
+    const [selectedType, setSelectedType] = useState(selectedStatus || null)
     const dispatch = useDispatch()
     return (
         <View style={[{width:"100%"},style]}>

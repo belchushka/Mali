@@ -83,6 +83,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+    const [name,setName] = useState("")
     const [passwordRepeat, setPasswordRepeat] = useState("")
     const dispatch = useDispatch()
     const {start, stop, loading} = useLoading()
@@ -127,7 +128,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
         try {
             if (authorizationType === "registration") {
                 try {
-                    if(email.trim().length == 0 || password.trim().length === 0 || phoneNumber.trim().length ===0){
+                    if(email.trim().length === 0 || password.trim().length === 0 || phoneNumber.trim().length ===0 || name.trim().length === 0){
                         throw "Заполните все поля"
                     }else if(password!=passwordRepeat){
                         throw "Пароли не совпадают"
@@ -135,7 +136,8 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                         const registered = await dispatch(register({
                             email: email,
                             password: password,
-                            numberPhone: phoneNumber
+                            numberPhone: phoneNumber,
+                            name:name
                         }))
 
                         if (registered) {
@@ -177,7 +179,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
         } catch (e) {
 
         }
-    }, [email, password, passwordRepeat, authorizationType, phoneNumber])
+    }, [email, password, passwordRepeat, authorizationType, phoneNumber, name])
 
     return (
         <ContentView>
@@ -213,7 +215,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                     <TextInput autoCapitalize = 'none' value={email} onChangeText={(val) => setEmail(val)} style={styles.input}
                                placeholder={"Введите e-mail"}
                                placeholderTextColor="#777777"/>
-                    {authorizationType === "registration" && <TextInput  style={styles.input}
+                    {authorizationType === "registration" && <TextInput onChangeText={(val) => setName(val)}  style={styles.input}
                                                                         placeholder={"Введите ваше имя"}
                                                                         placeholderTextColor="#777777"/> }
 

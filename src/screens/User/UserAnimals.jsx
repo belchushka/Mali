@@ -8,11 +8,14 @@ import {getUserAnimals} from "../../store/actions/userActions";
 import LoadingView from "../../components/CustomElements/LoadingView";
 import UserAnimalTypeFilter from "../../components/Filters/UserAnimalsTypeFilter";
 import CustomButton from "../../components/CustomElements/CustomButton";
+import {useRefresh} from "../../hooks/useRefresh";
+import {useFocusEffect} from "@react-navigation/native";
 
 function UserAnimals({navigation, route}, props) {
     const dispatch = useDispatch()
     const userAnimals = useSelector(state => state.user.userAnimals)
     const [status, setStatus] = useState(null)
+    const {refresh} = useRefresh()
     const {start, stop, loading} = useLoading()
     const actives = useMemo(() => {
         if (userAnimals) {
@@ -56,7 +59,14 @@ function UserAnimals({navigation, route}, props) {
         const data = await dispatch(getUserAnimals())
         stop()
     }, [dispatch])
-    useEffect(fetch, [fetch])
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener("focus",()=>{
+            fetch()
+            setStatus(route?.params?.status || null)
+        })
+
+        return unsubscribe
+    }, [fetch, navigation, route])
     return (
         <View style={{flex: 1}}>
             <ScrollView style={{flex: 1, backgroundColor: "white"}}>
@@ -64,7 +74,7 @@ function UserAnimals({navigation, route}, props) {
                               title={"Мои объявления"}
                               goBackAction={navigation.goBack}/>
                 {loading ? <LoadingView/> : <ContentView>
-                    <UserAnimalTypeFilter refused={refused} actives={actives} checking={checking} archive={archive}
+                    <UserAnimalTypeFilter refused={refused} actives={actives} selectedStatus={status} checking={checking} archive={archive}
                                           onChange={(status) => {
                                               setStatus(status)
                                           }}/>
@@ -75,7 +85,8 @@ function UserAnimals({navigation, route}, props) {
                             <View key={el.idAd}>
                                 <TouchableOpacity  onPress={() => {
                                     navigation.navigate("animalInfo", {
-                                        id: el.idAd
+                                        id: el.idAd,
+                                        refresh:refresh
                                     })
                                 }
                                 } style={styles.card}>
