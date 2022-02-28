@@ -33,6 +33,7 @@ import useLoading from "../hooks/useLoading";
 import LoadingView from "./CustomElements/LoadingView";
 import AdminAnimal from "../screens/Animal/AdminAnimal";
 import * as Linking from 'expo-linking';
+import EditAd from "../screens/User/EditAd";
 
 function HomeTabs() {
     const Tab = createBottomTabNavigator()
@@ -132,6 +133,7 @@ const NavigationComponent = () => {
                     <Stack.Screen name={"newAdName"} component={NewAdName}/>
                     <Stack.Screen name={"newAdContacts"} component={NewAdContacts}/>
                     <Stack.Screen name={"adminAnimal"} component={AdminAnimal}/>
+                    <Stack.Screen name={"editAd"} component={EditAd}/>
                 </Stack.Navigator>
             </NavigationContainer>
         }

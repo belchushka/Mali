@@ -118,6 +118,21 @@ export const getAnimalCities = (params) => async (dispatch) => {
     }
 }
 
+export const getAnimalRegions = (params) => async (dispatch) => {
+    try{
+        const data = await $host.get("ads/regions", {
+            params:params
+        })
+        dispatch({
+            type:SET_ANIMAL_CITIES,
+            payload:data.data
+        })
+        return data.data
+    }catch (e) {
+        throw e.response.data.message
+    }
+}
+
 export const getAnimalGender = (params) => async (dispatch) => {
     try{
         const data = await $host.get("ads/genders", {
@@ -216,6 +231,14 @@ export const setNewAdData = (params) => async (dispatch) => {
     }
 }
 
+export const saveAnimalEdit = (params) => async (dispatch) => {
+    try{
+        const data = await $authHost.post("user/edit_ad", params)
+        return data.data
+    }catch (e) {
+        throw e.response.data.message
+    }
+}
 
 
 

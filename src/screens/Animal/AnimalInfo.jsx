@@ -21,14 +21,15 @@ function AnimalInfo({navigation, route}, props) {
     const [data, setAnimalData] = useState({})
     const {start, stop, loading} = useLoading()
     const {open, close, render} = useAlert()
-    const [adStatus, setStatus] = useState(false)
-
+    const [adStatus, setAdStatus] = useState(false)
+    const [isMine, setIsMine] = useState(false)
     const fetch = useCallback(async () => {
         try {
             start()
             const data = await dispatch(getAnimal({idAd: animalId}))
             setAnimalData(data)
-            setStatus(data.adStatus==="На проверке" && data.isMine)
+            setAdStatus(data.adStatus==="На проверке")
+            setIsMine(data.isMine)
             stop()
         } catch (e) {
             open(e, "", () => () => {
@@ -51,20 +52,27 @@ function AnimalInfo({navigation, route}, props) {
             })
         }
     },[dispatch, animalId])
-    useEffect(fetch, [fetch, animalId])
+    useEffect(()=>{
+        const unsubscribe = navigation.addListener("focus",()=>{
+            fetch()
+        })
+
+        return unsubscribe
+    }, [fetch, animalId, navigation])
     return (
         <>
             {loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
-                {adStatus && (
+                {isMine && (
                     <View >
-                        <View style={styles.chekingText}>
+                        {adStatus &&  <View style={styles.chekingText}>
                             <Text style={styles.statusText}>Объявление на проверке</Text>
                             <SvgUri
                                 width={14}
                                 height={14}
                                 source={Ok}
                             />
-                        </View>
+                        </View>}
+
                         <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                             <TouchableOpacity style={styles.adminButton} onPress={()=>{
                                 sendAdToArchive()
@@ -88,6 +96,13 @@ function AnimalInfo({navigation, route}, props) {
                                 source={Seperator}
                             />
                             <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                                navigation.navigate("editAd",{
+                                    idAd:data.idAd,
+                                    name:data.namePet,
+                                    price:data.price,
+                                    age:data.age,
+                                    description:data.descriptionPet
+                                })
                             }
                             }>
                                 <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>

@@ -34,7 +34,9 @@ function NewAdName({navigation},props) {
             if ([name,description,price,address,age].some(el=>el.length==0) || !sexId || !city){
                 throw "Заполните все поля"
             }
-            await dispatch(setNewAdData({
+            start()
+            const dataAnimal = {
+                ...dataT,
                 namePet:name,
                 descriptionPet:description,
                 price:price,
@@ -42,13 +44,12 @@ function NewAdName({navigation},props) {
                 idCity:city,
                 address:address,
                 age:age
-            }))
-            start()
+            }
             const AdFormData = new FormData()
-            Object.keys(dataT).filter(el => el != "imgs").forEach(el => {
-                AdFormData.append(el, dataT[el])
+            Object.keys(dataAnimal).filter(el => el != "imgs").forEach(el => {
+                AdFormData.append(el, dataAnimal[el])
             })
-            dataT.imgs.forEach(el => {
+            dataAnimal.imgs.forEach(el => {
                 AdFormData.append("imgs", el)
             })
             AdFormData.append("idAnimalCategories", type)
