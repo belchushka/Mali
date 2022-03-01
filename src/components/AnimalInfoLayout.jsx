@@ -130,7 +130,7 @@ function AnimalInfoLayout({data,navigation, showErrorAlert=true},props) {
                                         <Text style={styles.buttonTextBlack}>Позвонить</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={[styles.button, styles.buttonOrange]} onPress={()=>{
-                                        Linking.openURL(`whatsapp://send?text=Здравствуйте,&phone=${data.numberWhatsAppUser[0]=="8" ? "+7"+data.numberWhatsAppUser.slice(1,data.numberWhatsAppUser.length-1) : data.numberWhatsAppUser}`)
+                                        Linking.openURL(`whatsapp://send?text=Здравствуйте,&phone=${data.numberWhatsAppUser || data.numberPhoneUser}`)
                                     }} >
                                         <Text style={styles.buttonTextWhite}>Написать</Text>
                                     </TouchableOpacity>

@@ -21,14 +21,14 @@ function AnimalInfo({navigation, route}, props) {
     const [data, setAnimalData] = useState({})
     const {start, stop, loading} = useLoading()
     const {open, close, render} = useAlert()
-    const [adStatus, setAdStatus] = useState(false)
+    const [adStatus, setAdStatus] = useState(null)
     const [isMine, setIsMine] = useState(false)
     const fetch = useCallback(async () => {
         try {
             start()
             const data = await dispatch(getAnimal({idAd: animalId}))
             setAnimalData(data)
-            setAdStatus(data.adStatus==="На проверке")
+            setAdStatus(data.adStatus)
             setIsMine(data.isMine)
             stop()
         } catch (e) {
@@ -42,9 +42,7 @@ function AnimalInfo({navigation, route}, props) {
         try{
             const data = await dispatch(sendToArchive({idAd:animalId}))
             open("Уведомление", "Объявление отправлено в архив", () => () => {
-                navigation.navigate("userAnimals",{
-                    status:"На проверке"
-                })
+                navigation.navigate("userAnimals")
             })
         }catch(e){
             open(e, "", () => () => {
@@ -58,63 +56,64 @@ function AnimalInfo({navigation, route}, props) {
         })
 
         return unsubscribe
-    }, [fetch, animalId, navigation])
+    }, [fetch, animalId, navigation, route])
     return (
         <>
             {loading ? <LoadingView/> : <View style={{flex: 1, backgroundColor: "white"}}>
                 {isMine && (
                     <View >
-                        {adStatus &&  <View style={styles.chekingText}>
-                            <Text style={styles.statusText}>Объявление на проверке</Text>
+                        <View style={styles.chekingText}>
+                            <Text style={styles.statusText}>{(adStatus==="На проверке" && "Объявление на проверке")||(adStatus==="Архив" && "Объявление в архиве") || (adStatus==="Отклонено"&&"Объявление отклонено") || (adStatus==="Активный" && "Ваше объявление")}</Text>
                             <SvgUri
                                 width={14}
                                 height={14}
                                 source={Ok}
                             />
-                        </View>}
-
-                        <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                            <TouchableOpacity style={styles.adminButton} onPress={()=>{
-                                sendAdToArchive()
-                            }}>
-                                <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>
-                                    <SvgUri
-                                        width={10}
-                                        height={10}
-                                        source={CloseSvg}
-                                    />
-                                    <Text style={styles.adminButtonText}>Снять с публикации</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <SvgUri
-                                style={{
-                                    marginLeft: 10,
-                                    marginRight: 10
-                                }}
-                                width={1}
-                                height={16}
-                                source={Seperator}
-                            />
-                            <TouchableOpacity style={styles.adminButton} onPress={()=>{
-                                navigation.navigate("editAd",{
-                                    idAd:data.idAd,
-                                    name:data.namePet,
-                                    price:data.price,
-                                    age:data.age,
-                                    description:data.descriptionPet
-                                })
-                            }
-                            }>
-                                <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>
-                                    <SvgUri
-                                        width={14}
-                                        height={14}
-                                        source={Edit}
-                                    />
-                                    <Text style={styles.adminButtonText}>Редактировать</Text>
-                                </View>
-                            </TouchableOpacity>
                         </View>
+                        {
+                            (adStatus!=="Отклонено" && adStatus!=="Архив") &&  <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                                <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                                    sendAdToArchive()
+                                }}>
+                                    <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>
+                                        <SvgUri
+                                            width={10}
+                                            height={10}
+                                            source={CloseSvg}
+                                        />
+                                        <Text style={styles.adminButtonText}>Снять с публикации</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <SvgUri
+                                    style={{
+                                        marginLeft: 10,
+                                        marginRight: 10
+                                    }}
+                                    width={1}
+                                    height={16}
+                                    source={Seperator}
+                                />
+                                <TouchableOpacity style={styles.adminButton} onPress={()=>{
+                                    navigation.navigate("editAd",{
+                                        idAd:data.idAd,
+                                        name:data.namePet,
+                                        price:data.price,
+                                        age:data.age,
+                                        description:data.descriptionPet
+                                    })
+                                }
+                                }>
+                                    <View style={{width:"100%", flexDirection:"row", alignItems:"center",paddingLeft:12}}>
+                                        <SvgUri
+                                            width={14}
+                                            height={14}
+                                            source={Edit}
+                                        />
+                                        <Text style={styles.adminButtonText}>Редактировать</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        }
 
                     </View>
                 )}

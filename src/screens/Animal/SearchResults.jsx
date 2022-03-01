@@ -27,7 +27,6 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
 function SearchResults({route, navigation}, props) {
     const params = route.params
     const dispatch = useDispatch()
-    const [fetchIndex, setFetchIndex] = useState(0)
     const step = 16
     const [results, setResults] = useState([])
     const [goingToClose,setGoingToClose] = useState(false)
@@ -35,6 +34,29 @@ function SearchResults({route, navigation}, props) {
     const [resultsCount, setResultsCount] = useState(0)
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
+        try {
+            setResults([])
+            start()
+            let filteredParams = {...params}
+            delete filteredParams.searchName
+            delete filteredParams.breedName
+            delete filteredParams.cityName
+            filteredParams.idAnimalPlace = JSON.stringify(filteredParams.idAnimalPlace)
+            const data = await dispatch(searchAnimals({
+                ...filteredParams,
+                idLastAd: 0,
+                numberAds:step
+            }))
+            setResultsCount(data.total || 0)
+            setRemains(data.remained)
+            setResults(data.cards)
+            stop()
+        } catch (e) {
+
+        }
+    }, [dispatch, params])
+
+    const fetchNext = useCallback(async (fetchIndex)=>{
         try {
             start()
             let filteredParams = {...params}
@@ -53,16 +75,16 @@ function SearchResults({route, navigation}, props) {
         } catch (e) {
 
         }
-    }, [dispatch, params, fetchIndex])
+    },[dispatch, params])
     useEffect(fetch, [fetch])
 
     return (
         <>
             <View style={{flex: 1, backgroundColor: "#F6F4F0"}}>
-                <ScrollView onScroll={({nativeEvent}) => {
+                <ScrollView onScroll={async ({nativeEvent}) => {
                     if (isCloseToBottom(nativeEvent)) {
                         if (remains>0){
-                            setFetchIndex(state => results[results.length - 1].idAd)
+                            fetchNext( results[results.length - 1].idAd)
                         }
                     }
                 }}
@@ -81,7 +103,6 @@ function SearchResults({route, navigation}, props) {
                                     }} key={item.idAd} style={styles.searchCard}>
                                         <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
                                         <Text style={styles.cardText}>{item.namePet}</Text>
-                                        <Text style={styles.cardText}>{item.idAd}</Text>
                                         <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
                                         <Text style={styles.cardTextSmall}>{item.city}</Text>
                                         <View style={styles.placeWrap}>

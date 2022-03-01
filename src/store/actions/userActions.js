@@ -97,18 +97,6 @@ export const verifyCode = (params)=>async (dispatch)=>{
 
 }
 
-export const changePassword = (params)=>async (dispatch)=>{
-    try{
-        const data =await $host.post("user/change_password",{
-            ...params
-        })
-        return true
-    }catch (e){
-        throw e.response.data.message
-    }
-
-}
-
 export const login = (params)=>async (dispatch)=>{
     try{
         const data =await $host.post("authentication/login",{
@@ -244,5 +232,23 @@ export const sendToArchive = (params)=>async (dispatch)=>{
         return true
     }catch (e){
         throw e
+    }
+}
+
+export const askForPasswordChange = (params)=>async(dispatch)=>{
+    try{
+        const data = await $authHost.post("user/password_change_request", params)
+        return data.data
+    }catch (e){
+        throw e.response.data.message
+    }
+}
+
+export const changePassword = (params)=>async (dispatch)=>{
+    try{
+        const data = await $authHost.post("user/change_password", params)
+        return data.data
+    }catch (e){
+        throw e.response.data.message
     }
 }

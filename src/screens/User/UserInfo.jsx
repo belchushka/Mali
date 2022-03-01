@@ -9,23 +9,27 @@ import SvgUri from "react-native-svg-uri";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import {useDispatch, useSelector} from "react-redux";
 import useLoading from "../../hooks/useLoading";
-import {getUserInfo, saveUserInfo} from "../../store/actions/userActions";
+import {askForPasswordChange, changePassword, getUserInfo, saveUserInfo} from "../../store/actions/userActions";
 import LoadingView from "../../components/CustomElements/LoadingView";
-import {ConvertImage} from "../../utils/ConvertImage";;
+import {ConvertImage} from "../../utils/ConvertImage";
 import {useAlert} from "../../hooks/useAlert";
 import ContentView from "../../components/ContentView";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import MaskInput from "react-native-mask-input/src/MaskInput";
+import PasswordModal from "../../components/Modals/PasswordModal";
 
 function UserInfo({navigation}, props) {
     const dispatch = useDispatch()
-    const [iconPath, setIconPath] = useState({})
+    const [iconPath, setIconPath] = useState("")
     const [newUserIcon, setNewUserIcon] = useState(null)
     const [name,setName]=useState("")
     const [surname,setSurname]=useState("")
     const [phone,setPhone]=useState("")
+    const [password,setPassword]=useState("")
+    const [passwordRepeat,setPasswordRepeat] = useState("")
     const [phoneWhatsapp,setPhoneWhatsapp]=useState("")
     const [email,setEmail]=useState("")
+    const [passwordModal, setPasswordModal]  = useState(false)
     const {start, stop, loading} = useLoading()
     const {open, close, render} = useAlert()
     const fetch = useCallback(async () => {
@@ -60,9 +64,17 @@ function UserInfo({navigation}, props) {
             }
         }
     }, [])
-    const saveData = useCallback(async () => {
+
+    const saveData = useCallback(async (savePassword,passwordCode) => {
         try {
             start()
+            if (savePassword){
+                await dispatch(changePassword({
+                    email:email,
+                    password:password,
+                    verificationCode:passwordCode
+                }))
+            }
             const formData = new FormData()
             formData.append("name", name)
             formData.append("surname", surname)
@@ -82,9 +94,32 @@ function UserInfo({navigation}, props) {
         } catch (e) {
             stop()
             open("Ошибка", e)
-
         }
-    }, [newUserIcon, dispatch, name, surname, phone,phoneWhatsapp])
+    }, [newUserIcon, dispatch, name, surname, phone,phoneWhatsapp, password, passwordRepeat,email])
+    const saveDataPassword = useCallback(async()=>{
+        try{
+            if (password.trim().length>0){
+                if (password.trim().length>=8){
+                    if (password===passwordRepeat){
+                        dispatch(askForPasswordChange({
+                            email:email
+                        }))
+                        setPasswordModal(true)
+                    }else{
+                        throw "Пароли должны совпадать"
+                    }
+                }else{
+                    throw "Пароль должен быть не менее 8 символов"
+                }
+            }else{
+                saveData(false)
+            }
+
+        }catch (e) {
+            open("Ошибка", e)
+        }
+
+    },[saveData,dispatch, password,passwordRepeat, email])
     useEffect(fetch, [fetch])
     return (
         <View style={{flex: 1, backgroundColor: "white"}}>
@@ -105,7 +140,7 @@ function UserInfo({navigation}, props) {
                                         iconPath ?
                                             <>
                                                 <Image style={styles.userImage}
-                                                       source={{uri: iconPath + '?' + new Date()}}/>
+                                                       source={{uri: iconPath + "?date="+new Date()}}/>
                                             </>
                                             :
                                             <View style={styles.svgUriWrapper}>
@@ -162,16 +197,21 @@ function UserInfo({navigation}, props) {
                                 />
                             </View>
                             <View style={styles.input}>
-                                <Text style={styles.inputText}>Изменить пароль</Text>
-                                <TextInput style={styles.inputField} secureTextEntry={true}/>
+                                <Text style={styles.inputText}>Новый пароль</Text>
+                                <TextInput value={password} onChangeText={val=>setPassword(val)} style={styles.inputField} secureTextEntry={true}/>
                             </View>
                             <View style={styles.input}>
-                                <Text style={styles.inputText}>Повторить пароль</Text>
-                                <TextInput style={styles.inputField} secureTextEntry={true}/>
+                                <Text style={styles.inputText}>Повторите пароль</Text>
+                                <TextInput value={passwordRepeat} onChangeText={val=>setPasswordRepeat(val)} style={styles.inputField} secureTextEntry={true}/>
                             </View>
                         </View>
+                        <PasswordModal visible={passwordModal} close={(changePassword, passwordCode)=>{
+                            setPasswordModal(false)
+                            saveData(changePassword,passwordCode)
+                        }
+                        }/>
                         <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 20}}>
-                            <CustomButton onClick={saveData} title={"Сохранить"}/>
+                            <CustomButton onClick={saveDataPassword} title={"Сохранить"}/>
                         </View>
                     </ContentView>
                 }

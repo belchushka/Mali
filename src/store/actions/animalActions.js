@@ -2,7 +2,7 @@ import {$authHost, $host} from "../../http/http";
 import qs from "qs";
 import {
     SET_ANIMAL_BREEDS, SET_ANIMAL_CITIES, SET_ANIMAL_GENDERS, SET_ANIMAL_INFO,
-    SET_ANIMAL_PLACES,
+    SET_ANIMAL_PLACES, SET_ANIMAL_REGIONS,
     SET_ANIMAL_TYPES,
     SET_CURRENT_ANIMAL_TYPE_ID_AND_NAME, SET_NEW_AD_DATA,
     SET_SEARCH_ANIMALS_RESULT
@@ -124,7 +124,7 @@ export const getAnimalRegions = (params) => async (dispatch) => {
             params:params
         })
         dispatch({
-            type:SET_ANIMAL_CITIES,
+            type:SET_ANIMAL_REGIONS,
             payload:data.data
         })
         return data.data

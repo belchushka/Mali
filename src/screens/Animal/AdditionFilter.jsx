@@ -16,7 +16,7 @@ function AdditionFilter({navigation, route}, props) {
     const animalTypeId = useSelector(state => state.animal.currentAnimalTypeId)
     const params = route.params.params
     const [city, setCity] = useState(params.idCity ?params.idCity : null)
-    const [cityName, setCityName] = useState("")
+    const [cityName, setCityName] = useState(params.cityName ?params.cityName : "")
     const [animalBreed, setAnimalBreed] = useState(params.idAnimalBreed ? params.idAnimalBreed : null)
     const [animalTypeName, setAnimalTypeName] = useState(params.breedName ?params.breedName : "")
     const [animalPlace, setAnimalPlace] = useState(params.idAnimalPlace ? params.idAnimalPlace : [])
@@ -30,14 +30,14 @@ function AdditionFilter({navigation, route}, props) {
     const refreshData = useCallback(async () => {
         start()
         const data = await dispatch(searchAnimals({
-            // idCity:city.toString(),
+            ...(city && {idCity:city}),
             ...(animalPlace.length !== 0 && {idAnimalPlace: JSON.stringify(animalPlace)}),
             ...(animalBreed && {idAnimalBreed: animalBreed}),
             ...(animalTypeId && {idAnimalCategories: animalTypeId}),
             ...(priceRange[0] && {priceMin: priceRange[0]}),
             ...(priceRange[1] && {priceMax: priceRange[1]}),
         }))
-        setTotal(data.total)
+        setTotal(data.total ? data.total : "0")
         stop()
     }, [dispatch, animalTypeId, animalBreed, priceRange, city, animalPlace])
     useEffect(refreshData,[refreshData])
@@ -72,11 +72,13 @@ function AdditionFilter({navigation, route}, props) {
                 }}>
                     <CustomButton loading={loading} title={`Показать ${total} предложений`} onClick={() => {
                         navigation.navigate("searchResults",{
+                            ...(city && {idCity:city}),
                             ...(animalPlace.length !== 0 && {idAnimalPlace: animalPlace}),
                             ...(animalBreed && {idAnimalBreed: animalBreed}),
                             ...(animalTypeId && {idAnimalCategories: animalTypeId}),
                             ...(priceRange[0] && {priceMin: priceRange[0]}),
                             ...(priceRange[1] && {priceMax: priceRange[1]}),
+                            ...(cityName.length!==0 && {cityName:cityName}),
                             searchName:"Результаты поиска:",
                             breedName:animalTypeName,
                             numberAds:46,
@@ -92,7 +94,6 @@ function AdditionFilter({navigation, route}, props) {
                  setCity(id)
                  setCityName(name)
                  setCityPanelOpened(false)
-
             }}/>
             <PricePanel closePanelAction={() => {
                 setPricePanelOpened(false)

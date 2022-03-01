@@ -201,14 +201,14 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                         <Text style={{color: authorizationType === "login" ? "white" : "black"}}>Войти</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={[styles.sectionHeader, {
-                    marginTop: 40
-                }]}>{authorizationType === "registration" ? "Зарегистрироваться" : "Войти"} через:</Text>
-                <View>
-                    <Button title={"Google"} onPress={handleGoogleSignIn}/>
-                </View>
+                {/*<Text style={[styles.sectionHeader, {*/}
+                {/*    marginTop: 40*/}
+                {/*}]}>{authorizationType === "registration" ? "Зарегистрироваться" : "Войти"} через:</Text>*/}
+                {/*<View>*/}
+                {/*    <Button title={"Google"} onPress={handleGoogleSignIn}/>*/}
+                {/*</View>*/}
                 <Text
-                    style={styles.sectionHeader}>Или {authorizationType === "registration" ? "зарегистрируйтесь" : "войдите"} с
+                    style={[styles.sectionHeader,{marginTop:40}]}>{authorizationType === "registration" ? "Зарегистрируйтесь" : "Войдите"} с
                     помощью
                     электронной почты</Text>
                 <View style={styles.inputForm}>
