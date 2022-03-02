@@ -28,7 +28,7 @@ function SearchResults({route, navigation}, props) {
     const params = route.params
     const dispatch = useDispatch()
     const step = 16
-    const [results, setResults] = useState([])
+    const results = useSelector(state=>state.animal.searchedAnimals)
     const [goingToClose,setGoingToClose] = useState(false)
     const [remains, setRemains] = useState(0)
     const [resultsCount, setResultsCount] = useState(0)
@@ -49,7 +49,6 @@ function SearchResults({route, navigation}, props) {
             }))
             setResultsCount(data.total || 0)
             setRemains(data.remained)
-            setResults(data.cards)
             stop()
         } catch (e) {
 
@@ -78,6 +77,7 @@ function SearchResults({route, navigation}, props) {
     },[dispatch, params])
     useEffect(fetch, [fetch])
 
+
     return (
         <>
             <View style={{flex: 1, backgroundColor: "#F6F4F0"}}>
@@ -98,8 +98,8 @@ function SearchResults({route, navigation}, props) {
                         {!goingToClose && (
                             <View style={styles.cardHolder}>
                                 {results && results.map((item) => {
-                                    return <TouchableOpacity onPress={() => {
-                                        navigation.navigate("animalInfo", {id: item.idAd})
+                                   return !item.isMine ? <TouchableOpacity onPress={() => {
+                                        navigation.navigate("animalInfo", {id: item.idAd, previousScreen:"searchResults"})
                                     }} key={item.idAd} style={styles.searchCard}>
                                         <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
                                         <Text style={styles.cardText}>{item.namePet}</Text>
@@ -108,7 +108,8 @@ function SearchResults({route, navigation}, props) {
                                         <View style={styles.placeWrap}>
                                             <Text style={styles.placeText}>{item.place}</Text>
                                         </View>
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> : <></>
+
                                 })}
 
                                 {loading && <View style={{alignItems:"center", width:"100%", marginTop:20}}>

@@ -380,19 +380,22 @@ const PasswordChange = ({goTo, showCloseButton}) => {
                     password: password,
                     verificationCode: code
                 }))
-                await Alert.alert("Пароль сменили! Давай войдем")
-                showCloseButton()
                 stop()
-                goTo(0)
+                open("Уведомление","Пароль сменили! Давай войдем", ()=>()=>{
+                    showCloseButton()
+
+                    goTo(0)
+                })
+
             }else {
                 throw "Пароли должны совпадать!"
             }
 
         } catch (e) {
             stop()
-            open(e)
+            open("Ошибка",e)
         }
-    }, [code,password,repeatPassword])
+    }, [code,password,repeatPassword,userEmail])
     return (
         <>
             {loading?<LoadingView/> : <ContentView>

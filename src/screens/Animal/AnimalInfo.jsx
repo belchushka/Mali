@@ -17,6 +17,7 @@ import {sendToArchive} from "../../store/actions/userActions";
 function AnimalInfo({navigation, route}, props) {
     const animalId = route.params.id
     const dispatch = useDispatch()
+    const status = route.params.status
     const refreshParent = route?.params?.refresh
     const [data, setAnimalData] = useState({})
     const {start, stop, loading} = useLoading()
@@ -42,7 +43,7 @@ function AnimalInfo({navigation, route}, props) {
         try{
             const data = await dispatch(sendToArchive({idAd:animalId}))
             open("Уведомление", "Объявление отправлено в архив", () => () => {
-                navigation.navigate("userAnimals")
+                navigation.goBack()
             })
         }catch(e){
             open(e, "", () => () => {

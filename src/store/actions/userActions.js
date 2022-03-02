@@ -11,168 +11,168 @@ import {
 } from "../consts";
 
 
-export const setFirstTime = (value)=>async (dispatch)=>{
-    try{
+export const setFirstTime = (value) => async (dispatch) => {
+    try {
         dispatch({
-            type:SET_FIRST_TIME,
-            payload:value
+            type: SET_FIRST_TIME,
+            payload: value
         })
-    }catch (e){
+    } catch (e) {
 
     }
 
 }
 
-export const setLoggedIn = (value)=>async (dispatch)=>{
-    try{
+export const setLoggedIn = (value) => async (dispatch) => {
+    try {
         dispatch({
-            type:SET_LOGGED_IN,
-            payload:value
+            type: SET_LOGGED_IN,
+            payload: value
         })
-    }catch (e){
+    } catch (e) {
 
     }
 
 }
 
-export const setUserData = (value)=>async (dispatch)=>{
-    try{
+export const setUserData = (value) => async (dispatch) => {
+    try {
         dispatch({
-            type:SET_USER_DATA,
-            payload:value
+            type: SET_USER_DATA,
+            payload: value
         })
-    }catch (e){
+    } catch (e) {
 
     }
 
 }
 
 
-export const register = (params)=>async (dispatch)=>{
-    try{
-        const data =await $host.post("authentication/registration",{
+export const register = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("authentication/registration", {
             ...params
         })
         dispatch({
-            type:SET_USER_EMAIL,
-            payload:params.email
+            type: SET_USER_EMAIL,
+            payload: params.email
         })
         return true
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 
 }
 
-export const verifyEmail = (params)=>async (dispatch)=>{
-    try{
-        const data =await $host.post("authentication/check_verification_code",{
+export const verifyEmail = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("authentication/check_verification_code", {
             ...params
         })
-        await AsyncStorage.setItem("userData",JSON.stringify(data.data))
-        await AsyncStorage.setItem("loggedIn","true")
+        await AsyncStorage.setItem("userData", JSON.stringify(data.data))
+        await AsyncStorage.setItem("loggedIn", "true")
         dispatch({
-            type:SET_USER_DATA,
-            payload:data.data
+            type: SET_USER_DATA,
+            payload: data.data
         })
         dispatch({
-            type:SET_LOGGED_IN,
-            payload:true
+            type: SET_LOGGED_IN,
+            payload: true
         })
         return data.data
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 
 }
 
-export const verifyCode = (params)=>async (dispatch)=>{
-    try{
-        const data =await $host.post("user/password_change_request",{
+export const verifyCode = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("user/password_change_request", {
             ...params
         })
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 
 }
 
-export const login = (params)=>async (dispatch)=>{
-    try{
-        const data =await $host.post("authentication/login",{
+export const login = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("authentication/login", {
             ...params
         })
         const userData = data.data
-        await AsyncStorage.setItem("userData",JSON.stringify(userData))
-        await AsyncStorage.setItem("loggedIn","true")
+        await AsyncStorage.setItem("userData", JSON.stringify(userData))
+        await AsyncStorage.setItem("loggedIn", "true")
         dispatch({
-            type:SET_USER_DATA,
-            payload:userData
+            type: SET_USER_DATA,
+            payload: userData
         })
         dispatch({
-            type:SET_LOGGED_IN,
-            payload:true
+            type: SET_LOGGED_IN,
+            payload: true
         })
         return true
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 
 }
 
-export const exitUser = ()=>async (dispatch)=>{
-    try{
-        await AsyncStorage.multiRemove(["loggedIn","userData"])
+export const exitUser = () => async (dispatch) => {
+    try {
+        await AsyncStorage.multiRemove(["loggedIn", "userData"])
         dispatch({
-            type:EXIT_USER,
+            type: EXIT_USER,
         })
         return true
-    }catch (e){
+    } catch (e) {
         return false
     }
 }
 
-export const getUserAnimals = (params)=>async (dispatch)=>{
-    try{
-        const data =await $authHost.get("user/user_ads")
+export const getUserAnimals = (params) => async (dispatch) => {
+    try {
+        const data = await $authHost.get("user/user_ads")
         dispatch({
-            type:SET_USER_ANIMALS,
-            payload:data.data.ads
+            type: SET_USER_ANIMALS,
+            payload: data.data.ads
         })
         return data.data.ads
-    }catch (e){
+    } catch (e) {
         return false
     }
 }
 
-export const getAdminCheckAnimals = (params)=>async (dispatch)=>{
-    try{
-        const data =await $authHost.get("admin/ads_need_approved")
+export const getAdminCheckAnimals = (params) => async (dispatch) => {
+    try {
+        const data = await $authHost.get("admin/ads_need_approved")
         dispatch({
-            type:SET_USER_ANIMALS,
-            payload:data.data
+            type: SET_USER_ANIMALS,
+            payload: data.data
         })
         return data.data
-    }catch (e){
+    } catch (e) {
         return false
     }
 }
 
-export const getUserInfo = (params)=>async (dispatch)=>{
-    try{
-        const data =await $authHost.get("user/profile")
+export const getUserInfo = (params) => async (dispatch) => {
+    try {
+        const data = await $authHost.get("user/profile")
         dispatch({
-            type:SET_USER_INFO,
-            payload:data.data
+            type: SET_USER_INFO,
+            payload: data.data
         })
         return data.data
-    }catch (e){
+    } catch (e) {
         return false
     }
 }
 
-export const saveUserInfo = (params)=>async (dispatch)=>{
-    try{
+export const saveUserInfo = (params) => async (dispatch) => {
+    try {
         const xhr = new XMLHttpRequest();
         const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
 
@@ -188,22 +188,21 @@ export const saveUserInfo = (params)=>async (dispatch)=>{
                     reject(xhr.responseText);
                 }
             };
-            xhr.open("POST","https://MALI.DEPRA.RU/api/user/change_user_data")
+            xhr.open("POST", "https://MALI.DEPRA.RU/api/user/change_user_data")
             xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.setRequestHeader("Authorization", "Bearer "+token);
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
             xhr.send(params);
         })
         return params
-    }catch (e){
+    } catch (e) {
         throw e
     }
 }
 
-export const createNewAd = (params)=>async (dispatch)=>{
-    try{
+export const createNewAd = (params) => async (dispatch) => {
+    try {
         const xhr = new XMLHttpRequest();
         const token = JSON.parse(await AsyncStorage.getItem("userData")).accessToken
-        console.log(params);
         const data = await new Promise((resolve, reject) => {
             xhr.onreadystatechange = e => {
                 if (xhr.readyState !== 4) {
@@ -215,40 +214,41 @@ export const createNewAd = (params)=>async (dispatch)=>{
                     reject(xhr.responseText);
                 }
             };
-            xhr.open("POST","https://MALI.DEPRA.RU/api/user/create_ad")
+            xhr.open("POST", "https://MALI.DEPRA.RU/api/user/create_ad")
             xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.setRequestHeader("Authorization", "Bearer "+token);
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
             xhr.send(params);
         })
-    }catch (e){
+    } catch (e) {
         throw e
     }
 }
 
-export const sendToArchive = (params)=>async (dispatch)=>{
-    try{
+export const sendToArchive = (params) => async (dispatch) => {
+    try {
         const data = await $authHost.post("user/send_ad_to_archive", params)
-        console.log(data);
+
         return true
-    }catch (e){
+    } catch (e) {
         throw e
     }
 }
 
-export const askForPasswordChange = (params)=>async(dispatch)=>{
-    try{
+export const askForPasswordChange = (params) => async (dispatch) => {
+    try {
         const data = await $authHost.post("user/password_change_request", params)
         return data.data
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 }
 
-export const changePassword = (params)=>async (dispatch)=>{
-    try{
-        const data = await $authHost.post("user/change_password", params)
+export const changePassword = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("user/change_password", params)
         return data.data
-    }catch (e){
+    } catch (e) {
         throw e.response.data.message
     }
 }
+

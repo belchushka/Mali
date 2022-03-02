@@ -1,4 +1,5 @@
 import {
+    ADD_SEARCH_ANIMALS_RESULT, RESET_SEARCH_ANIMALS_RESULT,
     SET_ANIMAL_BREEDS, SET_ANIMAL_CITIES, SET_ANIMAL_GENDERS, SET_ANIMAL_INFO,
     SET_ANIMAL_PLACES, SET_ANIMAL_REGIONS,
     SET_ANIMAL_TYPES,
@@ -50,6 +51,17 @@ export const animalReducer = (state=initialState, action)=>{
             }
 
         case SET_SEARCH_ANIMALS_RESULT:
+            return {
+                ...state,
+                searchedAnimals:action.payload
+            }
+        case ADD_SEARCH_ANIMALS_RESULT:
+            return {
+                ...state,
+                searchedAnimals:[...state.searchedAnimals, ...action.payload]
+            }
+
+        case RESET_SEARCH_ANIMALS_RESULT:
             return {
                 ...state,
                 searchedAnimals:action.payload

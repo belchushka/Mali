@@ -60,7 +60,12 @@ function UserAnimals({navigation, route}, props) {
         stop()
     }, [dispatch])
     useEffect(()=>{
-        fetch()
+        const unsubscribe = navigation.addListener("focus",()=>{
+            fetch()
+            setStatus(route.params?.status || null)
+        })
+
+        return unsubscribe
     }, [fetch, navigation, route])
     return (
         <View style={{flex: 1}}>
@@ -81,6 +86,8 @@ function UserAnimals({navigation, route}, props) {
                                 <TouchableOpacity  onPress={() => {
                                     navigation.navigate("animalInfo", {
                                         id: el.idAd,
+                                        status:status,
+                                        previousScreen:"userAnimals"
                                     })
                                 }
                                 } style={styles.card}>

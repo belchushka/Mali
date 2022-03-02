@@ -1,6 +1,7 @@
 import {$authHost, $host} from "../../http/http";
 import qs from "qs";
 import {
+    ADD_SEARCH_ANIMALS_RESULT, RESET_SEARCH_ANIMALS_RESULT,
     SET_ANIMAL_BREEDS, SET_ANIMAL_CITIES, SET_ANIMAL_GENDERS, SET_ANIMAL_INFO,
     SET_ANIMAL_PLACES, SET_ANIMAL_REGIONS,
     SET_ANIMAL_TYPES,
@@ -83,6 +84,30 @@ export const searchAnimals = (params) => async (dispatch) => {
         throw e.response.data.message
     }
 }
+
+
+export const addAnimalsResults = (params) => async (dispatch) => {
+    try{
+        dispatch({
+            type:ADD_SEARCH_ANIMALS_RESULT,
+            payload:params
+        })
+    }catch (e) {
+        throw e.response.data.message
+    }
+}
+
+export const resetAnimalsResults = (params) => async (dispatch) => {
+    try{
+        dispatch({
+            type:RESET_SEARCH_ANIMALS_RESULT,
+            payload:params
+        })
+    }catch (e) {
+        throw e.response.data.message
+    }
+}
+
 
 export const searchAnimalsString = (params) => async (dispatch) => {
     try{
