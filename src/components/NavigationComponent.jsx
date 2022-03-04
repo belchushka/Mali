@@ -6,6 +6,7 @@ import Intro from "./Intro";
 import Catalog from "../screens/Animal/Catalog";
 import {NavigationContainer} from "@react-navigation/native";
 import {AsyncStorage} from "react-native";
+import { CardStyleInterpolators } from '@react-navigation/stack';
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import SvgUri from "react-native-svg-uri";
 import HomeActive from "../media/Icons/HomeActive.svg"
@@ -116,7 +117,7 @@ const NavigationComponent = () => {
     return <>
         {loading ? <LoadingView/> :
             <NavigationContainer linking={linking}>
-                <Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName={firstTime ? "introduction" : "home"}>
+                <Stack.Navigator screenOptions={{headerShown: false, stackAnimation:"fade_from_bottom"}}  initialRouteName={firstTime ? "introduction" : "home"}>
                     {firstTime && <Stack.Screen name={"introduction"} component={Intro}/>}
                     <Stack.Screen name={"home"} component={HomeTabs}/>
                     <Stack.Screen name={"animalTransportation"} component={AnimalTransportation}/>
@@ -124,9 +125,9 @@ const NavigationComponent = () => {
                     <Stack.Screen name={"animalFilter"} component={AnimalFilter}/>
                     <Stack.Screen name={"searchResults"} component={SearchResults}/>
                     <Stack.Screen name={"additionalFilter"} component={AdditionFilter}/>
-                    <Stack.Screen name={"animalInfo"} component={AnimalInfo}/>
+                    <Stack.Screen name={"animalInfo"} component={AnimalInfo} />
                     <Stack.Screen name={"userAnimals"} component={userAnimals}/>
-                    <Stack.Screen name={"userInfo"} component={userInfo}/>
+                    <Stack.Screen name={"userInfo"} component={userInfo} />
                     <Stack.Screen name={"userPicture"} component={userPicture}/>
                     <Stack.Screen name={"newAdBreed"} component={NewAdAnimalBreed}/>
                     <Stack.Screen name={"newAdAppearance"} component={NewAdAppearance}/>

@@ -55,17 +55,6 @@ export const animalReducer = (state=initialState, action)=>{
                 ...state,
                 searchedAnimals:action.payload
             }
-        case ADD_SEARCH_ANIMALS_RESULT:
-            return {
-                ...state,
-                searchedAnimals:[...state.searchedAnimals, ...action.payload]
-            }
-
-        case RESET_SEARCH_ANIMALS_RESULT:
-            return {
-                ...state,
-                searchedAnimals:action.payload
-            }
         case SET_ANIMAL_CITIES:
             return {
                 ...state,

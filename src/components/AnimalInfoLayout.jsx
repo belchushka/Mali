@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {
     ActivityIndicator,
-    Image,
+    Image, Platform,
     ScrollView,
     Share,
     StyleSheet,
@@ -24,17 +24,13 @@ import ErrorModal from "./Modals/ErrorModal";
 function youtube_parser(url){
     let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     let match = url.match(regExp);
-    return (match&&match[7].length==11)? match[7] : false;
+    return (match&&match[7].length==11)? match[7] : "";
 }
 
 function AnimalInfoLayout({data,navigation, showErrorAlert=true},props) {
     const [videoLoaded,setVideoLoaded] = useState(false)
-    const [playing, setPlaying] = useState(false);
     const loggedIn = useSelector(state=>state.user.loggedIn)
     const [modalVisible,setModalVisible] = useState(false)
-    const togglePlaying = useCallback(() => {
-        setPlaying((prev) => !prev);
-    }, []);
     return (
             <ScrollView>
                 <View style={styles.swiperWrapper}>
@@ -107,7 +103,7 @@ function AnimalInfoLayout({data,navigation, showErrorAlert=true},props) {
                         renderPagination={(index)=>{
                             return <View style={{position:"absolute", alignSelf:"center", bottom:40, flexDirection:"row"}}>
                                 {data.imagesPath.map((el,indexEl)=>{
-                                    return <View style={[{width:5, height:5, backgroundColor:"rgba(255,255,255,0.3)", borderRadius:1200, marginLeft:10},indexEl==index && {width:15, backgroundColor:"white"} ]}>
+                                    return <View key={indexEl} style={[{width:5, height:5, backgroundColor:"rgba(255,255,255,0.3)", borderRadius:1200, marginLeft:10},indexEl==index && {width:15, backgroundColor:"white"} ]}>
 
                                     </View>
                                 })}
@@ -161,28 +157,22 @@ function AnimalInfoLayout({data,navigation, showErrorAlert=true},props) {
                         <Text style={styles.descriptionTitle}>Описание</Text>
                         <Text style={styles.descriptionText}>{`${data.descriptionPet}`}</Text>
                     </View>
+
                     {(()=>{
                         if(data.youtubeVideo){
-                            return <View style={[styles.video, !videoLoaded && {display:"none"}]}>
+                            return <View style={[styles.video, Platform.OS==="ios" && !videoLoaded && {display:"none"}]}>
                                 <YoutubePlayer
                                     height={210}
-                                    play={playing}
+                                    webViewStyle={{opacity: 0.99}}
                                     onReady={()=>{setVideoLoaded(true)}}
                                     videoId={youtube_parser(data.youtubeVideo)}
                                 />
                             </View>
-
                         }
                     })()
                     }
 
-                    {(()=>{
-                        if(data.youtubeVideo && !videoLoaded){
-                            return <View style={[styles.video, {justifyContent:"center"}]}><ActivityIndicator size="large" color="#F6A405" /></View>
-
-                        }
-                    })()
-                    }
+                    {( Platform.OS==="ios" && data.youtubeVideo && !videoLoaded) && <View style={[styles.video, {justifyContent:"center"}]}><ActivityIndicator size="large" color="#F6A405" /></View>}
 
 
                     {showErrorAlert && <CustomButton onClick={()=>{setModalVisible(true)}} style={{marginTop:25}}  title={"Нашли ошибку?"}/>

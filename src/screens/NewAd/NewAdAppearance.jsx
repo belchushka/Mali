@@ -21,6 +21,17 @@ import {useAlert} from "../../hooks/useAlert";
 import {setNewAdData} from "../../store/actions/animalActions";
 import DeleteImage from "../../media/Icons/DeleteImage.svg"
 import SvgUri from "react-native-svg-uri";
+import * as FileSystem from 'expo-file-system'
+
+export const getFileInfo = async (fileURI) => {
+    const fileInfo = await FileSystem.getInfoAsync(fileURI)
+    return fileInfo
+}
+
+export const isSizeOk = (fileSize)=>{
+    const isOk = fileSize / 1024 / 1024 < 5
+    return isOk
+}
 
 
 function NewAdAppearance({navigation}, props) {
@@ -41,21 +52,32 @@ function NewAdAppearance({navigation}, props) {
         } else SetIsYoutubeLinkValid(youtube == "");
     }
     const selectImages =useCallback(async ()=>{
-        const { status } =
-            await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-            alert("Вы должны дать разрешение доступа к галерее!");
-        } else {
-            let result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            });
-            if (!result.cancelled) {
-                setPhotos((prev) => [...prev, result.uri]);
+        try{
+            const { status } =
+                await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== "granted") {
+                alert("Вы должны дать разрешение доступа к галерее!");
+            } else {
+                let result = await ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    allowsEditing: true,
+                    aspect: [1, 1],
+                    quality: 1,
+                });
+                if (!result.cancelled) {
+                    const info = await getFileInfo(result.uri)
+                    console.log(info.size);
+                    if (isSizeOk(info.size)){
+                        setPhotos((prev) => [...prev, result.uri]);
+                    }else{
+                        throw "Размер файла не должен привышать 5мб"
+                    }
+                }
             }
+        }catch (e){
+            open("Ошибка",e)
         }
+
 
     },[])
     const dispatch = useDispatch()
@@ -67,6 +89,8 @@ function NewAdAppearance({navigation}, props) {
                 throw "Неверная ссылка"
             }else if(photos.length<2){
                 throw "Выберете хотя бы 2 фото"
+            }else if(photos.length>5){
+                throw "Количество фотографий не должно быть болше 5"
             }
             await dispatch(setNewAdData({
                 imgs:photos.map(el=>ConvertImage(el)),
@@ -93,7 +117,7 @@ function NewAdAppearance({navigation}, props) {
                     <Text style={styles.sectionTitle}>Фотографии:</Text>
                     <View style={styles.imagesWrap}>
                         {photos.map(el=>{
-                            return  <View style={styles.imageWrap}>
+                            return  <View key={el} style={styles.imageWrap}>
                                 <Image style={styles.image} source={{uri:el}}/>
                                 <TouchableOpacity key={el} onPress={()=>{setPhotos(state=>state.filter(el1=>el1!=el))}} style={{position:"absolute", top:5, right:5}} >
                                     <SvgUri width={18} height={18}  source={DeleteImage}/>

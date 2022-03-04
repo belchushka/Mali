@@ -86,28 +86,6 @@ export const searchAnimals = (params) => async (dispatch) => {
 }
 
 
-export const addAnimalsResults = (params) => async (dispatch) => {
-    try{
-        dispatch({
-            type:ADD_SEARCH_ANIMALS_RESULT,
-            payload:params
-        })
-    }catch (e) {
-        throw e.response.data.message
-    }
-}
-
-export const resetAnimalsResults = (params) => async (dispatch) => {
-    try{
-        dispatch({
-            type:RESET_SEARCH_ANIMALS_RESULT,
-            payload:params
-        })
-    }catch (e) {
-        throw e.response.data.message
-    }
-}
-
 
 export const searchAnimalsString = (params) => async (dispatch) => {
     try{

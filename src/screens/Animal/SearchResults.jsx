@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import SearchBar from "../../components/CustomElements/SearchBar";
 import ContentView from "../../components/ContentView";
-import {searchAnimals, searchAnimalsString} from "../../store/actions/animalActions";
+import {addAnimalsResults, searchAnimals, searchAnimalsString} from "../../store/actions/animalActions";
 import {useDispatch, useSelector} from "react-redux";
 import AnimalCard from "../../components/AnimalCard";
 import useLoading from "../../hooks/useLoading";
@@ -27,26 +27,28 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
 function SearchResults({route, navigation}, props) {
     const params = route.params
     const dispatch = useDispatch()
-    const step = 16
-    const results = useSelector(state=>state.animal.searchedAnimals)
+    const step = 10
+    const [results,setResults] = useState([])
+    console.log(results);
     const [goingToClose,setGoingToClose] = useState(false)
     const [remains, setRemains] = useState(0)
     const [resultsCount, setResultsCount] = useState(0)
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
-            setResults([])
             start()
             let filteredParams = {...params}
             delete filteredParams.searchName
             delete filteredParams.breedName
             delete filteredParams.cityName
             filteredParams.idAnimalPlace = JSON.stringify(filteredParams.idAnimalPlace)
+
             const data = await dispatch(searchAnimals({
                 ...filteredParams,
                 idLastAd: 0,
                 numberAds:step
             }))
+            setResults(data.cards)
             setResultsCount(data.total || 0)
             setRemains(data.remained)
             stop()
@@ -67,24 +69,30 @@ function SearchResults({route, navigation}, props) {
                 idLastAd: fetchIndex,
                 numberAds:step
             }))
+            setResults(state=>[...state,...data.cards])
             setResultsCount(data.total)
             setRemains(data.remained)
-            setResults(state => [...state,...data.cards])
             stop()
         } catch (e) {
 
         }
     },[dispatch, params])
     useEffect(fetch, [fetch])
+    useEffect(()=>{
+        const backAction = ()=>{
+            stop()
+        }
+        BackHandler.addEventListener('hardwareBackPress', backAction);
 
-
+        return () => BackHandler.removeEventListener('hardwareBackPress', backAction)
+    })
     return (
         <>
             <View style={{flex: 1, backgroundColor: "#F6F4F0"}}>
                 <ScrollView onScroll={async ({nativeEvent}) => {
                     if (isCloseToBottom(nativeEvent)) {
                         if (remains>0){
-                            fetchNext( results[results.length - 1].idAd)
+                            fetchNext(results[results.length - 1].idAd)
                         }
                     }
                 }}
@@ -98,17 +106,18 @@ function SearchResults({route, navigation}, props) {
                         {!goingToClose && (
                             <View style={styles.cardHolder}>
                                 {results && results.map((item) => {
-                                   return !item.isMine ? <TouchableOpacity onPress={() => {
+                                   return <TouchableOpacity onPress={() => {
                                         navigation.navigate("animalInfo", {id: item.idAd, previousScreen:"searchResults"})
                                     }} key={item.idAd} style={styles.searchCard}>
                                         <AnimalCard clickable={false} key={item.idAd} image={item.imagePreview}/>
                                         <Text style={styles.cardText}>{item.namePet}</Text>
                                         <Text style={styles.cardTextBold}>{item.price + " руб."}</Text>
                                         <Text style={styles.cardTextSmall}>{item.city}</Text>
+
                                         <View style={styles.placeWrap}>
                                             <Text style={styles.placeText}>{item.place}</Text>
                                         </View>
-                                    </TouchableOpacity> : <></>
+                                    </TouchableOpacity>
 
                                 })}
 
@@ -200,6 +209,7 @@ const styles = StyleSheet.create({
 
     searchCard: {
         marginTop: 15,
+        maxWidth:"49%"
     }
 
 })

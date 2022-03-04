@@ -16,6 +16,7 @@ function SearchBar({style, showBackButton=false, navigation},props) {
             }))
             const properties = params.recognizedProperties
             navigation.navigate("searchResults",{
+                ...(properties.idCity && {idCity:properties.idCity}),
                 ...((properties.idAnimalPlace && properties.idAnimalPlace.length !== 0) && {idAnimalPlace: properties.idAnimalPlace}),
                 ...(properties.idAnimalBreed && {idAnimalBreed: properties.idAnimalBreed}),
                 ...(properties.idAnimalCategories && {idAnimalCategories: properties.idAnimalCategories}),

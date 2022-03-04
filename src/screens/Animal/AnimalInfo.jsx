@@ -12,6 +12,7 @@ import CloseSvg from "../../media/Icons/Close.svg"
 import Edit from "../../media/Icons/EditNoWrap.svg"
 import Ok from "../../media/Icons/OkSvg.svg"
 import {sendToArchive} from "../../store/actions/userActions";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 
 function AnimalInfo({navigation, route}, props) {
@@ -42,8 +43,8 @@ function AnimalInfo({navigation, route}, props) {
     const sendAdToArchive = useCallback(async ()=>{
         try{
             const data = await dispatch(sendToArchive({idAd:animalId}))
-            open("Уведомление", "Объявление отправлено в архив", () => () => {
-                navigation.goBack()
+            open("Уведомление", "Объявление отправлено в архив", ()=>()=>{
+                fetch()
             })
         }catch(e){
             open(e, "", () => () => {
@@ -122,6 +123,7 @@ function AnimalInfo({navigation, route}, props) {
             </View>}
             {render()}
         </>
+
 
     );
 }

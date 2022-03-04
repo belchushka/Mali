@@ -66,7 +66,7 @@ function AdminAnimal({navigation},props) {
     useEffect(fetch, [fetch])
     return (
         <>
-            {completed &&
+            { loading ? <LoadingView/> : (completed || Object.keys(animalData).length ===0) &&
                 <View style={{flex:1}}>
                     <CustomHeader hasBackButton={true} goBackAction={navigation.goBack}/>
                     <View style={{backgroundColor:"white", flex:1}}>
@@ -75,9 +75,8 @@ function AdminAnimal({navigation},props) {
                     </View>
 
                 </View>
-
             }
-            { loading ? <LoadingView/> : !completed && <View style={{flex: 1, backgroundColor: "white"}}>
+            { loading ? <LoadingView/> : (!completed && Object.keys(animalData).length !==0) && <View style={{flex: 1, backgroundColor: "white"}}>
                     <View style={{width:"100%", flexDirection:"row", justifyContent:"space-between"}}>
                         <TouchableOpacity style={styles.adminButton} onPress={()=>{
                             setRefuseModalVisible(true)}
