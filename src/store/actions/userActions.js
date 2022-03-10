@@ -252,3 +252,13 @@ export const changePassword = (params) => async (dispatch) => {
     }
 }
 
+export const sendErrorFeedback = (params) => async (dispatch) => {
+    try {
+        const data = await $host.post("user/feedback", params)
+        return data.data
+    } catch (e) {
+        throw e.response.data.message
+    }
+}
+
+

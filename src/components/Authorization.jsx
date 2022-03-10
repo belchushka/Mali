@@ -229,7 +229,7 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                             placeholderTextColor="#777777"
                             style={styles.input}
                             autoCapitalize = 'none'
-                            mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                            mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/]}
                         />
                     }
                     <TextInput value={password} secureTextEntry={true} textContentType="password" onChangeText={(val) => setPassword(val)} style={styles.input}

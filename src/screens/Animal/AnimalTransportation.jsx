@@ -5,6 +5,7 @@ import ContentView from "../../components/ContentView";
 import CustomButton from "../../components/CustomElements/CustomButton";
 import CircledIcon from "../../components/CustomElements/CircledIcon";
 import Inst from "../../media/Icons/Inst.svg"
+import Telegram from "../../media/Icons/Telegram.svg"
 import {Linking} from 'react-native'
 
 
@@ -14,13 +15,20 @@ function AnimalTranportation({navigation},props) {
             <CustomHeader hasBackButton={true} title={"Перевозка животных"} goBackAction={navigation.goBack} />
            <ContentView style={{backgroundColor:"white", height:Dimensions.get("window").height}}>
                <Text style={styles.textBold}>Перевозка животных по всей России.</Text>
-               <Text style={styles.textInfo}>В нашей компании <Text style={{color:"#F6A405"}}>MALI</Text> есть перевозчики, которые сами имеют животных и очень их любят.
-                   Они накормят, выгуляют и приласкают ваших драгоценных любимцев. Помимо обычного
-                   не специализированного транспорта для домашних животных, вы можете заказать на нашем сайте профессиональную коневозку для перевозки лошадей или специальный скотовоз для перевозки свиней или овец. Для этого вам нужно просто разместить запрос, а все остальное мы сделаем
-                   за вас.</Text>
+               <Text style={styles.textInfo}>Наша компания <Text style={{color:"#F6A405"}} onPress={() => Linking.openURL('https://feival.ru')}>Feival</Text> предоставляет услуги трансфера для ваших питомцев. Мы поможем доставить вашего друга в любую точку города или даже страны, различными видами транспорта. Во время путешествия предложим напитки и подкрепиться, сопроводим во время выгула, приложим максимальные условия для безопасности транспортировки.</Text>
                <View style={styles.actionView}>
-                   <CustomButton onClick={()=>{Linking.openURL(`tel:${88005553535}`)}} title={"Позвонить"} style={{width:220}} />
-                   <CircledIcon style={{marginLeft:20}} image={Inst}/>
+                   <CustomButton onClick={()=>{Linking.openURL(`whatsapp://send?text=Здравствуйте,&phone=880005553535`)}} title={"Написать"} style={{width:220}} />
+                   <TouchableOpacity onPress={()=>{
+                       Linking.openURL("https://www.instagram.com/ooo_feival/?r=nametag")
+                   }}>
+                       <CircledIcon width={20} height={20}  style={{marginLeft:20}} image={Inst}/>
+                   </TouchableOpacity>
+                   <TouchableOpacity onPress={()=>{
+                       Linking.openURL("https://t.me/oooFeival")
+                   }}>
+                       <CircledIcon width={20} height={20}  style={{marginLeft:20}} image={Telegram}/>
+                   </TouchableOpacity>
+
                </View>
            </ContentView>
         </View>

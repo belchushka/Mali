@@ -24,4 +24,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CircledIcon;
+export default React.memo(CircledIcon) ;

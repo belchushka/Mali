@@ -179,7 +179,7 @@ function UserInfo({navigation}, props) {
                                     placeholderTextColor="#777777"
                                     style={styles.inputField}
                                     autoCapitalize = 'none'
-                                    mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                                    mask={['+',/\d/,'(', /\d/, /\d/, /\d/,')', ' ', /\d/, /\d/, /\d/,'-', /\d/, /\d/, '-', /\d/, /\d/]}
                                 />
                             </View>
                             <View style={styles.input}>

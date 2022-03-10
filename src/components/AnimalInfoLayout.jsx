@@ -35,7 +35,8 @@ function AnimalInfoLayout({data,navigation, showErrorAlert=true},props) {
             <ScrollView>
                 <View style={styles.swiperWrapper}>
                     <TouchableOpacity onPress={() => {
-                        navigation.goBack()
+                        navigation.canGoBack() ? navigation.goBack() : navigation.navigate("home")
+
                     }} style={styles.swiperBackButton}>
                         <SvgUri width={44} height={44} source={BackWhite}/>
                     </TouchableOpacity>

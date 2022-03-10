@@ -4,7 +4,7 @@ import ContentView from "../../components/ContentView";
 import {
     Alert, Button,
     Dimensions,
-    Image,
+    Image, Platform,
     StyleSheet,
     Text,
     TextInput,
@@ -29,7 +29,8 @@ export const getFileInfo = async (fileURI) => {
 }
 
 export const isSizeOk = (fileSize)=>{
-    const isOk = fileSize / 1024 / 1024 < 5
+    const size = Platform.OS==="ios" ? fileSize / 1024 / 1024 - 2 : fileSize / 1024 / 1024 - 2
+    const isOk = size < 5
     return isOk
 }
 
