@@ -20,7 +20,7 @@ import {useAlert} from "../../hooks/useAlert";
 import {useDispatch} from "react-redux";
 import {sendErrorFeedback} from "../../store/actions/userActions"
 
-const ErrorModal = ({visible, close}) => {
+const ErrorModal = ({visible, close, title="Нашли ошибку", descriptionTitle="Опишите проблему"}) => {
     const [name, setName] = useState("")
     const [phone, setPhone] = useState("")
     const dispatch = useDispatch()
@@ -36,7 +36,7 @@ const ErrorModal = ({visible, close}) => {
                     name:name,
                     message:description
                 }))
-                open("Уведомление", "Вы успешно сообщили об ошибке", ()=>()=>{
+                open("Уведомление", "Ваше обращение успешно отправлено", ()=>()=>{
                     close()
                 })
             }
@@ -65,7 +65,7 @@ const ErrorModal = ({visible, close}) => {
                                 justifyContent: "space-between",
                                 marginBottom: 16
                             }}>
-                                <Text style={styles.modalText}>Нашли ошибку?</Text>
+                                <Text style={styles.modalText}>{title}</Text>
                                 <TouchableOpacity onPress={() => {
                                     close()
                                 }}>
@@ -91,7 +91,7 @@ const ErrorModal = ({visible, close}) => {
                                        numberOfLines={Platform.OS === 'ios' ? null : 6}
                                        minHeight={(Platform.OS === 'ios' && 6) ? (20 * 6) : null}
                                        style={[styles.inputs, styles.textArea]}
-                                       placeholder={"Опишите проблему"} />
+                                       placeholder={descriptionTitle} />
 
                             <CustomButton title={"Отправить"} onClick={() => {
                                 sendFeedback()
