@@ -2,10 +2,13 @@ import React from 'react';
 import {Image, StyleSheet, View} from "react-native";
 import SvgUri from "react-native-svg-uri";
 
-function CircledIcon({style, image, width,height},props) {
+function CircledIcon({style, image, width,height, iconStyle={}},props) {
     return (
         <View style={[styles.iconWrapper, style]}>
-            <SvgUri width={width} height={height} source={image} />
+            <View style={iconStyle}>
+                <SvgUri width={width} height={height} source={image} />
+
+            </View>
         </View>
     );
 }

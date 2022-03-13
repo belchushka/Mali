@@ -210,7 +210,7 @@ function UserInfo({navigation}, props) {
                             saveData(changePassword,passwordCode)
                         }
                         }/>
-                        <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 20}}>
+                        <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 5}}>
                             <CustomButton onClick={saveDataPassword} title={"Сохранить"}/>
                         </View>
                     </ContentView>
@@ -234,15 +234,15 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     inputField: {
-        paddingTop: 5,
-        paddingBottom: 10,
+
+        paddingBottom: 6,
         borderBottomWidth: 1,
         borderBottomColor: "#E7E7E7",
         fontSize: 16
     },
     inputText: {
         color: "#808080",
-        fontSize: 14
+        fontSize: 12,
     },
     svgUriWrapper: {
         borderRadius: 10000,

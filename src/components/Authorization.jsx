@@ -248,6 +248,9 @@ function Auth({navigation, hideCloseButton, goTo}, props) {
                 <Text style={styles.policy}>Создавая личный кабинет вы соглашаетесь с нашими <Text onPress={() => {
                     navigation.navigate("policy")
                 }} style={{textDecorationLine: 'underline'}}>условиями использования</Text> и <Text
+                    onPress={() => {
+                        navigation.navigate("policy")
+                    }}
                     style={{textDecorationLine: 'underline'}}>политикой конфедициальности</Text> </Text>
                 <View style={styles.help}>
                     <Text style={styles.helpText} onPress={() => {

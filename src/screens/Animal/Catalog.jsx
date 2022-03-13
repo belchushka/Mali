@@ -34,7 +34,7 @@ function Catalog({navigation}, props) {
         <View style={{flex:1}}>
             <KeyboardAwareScrollView style={{flex:1}} contentContainerStyle={{flexGrow:1}}  keyboardShouldPersistTaps="handled">
                 <SearchBar navigation={navigation}/>
-                <ContentView style={{flex:1}}>
+                <ContentView style={{flex:1, }}>
                     {loading ? <LoadingView />:
                         <>
                             <View style={styles.cardHolder}>
@@ -60,6 +60,13 @@ function Catalog({navigation}, props) {
                                 marginTop: 50,
                                 marginBottom: 50,
                             }} iconHeight={12} iconWidth={16}/>
+                            <TouchableOpacity onPress={()=>{
+                                navigation.navigate("policy")
+                            }
+                            }>
+                                <Text  style={{color:"#A1A1A1", fontSize:12, textAlign:'center', textDecorationLine:"underline", textDecorationColor:"#A1A1A1", textDecorationStyle:"solid", marginBottom:20}}>Пользовательское соглашение и политика конфедициальности</Text>
+                            </TouchableOpacity>
+
                         </>
 
                     }
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
     },
 
     catalogView: {
-        backgroundColor: "#F6F4F0",
+        backgroundColor: "#F7F4F0",
     }
 })
 

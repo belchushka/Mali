@@ -161,6 +161,7 @@ export const getAdminCheckAnimals = (params) => async (dispatch) => {
 export const getUserInfo = (params) => async (dispatch) => {
     try {
         const data = await $authHost.get("user/profile")
+        console.log(data);
         dispatch({
             type: SET_USER_INFO,
             payload: data.data

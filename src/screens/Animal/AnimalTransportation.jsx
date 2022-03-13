@@ -17,18 +17,18 @@ function AnimalTranportation({navigation},props) {
             <CustomHeader hasBackButton={true} title={"Перевозка животных"} goBackAction={navigation.goBack} />
            <ContentView style={{backgroundColor:"white", height:Dimensions.get("window").height}}>
                <Text style={styles.textBold}>Перевозка животных по всей России.</Text>
-               <Text style={styles.textInfo}>Наша компания <Text style={{color:"#F6A405"}} onPress={() => Linking.openURL('https://feival.ru')}>Feival</Text> предоставляет услуги трансфера для ваших питомцев. Мы поможем доставить вашего друга в любую точку города или даже страны, различными видами транспорта. Во время путешествия предложим напитки и подкрепиться, сопроводим во время выгула, приложим максимальные условия для безопасности транспортировки.</Text>
+               <Text style={styles.textInfo}>Наша компания <Text style={{color:"#F6A405", textDecorationLine:"underline", textDecorationColor:"#F6A405", textDecorationStyle:"solid"}} onPress={() => Linking.openURL('https://feival.ru')}>FIEVAL</Text> предоставляет услуги трансфера для ваших питомцев. Мы поможем доставить вашего друга в любую точку города или даже страны, различными видами транспорта. Во время путешествия предложим напитки и подкрепиться, сопроводим во время выгула, приложим максимальные условия для безопасности транспортировки.</Text>
                <View style={styles.actionView}>
                    <CustomButton onClick={()=>{setModalVisible(true)}} title={"Написать"} style={{width:220}} />
                    <TouchableOpacity onPress={()=>{
                        Linking.openURL("https://www.instagram.com/ooo_feival/?r=nametag")
                    }}>
-                       <CircledIcon width={20} height={20}  style={{marginLeft:20}} image={Inst}/>
+                       <CircledIcon width={20} height={20}  style={{marginLeft:20, backgroundColor:"#F6A405", borderWidth:0}} image={Inst}/>
                    </TouchableOpacity>
                    <TouchableOpacity onPress={()=>{
                        Linking.openURL("https://t.me/oooFeival")
                    }}>
-                       <CircledIcon width={20} height={20}  style={{marginLeft:20}} image={Telegram}/>
+                       <CircledIcon width={20} height={20}  style={{marginLeft:10, backgroundColor:"#38B0E3", borderWidth:0}} iconStyle={{left:-1}} image={Telegram}/>
                    </TouchableOpacity>
 
                </View>
