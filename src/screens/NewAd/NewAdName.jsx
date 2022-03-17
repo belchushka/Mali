@@ -90,7 +90,7 @@ function NewAdName({navigation},props) {
                 }} style={styles.input}>
                     <Text>{cityName.length === 0 ? "Укажите город проживания >" : cityName}</Text>
                 </TouchableOpacity>
-                <TextInput value={address}  onChangeText={(val)=>{setAddress(val)}} style={[styles.textInput]} placeholder={"Введите адресс"}/>
+                <TextInput value={address}  onChangeText={(val)=>{setAddress(val)}} style={[styles.textInput]} placeholder={"Введите адрес"}/>
                 <View style={{flex:1, justifyContent:"flex-end", marginBottom:10}}>
                     <CustomButton loading={loading}  onClick={goNext} title={"Продолжить"}/>
                 </View>

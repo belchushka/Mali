@@ -89,7 +89,7 @@ function SearchResults({route, navigation}, props) {
     return (
         <>
             <View style={{flex: 1, backgroundColor: "#F6F4F0"}}>
-                <ScrollView onScroll={async ({nativeEvent}) => {
+                <ScrollView contentContainerStyle={{paddingBottom:120}} onScroll={async ({nativeEvent}) => {
                     if (isCloseToBottom(nativeEvent)) {
                         if (remains>0){
                             fetchNext(results[results.length - 1].idAd)
