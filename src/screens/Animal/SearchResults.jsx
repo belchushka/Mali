@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
     },
     textBold: {
         fontWeight: "bold",
-        fontSize: 18
+        fontSize: 18,
+        textAlign:"center"
     },
 
     textOpacity: {

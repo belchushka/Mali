@@ -2,11 +2,13 @@ import axios from "axios";
 import {AsyncStorage} from "react-native";
 
 const $authHost = axios.create({
-    baseURL:"https://MALI.DEPRA.RU/api/"
+    baseURL:"https://vm-20ed0b64.na4u.ru/api/",
+
 })
 
 const $host = axios.create({
-    baseURL:"https://MALI.DEPRA.RU/api/"
+    baseURL:"https://vm-20ed0b64.na4u.ru/api/",
+
 })
 
 $authHost.interceptors.request.use(async (config)=>{

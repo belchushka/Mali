@@ -18,6 +18,7 @@ function Catalog({navigation}, props) {
     const dispatch = useDispatch()
     const [modalVisible,setModalVisible] = useState(false)
     const animalTypes = useSelector(state=>state.animal.types)
+    console.log(animalTypes);
     const {start, stop, loading} = useLoading()
     const fetch = useCallback(async () => {
         try {
@@ -25,10 +26,9 @@ function Catalog({navigation}, props) {
             const data = await dispatch(getAnimalTypes())
             stop()
         } catch (e) {
-
+            console.log(e);
         }
     }, [dispatch])
-
     useEffect(fetch, [fetch])
     return (
         <View style={{flex:1}}>

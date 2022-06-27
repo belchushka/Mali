@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "mali",
-    "slug": "mali",
-    "version": "1.0.0",
-    "scheme": "mali",
+    "name": "Feival",
+    "slug": "feival",
+    "version": "2.0.0",
+    "scheme": "feival",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.belchushka.mali",
+      "bundleIdentifier": "com.belchushka.feival",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.1033752769210-oe6ksm0uqai87ns8if9oujle8145jih3"
@@ -32,7 +32,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [],
-      "package": "com.belchushka.mali"
+      "package": "com.belchushka.feival",
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"

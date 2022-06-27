@@ -12,14 +12,18 @@ import {AsyncStorage} from "react-native";
 
 export const getAnimalTypes = (params) => async (dispatch) => {
     try{
-        const data = await $host.get("ads/type_pet")
+        const data = await $host.get("ads/type_pet", {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         dispatch({
             type:SET_ANIMAL_TYPES,
             payload:data.data
         })
         return data.data
     }catch (e) {
-        throw e.response.data.message
+        throw e
     }
 }
 

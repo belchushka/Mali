@@ -100,7 +100,7 @@ function Profile({navigation, route}, props) {
                             </TouchableOpacity>
                         </View>
                         :
-                        <QuestionBlock style={{marginTop: 20}} title={"Необходимо зайти в аккаунт"}
+                        <QuestionBlock style={{marginTop: 20}} title={"Необходимо войти в аккаунт"}
                                        text={"Чтобы пользоваться профилем, нужно войти\n" +
                                            "в свой аккаунт или создать новый"} onButtonClick={openPanel}
                                        buttonText={"Зарегистрироваться"} icon={Alert}/>

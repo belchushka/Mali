@@ -23,7 +23,7 @@ function NewAdAnimalType({navigation}, props) {
                 {loggedIn ? <AnimalTypes onSelect={(id, name) => {
                         goNext(id, name)
                     }} underlineBottom={true} style={{marginTop: 0}}/> :
-                    <ScrollView><QuestionBlock style={{marginTop: 20}} title={"Необходимо зайти в аккаунт"}
+                    <ScrollView><QuestionBlock style={{marginTop: 20}} title={"Необходимо войти в аккаунт"}
                                                text={"Чтобы разместить объявление необходимо авторизоваться в профиле"}
                                                buttonText={"Перейти в профиль"} onButtonClick={() => {
                         navigation.navigate("profile", {opened:true})
