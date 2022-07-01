@@ -214,7 +214,7 @@ export const createNewAd = (params) => async (dispatch) => {
                     reject(xhr.responseText);
                 }
             };
-            xhr.open("POST", "https://MALI.DEPRA.RU/api/user/create_ad")
+            xhr.open("POST", "https://vm-20ed0b64.na4u.ru/api/user/create_ad")
             xhr.setRequestHeader("Content-Type", "multipart/form-data");
             xhr.setRequestHeader("Authorization", "Bearer " + token);
             xhr.send(params);
